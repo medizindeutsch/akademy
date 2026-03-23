@@ -3,159 +3,138 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Deutsch B1 – Platform</title>
+<title>Deutsch B1 – Kapsamlı Hazırlık</title>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;700;900&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #f5f0e8; --surface: #ede8df; --card: #ffffff; --dark: #1a1612;
-  --accent: #c8391a; --accent2: #2a6b4e; --border: #d8d0c0; --shadow: rgba(26,22,18,0.12);
+    --bg: #f5f0e8; --surface: #ede8df; --card: #ffffff; --dark: #1a1612;
+    --accent: #c8391a; --accent2: #2a6b4e; --border: #d8d0c0; --shadow: rgba(26,22,18,0.12);
 }
 *{margin:0;padding:0;box-sizing:border-box;}
-body{background:var(--bg); color:var(--dark); font-family:'Outfit',sans-serif; min-height:100vh;}
+body{background:var(--bg); color:var(--dark); font-family:'Outfit',sans-serif;}
 
 header{
-  position:sticky; top:0; z-index:100; background:rgba(245,240,232,0.92);
-  backdrop-filter:blur(12px); border-bottom:1px solid var(--border);
-  padding:0 2rem; display:flex; align-items:center; justify-content:space-between; height:64px;
+    position:sticky; top:0; z-index:100; background:rgba(245,240,232,0.92);
+    backdrop-filter:blur(12px); border-bottom:1px solid var(--border);
+    padding:0 2rem; display:flex; align-items:center; justify-content:space-between; height:64px;
 }
 .logo{font-family:'Fraunces',serif; font-size:1.5rem; font-weight:900;}
 .logo em{color:var(--accent); font-style:normal;}
 
 nav{display:flex; gap:0.5rem;}
-.nav-btn{background:none; border:none; padding:0.5rem 1rem; cursor:pointer; font-weight:500; border-radius:8px; transition:0.2s;}
+.nav-btn{background:none; border:none; padding:0.5rem 1rem; cursor:pointer; font-weight:500; border-radius:8px;}
 .nav-btn.active{background:var(--dark); color:#fff;}
 
 .section{display:none; padding:2rem;}
 .section.active{display:block;}
 
-/* Flashcard Tasarımı */
+/* Flashcard */
 .vocab-card{
-  background:var(--card); border:1px solid var(--border); border-radius:24px;
-  padding:3rem; max-width:500px; margin:2rem auto; text-align:center;
-  box-shadow:0 15px 35px var(--shadow); position:relative;
+    background:var(--card); border:1px solid var(--border); border-radius:24px;
+    padding:2.5rem; max-width:500px; margin:2rem auto; text-align:center;
+    box-shadow:0 15px 35px var(--shadow);
 }
-.vocab-word{font-family:'Fraunces',serif; font-size:2.8rem; margin:1rem 0; color:var(--dark);}
-.vocab-translation{font-size:1.4rem; color:var(--accent2); margin-bottom:2rem; opacity:0; transition:0.3s;}
-.vocab-translation.show{opacity:1;}
+.vocab-word{font-family:'Fraunces',serif; font-size:2.5rem; margin:1rem 0;}
+.vocab-tr{font-size:1.3rem; color:var(--accent2); margin-bottom:1.5rem; display:none;}
 
-.btn-main{
-  background:var(--dark); color:#fff; border:none; padding:1rem 2rem;
-  border-radius:12px; cursor:pointer; font-weight:600; width:100%; margin-top:1rem;
-}
-.btn-speak{
-  background:var(--surface); border:none; width:60px; height:60px;
-  border-radius:50%; cursor:pointer; font-size:1.5rem; margin-bottom:1rem;
-}
+/* Gramer Tablosu */
+.grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(280px, 1fr)); gap:1.5rem; max-width:1200px; margin:0 auto;}
+.grid-item{background:var(--card); border:1px solid var(--border); border-radius:16px; padding:1.5rem;}
+.grid-item h3{font-family:'Fraunces',serif; color:var(--accent); margin-bottom:1rem;}
 
-/* Progress Bar */
-.progress-container{max-width:500px; margin:0 auto; margin-top:2rem;}
-.progress-bar{background:var(--border); height:8px; border-radius:4px; overflow:hidden;}
-.progress-fill{background:var(--accent); height:100%; width:0%; transition:0.3s;}
+.btn{background:var(--dark); color:#fff; border:none; padding:0.8rem 1.2rem; border-radius:10px; cursor:pointer; font-weight:600; margin:5px;}
 </style>
 </head>
 <body>
 
 <header>
-  <div class="logo">Deutsch<em>.</em>B1</div>
-  <nav>
-    <button class="nav-btn active" onclick="showSec('vocab')">Kelimeler</button>
-    <button class="nav-btn" onclick="showSec('info')">Bilgi</button>
-  </nav>
+    <div class="logo">Deutsch<em>.</em>B1</div>
+    <nav id="mainNav">
+        <button class="nav-btn active" onclick="showSec('vocab')">📚 Kelimeler</button>
+        <button class="nav-btn" onclick="showSec('grammar')">📖 Gramer</button>
+        <button class="nav-btn" onclick="showSec('reading')">📰 Okuma</button>
+    </nav>
 </header>
 
 <section id="sec-vocab" class="section active">
-  <div class="vocab-card">
-    <button class="btn-speak" onclick="speakCurrent()">🔊</button>
-    <div id="vWord" class="vocab-word">Yükleniyor...</div>
-    <div id="vTr" class="vocab-translation">Anlamı Göster</div>
-    <button class="btn-main" onclick="toggleTr()">Anlamı Gör / Gizle</button>
-    <button class="btn-main" style="background:var(--accent2);" onclick="nextWord()">Sonraki Kelime →</button>
-  </div>
-  
-  <div class="progress-container">
-    <div style="display:flex; justify-content:space-between; margin-bottom:0.5rem;">
-      <span id="vCount">0 / 0</span>
-      <span id="vPct">0%</span>
+    <div class="vocab-card">
+        <button class="btn" style="background:var(--surface); color:black; border-radius:50%; width:50px; height:50px;" onclick="speakCurrent()">🔊</button>
+        <div id="vWord" class="vocab-word">Yükleniyor...</div>
+        <div id="vTr" class="vocab-tr">Anlam</div>
+        <button class="btn" onclick="document.getElementById('vTr').style.display='block'">Anlamı Gör</button>
+        <button class="btn" style="background:var(--accent2);" onclick="nextVocab()">Sonraki →</button>
     </div>
-    <div class="progress-bar"><div id="vFill" class="progress-fill"></div></div>
-  </div>
 </section>
 
-<section id="sec-info" class="section">
-  <div style="max-width:600px; margin:0 auto; text-align:center;">
-    <h2>Deutsch B1 Hazırlık</h2>
-    <p style="margin-top:1rem;">Bu platform Almanca B1 sınavı için kelime çalışmanıza yardımcı olur.</p>
-  </div>
+<section id="sec-grammar" class="section">
+    <div class="grid">
+        <div class="grid-item">
+            <h3>Passiv (Edilgen Yapı)</h3>
+            <p>Werden + Partizip II</p>
+            <p style="font-style:italic; margin-top:0.5rem;">"Das Auto wird repariert."</p>
+        </div>
+        <div class="grid-item">
+            <h3>Konjunktiv II</h3>
+            <p>Hayaller ve Nezaket: würde + Infinitiv</p>
+            <p style="font-style:italic; margin-top:0.5rem;">"Ich hätte gern einen Kaffee."</p>
+        </div>
+    </div>
+</section>
+
+<section id="sec-reading" class="section">
+    <div style="max-width:800px; margin:0 auto; background:white; padding:2rem; border-radius:20px; border:1px solid var(--border);">
+        <h2 style="font-family:'Fraunces'; margin-bottom:1rem;">B1 Okuma Parçası</h2>
+        <p>Almanya'da yaşam ve kültür üzerine metinler buraya gelecek...</p>
+    </div>
 </section>
 
 <script>
-// KELİME VERİLERİ (Burası senin ana listen)
-const vocabList = [
-  {de: "die Verabredung", tr: "Randevu / Buluşma"},
-  {de: "die Herausforderung", tr: "Zorluk / Meydan okuma"},
-  {de: "sich entscheiden", tr: "Karar vermek"},
-  {de: "beeindruckend", tr: "Etkileyici"},
-  {de: "nachhaltig", tr: "Sürdürülebilir"},
-  {de: "der Erfolg", tr: "Başarı"},
-  {de: "verantwortlich", tr: "Sorumlu"}
+const vocabData = [
+    {de: "die Herausforderung", tr: "Zorluk / Meydan okuma"},
+    {de: "sich beschäftigen mit", tr: "Bir şeyle meşgul olmak"},
+    {de: "die Voraussetzung", tr: "Ön koşul / Şart"},
+    {de: "begeistert", tr: "Coşkulu / Hayran"},
+    {de: "nachhaltig", tr: "Sürdürülebilir"}
 ];
 
-let currentIndex = 0;
+let vIdx = 0;
 
-// SAYFA YÖNETİMİ
 function showSec(id) {
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('sec-' + id).classList.add('active');
-  event.currentTarget.classList.add('active');
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('sec-' + id).classList.add('active');
+    event.currentTarget.classList.add('active');
 }
 
-// SESLENDİRME MOTORU
+// SESLENDİRME
 function speak(text) {
-  if ('speechSynthesis' in window) {
-    window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'de-DE';
-    utterance.rate = 0.85;
-    window.speechSynthesis.speak(utterance);
-  }
+    if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'de-DE';
+        utterance.rate = 0.85;
+        window.speechSynthesis.speak(utterance);
+    }
 }
 
 function speakCurrent() {
-  speak(vocabList[currentIndex].de);
+    speak(vocabData[vIdx].de);
 }
 
-// KELİME GÜNCELLEME
-function updateCard() {
-  const item = vocabList[currentIndex];
-  document.getElementById('vWord').textContent = item.de;
-  document.getElementById('vTr').textContent = item.tr;
-  document.getElementById('vTr').classList.remove('show');
-  
-  // Progress Güncelle
-  const total = vocabList.length;
-  const pct = Math.round(((currentIndex + 1) / total) * 100);
-  document.getElementById('vCount').textContent = (currentIndex + 1) + " / " + total;
-  document.getElementById('vPct').textContent = pct + "%";
-  document.getElementById('vFill').style.width = pct + "%";
-
-  // Kelime geldiğinde oku
-  speak(item.de);
+function nextVocab() {
+    vIdx = (vIdx + 1) % vocabData.length;
+    loadVocab();
 }
 
-function nextWord() {
-  currentIndex = (currentIndex + 1) % vocabList.length;
-  updateCard();
+function loadVocab() {
+    const item = vocabData[vIdx];
+    document.getElementById('vWord').textContent = item.de;
+    document.getElementById('vTr').textContent = item.tr;
+    document.getElementById('vTr').style.display = 'none';
+    speak(item.de);
 }
 
-function toggleTr() {
-  document.getElementById('vTr').classList.toggle('show');
-}
-
-// İLK AÇILIŞ
-window.onload = () => {
-  updateCard();
-};
+window.onload = loadVocab;
 </script>
 </body>
 </html>
