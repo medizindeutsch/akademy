@@ -938,23 +938,34 @@ header{
 </section>
 
 <script>
-  // SESLENDİRME FONKSİYONU - Buradan kopyala
+ // --- SESLENDİRME SİSTEMİ ---
 function speak(text) {
   if ('speechSynthesis' in window) {
+    window.speechSynthesis.cancel(); 
     const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'de-DE'; // Almanca aksanı
-    utterance.rate = 0.85;    // Anlaşılır hız
+    utterance.lang = 'de-DE'; 
+    utterance.rate = 0.85;    
     window.speechSynthesis.speak(utterance);
   }
 }
-  function speak(text) {
-  if ('speechSynthesis' in window) {
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'de-DE';
-    utterance.rate = 0.85;
-    window.speechSynthesis.speak(utterance);
+
+// --- BAŞLATICI ---
+window.addEventListener('DOMContentLoaded', () => {
+  if (typeof vGetWords === 'function') {
+    vFiltered = vGetWords();
+    vLoad();
   }
-}
+  // Diğer modülleri çalıştır
+  if (typeof renderGrammarGrid === 'function') renderGrammarGrid();
+  if (typeof renderTextSelector === 'function') renderTextSelector();
+  if (typeof loadReading === 'function') loadReading(0);
+  if (typeof renderSpeakGrid === 'function') renderSpeakGrid();
+});
+
+// Kapanış etiketleri (Sadece birer tane olmalı!)
+</script>
+</body>
+</html>
 //
 // ════════════════════════════════════════════
 // NAVİGASYON
