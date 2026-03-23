@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Almanca Sağlıkçı Portalı</title>
+    <title>Almanca Sağlık Portalı</title>
     <style>
         :root {
             --primary: #00796b;
@@ -12,6 +12,7 @@
             --paramedic: #f57c00;
             --anes: #7b1fa2;
             --bg: #f0f4f3;
+            --white: #ffffff;
         }
 
         body {
@@ -21,127 +22,245 @@
             display: flex; flex-direction: column; align-items: center;
         }
 
-        /* GİRİŞ GÖRSELİ VE HOŞGELDİN */
+        .hidden { display: none !important; }
+
+        /* ANA SAYFA HERO */
         .hero {
-            width: 100%;
-            height: 350px;
+            width: 100%; height: 300px;
             background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), 
                         url('https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&q=80&w=1200');
-            background-size: cover;
-            background-position: center;
-            display: flex; flex-direction: column;
-            justify-content: center; align-items: center;
+            background-size: cover; background-position: center;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
             color: white; text-align: center;
-            border-bottom: 8px solid var(--primary);
         }
 
-        .hero h1 { margin: 0; font-size: 2.2rem; text-shadow: 2px 2px 10px rgba(0,0,0,0.5); }
-        .hero p { font-size: 1.1rem; margin-top: 10px; background: rgba(0,0,0,0.3); padding: 5px 15px; border-radius: 20px; }
+        .container { width: 90%; max-width: 600px; margin: -50px auto 100px auto; }
 
-        .container {
-            width: 90%; max-width: 800px;
-            margin: -60px auto 50px auto;
-        }
-
-        .welcome-text {
-            background: white;
-            padding: 20px;
-            border-radius: 15px;
-            text-align: center;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            margin-bottom: 30px;
-        }
-
-        /* MESLEK KARTLARI IZGARASI */
-        .grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-
+        /* MESLEK KARTLARI */
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         .profession-card {
-            background: white;
-            padding: 25px;
-            border-radius: 20px;
-            text-align: center;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border-bottom: 6px solid #ccc;
-            text-decoration: none;
+            background: white; padding: 20px; border-radius: 20px;
+            text-align: center; box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            cursor: pointer; transition: 0.3s;
+        }
+        .profession-card:hover { transform: translateY(-5px); }
+        .p-nurse { border-bottom: 6px solid var(--nurse); }
+        .p-doctor { border-bottom: 6px solid var(--doctor); }
+        .p-para { border-bottom: 6px solid var(--paramedic); }
+        .p-anes { border-bottom: 6px solid var(--anes); }
+
+        /* İÇERİK KARTI */
+        .main-card {
+            background: white; padding: 30px; border-radius: 25px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1); text-align: center;
         }
 
-        .profession-card:hover { transform: translateY(-10px); }
+        .word-de { font-size: 2.2rem; color: var(--nurse); font-weight: bold; margin-bottom: 10px; }
+        .word-tr { 
+            font-size: 1.2rem; color: #666; cursor: pointer; 
+            filter: blur(8px); transition: 0.3s; margin-bottom: 25px; 
+        }
+        .word-tr.reveal { filter: blur(0); }
 
-        /* RENKLER VE İKONLAR */
-        .p-nurse { border-color: var(--nurse); }
-        .p-doctor { border-color: var(--doctor); }
-        .p-para { border-color: var(--paramedic); }
-        .p-anes { border-color: var(--anes); }
-
-        .icon { font-size: 3rem; margin-bottom: 15px; display: block; }
-        
-        .profession-card b { display: block; font-size: 1.3rem; margin-bottom: 5px; color: #333; }
-        .profession-card span { font-size: 0.9rem; color: #666; font-style: italic; }
-
-        @media (max-width: 600px) {
-            .grid { grid-template-columns: 1fr; }
-            .hero h1 { font-size: 1.6rem; }
+        .info-box {
+            text-align: left; background: #f1f8f7; padding: 15px;
+            border-radius: 15px; border-left: 5px solid var(--nurse);
+            margin-bottom: 20px; line-height: 1.6;
         }
 
-        footer { margin: 40px 0; color: #888; font-size: 0.9rem; }
+        /* ALT NAVİGASYON */
+        .nav-bar {
+            position: fixed; bottom: 0; width: 100%; background: white;
+            display: flex; justify-content: space-around; padding: 12px 0;
+            box-shadow: 0 -5px 15px rgba(0,0,0,0.1); border-top: 1px solid #eee;
+        }
+        .nav-item {
+            border: none; background: none; color: #888; font-size: 0.75rem;
+            display: flex; flex-direction: column; align-items: center; cursor: pointer;
+        }
+        .nav-item.active { color: var(--nurse); font-weight: bold; }
+        .nav-icon { font-size: 1.4rem; }
+
+        .btn-group { display: flex; gap: 10px; }
+        .btn {
+            flex: 1; padding: 15px; border: none; border-radius: 12px;
+            font-weight: bold; cursor: pointer; transition: 0.2s;
+        }
+        .btn-next { background: var(--nurse); color: white; }
+        .btn-prev { background: #eee; color: #555; }
+
+        @media (max-width: 500px) { .grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
 
-    <div class="hero">
-        <h1>Willkommen im Gesundheitsportal!</h1>
-        <p>Almanca Sağlıkçı Eğitim ve Uygulama Portalı</p>
-    </div>
-
-    <div class="container">
-        <div class="welcome-text">
-            <b>Wählen Sie Ihren Beruf | Mesleğinizi Seçiniz</b>
-            <p style="color:#777; font-size:0.9rem;">Branşınıza özel vaka, bakım ve terminoloji çalışmaları için tıklayın.</p>
+    <div id="home-screen">
+        <div class="hero">
+            <h1>Medizin-Deutsch Portal</h1>
+            <p>Willkommen | Branşınızı Seçiniz</p>
         </div>
-
-        <div class="grid">
-            <div class="profession-card p-nurse" onclick="goTo('nurse')">
-                <span class="icon">🩺</span>
-                <b>Pflegekraft | Hemşire</b>
-                <span>Pflegeplanung & Patientengespräch</span>
-            </div>
-
-            <div class="profession-card p-doctor" onclick="goTo('doctor')">
-                <span class="icon">👨‍⚕️</span>
-                <b>Arzt / Ärztin | Doktor</b>
-                <span>Anamnese & Diagnoseerstellung</span>
-            </div>
-
-            <div class="profession-card p-para" onclick="goTo('para')">
-                <span class="icon">🚑</span>
-                <b>Notfallsanitäter | Paramedik</b>
-                <span>Einsatzmeldungen & Erste Hilfe</span>
-            </div>
-
-            <div class="profession-card p-anes" onclick="goTo('anes')">
-                <span class="icon">😴</span>
-                <b>Anästhesie | Anestezi</b>
-                <span>Narkoseeinleitung & Überwachung</span>
+        <div class="container">
+            <div class="grid">
+                <div class="profession-card p-nurse" onclick="startModule('nurse')">
+                    <span style="font-size:2.5rem;">🩺</span>
+                    <h3 style="margin:10px 0 5px 0;">Pflegekraft<br><small>Hemşire</small></h3>
+                </div>
+                <div class="profession-card p-doctor" onclick="startModule('doctor')">
+                    <span style="font-size:2.5rem;">👨‍⚕️</span>
+                    <h3 style="margin:10px 0 5px 0;">Arzt/Ärztin<br><small>Doktor</small></h3>
+                </div>
+                <div class="profession-card p-para" onclick="startModule('para')">
+                    <span style="font-size:2.5rem;">🚑</span>
+                    <h3 style="margin:10px 0 5px 0;">Notfall<br><small>Paramedik</small></h3>
+                </div>
+                <div class="profession-card p-anes" onclick="startModule('anes')">
+                    <span style="font-size:2.5rem;">😴</span>
+                    <h3 style="margin:10px 0 5px 0;">Anästhesie<br><small>Anestezi</small></h3>
+                </div>
             </div>
         </div>
     </div>
 
-    <footer>
-        © 2026 Medizin-Deutsch Master | Professionelle Fachsprache
-    </footer>
+    <div id="main-module" class="hidden" style="width:100%;">
+        <header id="moduleHeader" style="background:var(--nurse); color:white; width:100%; padding:15px; text-align:center; font-weight:bold; text-transform:uppercase;">
+            MODUL
+        </header>
+        
+        <div class="container" style="margin-top:20px;">
+            <div id="nurse-vocab" class="sub-module">
+                <div class="main-card">
+                    <div id="deWord" class="word-de">Laden...</div>
+                    <div id="trWord" class="word-tr" onclick="this.classList.toggle('reveal')">Dokun ve Gör</div>
+                    <div class="info-box" id="infoBox">
+                        <div id="exDe" style="font-weight:600;"></div>
+                        <div id="exTr" style="font-style:italic; color:#546e7a; font-size:0.9rem; margin-top:5px;"></div>
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn btn-prev" onclick="changeWord(-1)">Zurück</button>
+                        <button class="btn btn-next" onclick="changeWord(1)">Weiter</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="nurse-vaka" class="sub-module hidden">
+                <div class="main-card" style="text-align:left;">
+                    <h2 id="vakaTitle" style="color:var(--nurse);">Fallbeispiel</h2>
+                    <div id="vakaContent" style="line-height:1.7; color:#333;"></div>
+                </div>
+            </div>
+
+            <div id="nurse-bakim" class="sub-module hidden">
+                <div class="main-card" style="text-align:left;">
+                    <h2 id="bakimTitle" style="color:var(--nurse);">Dokumentation</h2>
+                    <div id="bakimContent" style="line-height:1.7; color:#333;"></div>
+                </div>
+            </div>
+        </div>
+
+        <nav class="nav-bar">
+            <button class="nav-item active" onclick="switchTab('vocab', this)"><span class="nav-icon">📖</span>Kelime</button>
+            <button class="nav-item" onclick="switchTab('vaka', this)"><span class="nav-icon">🚑</span>Vaka</button>
+            <button class="nav-item" onclick="switchTab('bakim', this)"><span class="nav-icon">🩺</span>Uygulama</button>
+            <button class="nav-item" onclick="location.reload()"><span class="nav-icon">🏠</span>Menü</button>
+        </nav>
+    </div>
 
     <script>
-        function goTo(role) {
-            alert(role + " bölümü hazırlanıyor! \n\nBir sonraki adımda bu butona tıklandığında açılacak sayfayı yapacağız.");
-            // İlerde burası window.location.href = role + ".html"; olacak.
+        let currentRole = '';
+        let vIdx = 0;
+
+        const data = {
+            nurse: {
+                color: '#0288d1',
+                title: 'Hemşirelik Bölümü',
+                vocab: [
+                    { de: "die Grundpflege", tr: "Temel Bakım", ex: "Ich helfe bei der Grundpflege.", et: "Temel bakımda yardımcı oluyorum." },
+                    { de: "die Vitalzeichen", tr: "Yaşam Bulguları", ex: "Bitte messen Sie die Vitalzeichen.", et: "Lütfen yaşam bulgularını ölçün." }
+                ],
+                vaka: "<b>Hasta:</b> Frau Weber<br><b>Durum:</b> Dekubitus riski var. Pozisyon verilmeli.",
+                bakim: "• Pozisyon takibi<br>• Cilt bütünlüğü kontrolü"
+            },
+            doctor: {
+                color: '#d32f2f',
+                title: 'Doktor Bölümü',
+                vocab: [
+                    { de: "die Anamnese", tr: "Anamnez (Öykü)", ex: "Wir müssen die Anamnese erheben.", et: "Hastanın öyküsünü almalıyız." },
+                    { de: "die Diagnose", tr: "Teşhis", ex: "Die Diagnose ist noch unklar.", et: "Teşhis henüz belirsiz." }
+                ],
+                vaka: "<b>Hasta:</b> Herr Schmidt<br><b>Bulgu:</b> Göğüs ağrısı (Thoraxschmerz). EKG çekilmeli.",
+                bakim: "• Lab sonuçlarının analizi<br>• Konsültasyon planı"
+            },
+            para: {
+                color: '#f57c00',
+                title: 'Paramedik Bölümü',
+                vocab: [
+                    { de: "der Notfall", tr: "Acil Durum", ex: "Es gibt einen medizinischen Notfall.", et: "Tıbbi bir acil durum var." },
+                    { de: "die Erstversorgung", tr: "İlk Müdahale", ex: "Wir leisten die Erstversorgung.", et: "İlk müdahaleyi gerçekleştiriyoruz." }
+                ],
+                vaka: "<b>Olay:</b> Trafik kazası (Verkehrsunfall).<br><b>Durum:</b> Bilinç kapalı, entübe edildi.",
+                bakim: "• Monitorizasyon<br>• Damar yolu açılması"
+            },
+            anes: {
+                color: '#7b1fa2',
+                title: 'Anestezi Bölümü',
+                vocab: [
+                    { de: "die Narkose", tr: "Narkoz", ex: "Die Narkose wird vorbereitet.", et: "Narkoz hazırlanıyor." },
+                    { de: "die Einleitung", tr: "Anestezi Başlatma", ex: "Wir beginnen mit der Narkoseeinleitung.", et: "Anesteziye başlıyoruz." }
+                ],
+                vaka: "<b>Operasyon:</b> Apendektomi.<br><b>Durum:</b> Hasta ASA 2. Hazırlık tamam.",
+                bakim: "• Pre-op değerlendirme<br>• İntravenöz indüksiyon"
+            }
+        };
+
+        function startModule(role) {
+            currentRole = role;
+            vIdx = 0;
+            const roleData = data[role];
+            
+            // UI Renklerini Ayarla
+            document.documentElement.style.setProperty('--nurse', roleData.color);
+            document.getElementById('moduleHeader').innerText = roleData.title;
+            document.getElementById('moduleHeader').style.background = roleData.color;
+            
+            document.getElementById('home-screen').classList.add('hidden');
+            document.getElementById('main-module').classList.remove('hidden');
+            renderWord();
+        }
+
+        function renderWord() {
+            const w = data[currentRole].vocab[vIdx];
+            document.getElementById('deWord').innerText = w.de;
+            document.getElementById('trWord').innerText = w.tr;
+            document.getElementById('trWord').classList.remove('reveal');
+            document.getElementById('exDe').innerText = w.ex;
+            document.getElementById('exTr').innerText = w.et;
+            document.getElementById('deWord').style.color = data[currentRole].color;
+            document.getElementById('infoBox').style.borderColor = data[currentRole].color;
+        }
+
+        function changeWord(s) {
+            vIdx = (vIdx + s + data[currentRole].vocab.length) % data[currentRole].vocab.length;
+            renderWord();
+        }
+
+        function switchTab(type, btn) {
+            document.querySelectorAll('.sub-module').forEach(m => m.classList.add('hidden'));
+            document.getElementById('nurse-' + type).classList.remove('hidden');
+            
+            const roleData = data[currentRole];
+            if(type === 'vaka') {
+                document.getElementById('vakaContent').innerHTML = roleData.vaka;
+                document.getElementById('vakaTitle').style.color = roleData.color;
+            }
+            if(type === 'bakim') {
+                document.getElementById('bakimContent').innerHTML = roleData.bakim;
+                document.getElementById('bakimTitle').style.color = roleData.color;
+            }
+
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+            btn.classList.add('active');
+            btn.style.color = roleData.color;
         }
     </script>
-
 </body>
 </html>
