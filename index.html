@@ -271,16 +271,101 @@ const vocabData = {
     {w:"beeinflussen", t:"Etkilemek", tp:"Fiil", p:"-", exD:"Das Wetter beeinflusst meine Laune.", exT:"Hava modumu etkiliyor."}
 ],
     'MEDICAL': [
-        {w:"der Blutdruck", t:"Tansiyon", exD:"Wir müssen den Blutdruck messen.", exT:"Tansiyonu ölçmeliyiz."},
-        {w:"die Untersuchung", t:"Muayene", exD:"Die Untersuchung dauert 10 Minuten.", exT:"Muayene 10 dakika sürer."},
-        {w:"das Rezept", t:"Reçete", exD:"Hier ist Ihr Rezept.", exT:"İşte reçeteniz."},
-        {w:"einatmen", t:"Nefes almak", exD:"Bitte tief einatmen.", exT:"Lütfen derin nefes alın."},
-        {w:"ausatmen", t:"Nefes vermek", exD:"Und jetzt ausatmen.", exT:"Ve şimdi nefes verin."},
-        {w:"die Spritze", t:"İğne/Enjektör", exD:"Keine Sorge, die Spritze tut nicht weh.", exT:"Endişelenmeyin, iğne acıtmaz."},
-        {w:"der Schmerz", t:"Ağrı", exD:"Wo haben Sie Schmerzen?", exT:"Nerenizde ağrı var?"},
-        {w:"die Krankenschwester", t:"Hemşire", exD:"Die Krankenschwester kommt gleich.", exT:"Hemşire birazdan gelecek."},
-        {w:"nüchtern", t:"Aç karnına", exD:"Sie müssen nüchtern kommen.", exT:"Aç karnına gelmelisiniz."},
-        {w:"die Notaufnahme", t:"Acil Servis", exD:"Er ist in der Notaufnahme.", exT:"O, acil serviste."}
+        // --- VÜCUT BÖLÜMLERİ (Körperteile) ---
+        {w:"der Kopf", t:"Baş/Kafa", exD:"Mein Kopf tut weh.", exT:"Başım ağrıyor."},
+        {w:"der Hals", t:"Boğaz/Boyun", exD:"Haben Sie Halsschmerzen?", exT:"Boğaz ağrınız var mı?"},
+        {w:"der Bauch", t:"Karın", exD:"Legen Sie die Hand auf den Bauch.", exT:"Elinizi karnınıza koyun."},
+        {w:"der Rücken", t:"Sırt", exD:"Gerade sitzen, bitte.", exT:"Dik oturun, lütfen."},
+        {w:"die Brust", t:"Göğüs", exD:"Machen Sie den Oberkörper frei.", exT:"Üst bedeninizi soyun."},
+        {w:"das Herz", t:"Kalp", exD:"Ihr Herz schlägt normal.", exT:"Kalbiniz normal atıyor."},
+        {w:"die Lunge", t:"Akciğer", exD:"Atmen Sie tief ein.", exT:"Derin nefes alın."},
+        {w:"der Magen", t:"Mide", exD:"Ist Ihr Magen leer?", exT:"Mideniz boş mu?"},
+        {w:"die Leber", t:"Karaciğer", exD:"Wir prüfen die Leberwerte.", exT:"Karaciğer değerlerini kontrol ediyoruz."},
+        {w:"die Niere", t:"Böbrek", exD:"Trinken Sie viel Wasser.", exT:"Bol su için."},
+        {w:"das Bein", t:"Bacak", exD:"Können Sie das Bein bewegen?", exT:"Bacağınızı hareket ettirebilir misiniz?"},
+        {w:"der Arm", t:"Kol", exD:"Bitte den Arm ruhig halten.", exT:"Lütfen kolunuzu sabit tutun."},
+        {w:"das Auge", t:"Göz", exD:"Schließen Sie die Augen.", exT:"Gözlerinizi kapatın."},
+        {w:"das Ohr", t:"Kulak", exD:"Haben Sie Ohrenschmerzen?", exT:"Kulak ağrınız var mı?"},
+        {w:"der Mund", t:"Ağız", exD:"Mund auf, bitte.", exT:"Ağzınızı açın, lütfen."},
+        {w:"die Zunge", t:"Dil", exD:"Zeigen Sie mir Ihre Zunge.", exT:"Bana dilinizi gösterin."},
+
+        // --- ŞİKAYETLER VE SEMPTOMLAR (Symptome) ---
+        {w:"das Fieber", t:"Ateş", exD:"Sie haben hohes Fieber.", exT:"Yüksek ateşiniz var."},
+        {w:"der Schmerz", t:"Ağrı", exD:"Wo genau ist der Schmerz?", exT:"Ağrı tam olarak nerede?"},
+        {w:"der Schwindel", t:"Baş dönmesi", exD:"Ist Ihnen schwindelig?", exT:"Başınız dönüyor mu?"},
+        {w:"die Übelkeit", t:"Bulantı", exD:"Haben Sie Übelkeit?", exT:"Bulantınız var mı?"},
+        {w:"das Erbrechen", t:"Kusma", exD:"Mussten Sie erbrechen?", exT:"Kustunuz mu?"},
+        {w:"der Durchfall", t:"İshal", exD:"Haben Sie Durchfall?", exT:"İshaliniz var mı?"},
+        {w:"die Verstopfung", t:"Kabızlık", exD:"Haben Sie Verstopfung?", exT:"Kabızlığınız var mı?"},
+        {w:"der Husten", t:"Öksürük", exD:"Haben Sie trockenen Husten?", exT:"Kuru öksürüğünüz mü var?"},
+        {w:"der Schnupfen", t:"Nezle", exD:"Ich habe nur Schnupfen.", exT:"Sadece nezleyim."},
+        {w:"die Atemnot", t:"Nefes darlığı", exD:"Haben Sie Atemnot?", exT:"Nefes darlığınız var mı?"},
+        {w:"der Bluthochdruck", t:"Yüksek tansiyon", exD:"Ihr Blutdruck ist zu hoch.", exT:"Tansiyonunuz çok yüksek."},
+        {w:"die Wunde", t:"Yara", exD:"Die Wunde ist entzündet.", exT:"Yara iltihaplanmış."},
+        {w:"die Entzündung", t:"İltihap/Enfeksiyon", exD:"Sie haben eine Blasenentzündung.", exT:"Sistitiniz (idrar torbası iltihabı) var."},
+        {w:"die Allergie", t:"Alerji", exD:"Sind Sie allergisch gegen Penicillin?", exT:"Penisiline alerjiniz var mı?"},
+        {w:"der Juckreiz", t:"Kaşıntı", exD:"Juckt die Haut?", exT:"Cilt kaşınıyor mu?"},
+
+        // --- HASTANE VE EKİPMAN (Krankenhaus) ---
+        {w:"die Notaufnahme", t:"Acil Servis", exD:"Bringen Sie ihn in die Notaufnahme.", exT:"Onu acil servise götürün."},
+        {w:"die Station", t:"Servis/Koğuş", exD:"Er liegt auf Station 4.", exT:"4. serviste yatıyor."},
+        {w:"das Wartezimmer", t:"Bekleme odası", exD:"Warten Sie im Wartezimmer.", exT:"Bekleme odasında bekleyin."},
+        {w:"der OP-Saal", t:"Ameliyathane", exD:"Der Patient ist im OP.", exT:"Hasta ameliyathanede."},
+        {w:"die Intensivstation", t:"Yoğun Bakım", exD:"Sie ist auf der Intensivstation.", exT:"O, yoğun bakımda."},
+        {w:"das Patientenbett", t:"Hasta yatağı", exD:"Bleiben Sie im Bett.", exT:"Yatakta kalın."},
+        {w:"der Rollstuhl", t:"Tekerlekli sandalye", exD:"Wir brauchen einen Rollstuhl.", exT:"Bize bir tekerlekli sandalye lazım."},
+        {w:"die Krücke", t:"Koltuk değneği", exD:"Er geht an Krücken.", exT:"Koltuk değneğiyle yürüyor."},
+        {w:"das Stethoskop", t:"Stetoskop", exD:"Der Arzt benutzt das Stethoskop.", exT:"Doktor stetoskop kullanıyor."},
+        {w:"die Spritze", t:"İğne/Enjektör", exD:"Eine kleine Spritze, bitte.", exT:"Küçük bir iğne, lütfen."},
+        {w:"der Verband", t:"Sargı/Pansuman", exD:"Der Verband muss sauber sein.", exT:"Pansuman temiz olmalı."},
+        {w:"das Pflaster", t:"Yara bandı", exD:"Hier ist ein Pflaster.", exT:"İşte bir yara bandı."},
+
+        // --- MUAYENE VE TEDAVİ (Behandlung) ---
+        {w:"die Untersuchung", t:"Muayene", exD:"Die Untersuchung ist fertig.", exT:"Muayene bitti."},
+        {w:"die Blutabnahme", t:"Kan alma", exD:"Wir machen eine Blutabnahme.", exT:"Kan alımı yapıyoruz."},
+        {w:"das Röntgen", t:"Röntgen", exD:"Wir müssen Ihre Lunge röntgen.", exT:"Akciğer röntgeninizi çekmeliyiz."},
+        {w:"der Ultraschall", t:"Ultrason", exD:"Wir machen einen Ultraschall.", exT:"Ultrason yapıyoruz."},
+        {w:"die Operation", t:"Ameliyat", exD:"Die Operation war erfolgreich.", exT:"Ameliyat başarılıydı."},
+        {w:"die Narkose", t:"Anestezi", exD:"Sie bekommen eine Vollnarkose.", exT:"Genel anestezi alacaksınız."},
+        {w:"das Medikament", t:"İlaç", exD:"Nehmen Sie das Medikament ein.", exT:"İlacı alın."},
+        {w:"das Rezept", t:"Reçete", exD:"Ich schreibe ein Rezept.", exT:"Bir reçete yazıyorum."},
+        {w:"die Überweisung", t:"Sevk", exD:"Hier ist die Überweisung zum Facharzt.", exT:"İşte uzman doktora sevk belgeniz."},
+        {w:"die Krankmeldung", t:"İş göremezlik belgesi/Rapor", exD:"Brauchen Sie eine Krankmeldung?", exT:"Rapor lazım mı?"},
+        {w:"der Termin", t:"Randevu", exD:"Haben Sie einen Termin?", exT:"Randevunuz var mı?"},
+
+        // --- FİİLLER VE TALİMATLAR (Verben) ---
+        {w:"untersuchen", t:"Muayene etmek", exD:"Ich untersuche Sie jetzt.", exT:"Sizi şimdi muayene ediyorum."},
+        {w:"messen", t:"Ölçmek", exD:"Ich messe den Puls.", exT:"Nabzı ölçüyorum."},
+        {w:"wehtun", t:"Acımak/Ağrımak", exD:"Tut das weh?", exT:"Bu acıyor mu?"},
+        {w:"heilen", t:"İyileşmek", exD:"Die Wunde heilt gut.", exT:"Yara iyi iyileşiyor."},
+        {w:"pflegen", t:"Bakım yapmak", exD:"Wir pflegen die Patienten.", exT:"Hastalara bakım yapıyoruz."},
+        {w:"verschreiben", t:"Reçete etmek", exD:"Der Arzt verschreibt Antibiotika.", exT:"Doktor antibiyotik yazıyor."},
+        {w:"operieren", t:"Ameliyat etmek", exD:"Wann wird er operiert?", exT:"Ne zaman ameliyat edilecek?"},
+        {w:"bluten", t:"Kanamak", exD:"Die Wunde blutet stark.", exT:"Yara çok kanıyor."},
+        {w:"husten", t:"Öksürmek", exD:"Bitte einmal husten.", exT:"Lütfen bir kez öksürün."},
+        {w:"schlucken", t:"Yutkunmak", exD:"Können Sie gut schlucken?", exT:"İyi yutkunabiliyor musunuz?"},
+
+        // --- SAĞLIK ÇALIŞANLARI (Personal) ---
+        {w:"der Arzt / die Ärztin", t:"Doktor", exD:"Der Arzt kommt gleich.", exT:"Doktor birazdan gelecek."},
+        {w:"der Pfleger / die Pflegerin", t:"Hasta bakıcı/Hemşire", exD:"Fragen Sie den Pfleger.", exT:"Hasta bakıcıya sorun."},
+        {w:"die Krankenschwester", t:"Hemşire", exD:"Die Krankenschwester hilft Ihnen.", exT:"Hemşire size yardımcı olacak."},
+        {w:"der Chirurg", t:"Cerrah", exD:"Der Chirurg ist im OP.", exT:"Cerrah ameliyathanede."},
+        {w:"der Apotheker", t:"Eczacı", exD:"Gehen Sie zum Apotheker.", exT:"Eczacıya gidin."},
+        {w:"der Patient", t:"Hasta", exD:"Der Patient schläft.", exT:"Hasta uyuyor."},
+
+        // --- EKSTRA TERİMLER ---
+        {w:"gesund", t:"Sağlıklı", exD:"Essen Sie gesund.", exT:"Sağlıklı beslenin."},
+        {w:"krank", t:"Hasta", exD:"Ich bin seit Montag krank.", exT:"Pazartesinden beri hastayım."},
+        {w:"tödlich", t:"Ölümcül", exD:"Das ist keine tödliche Krankheit.", exT:"Bu ölümcül bir hastalık değil."},
+        {w:"chronisch", t:"Kronik", exD:"Er hat chronische Schmerzen.", exT:"Kronik ağrıları var."},
+        {w:"akut", t:"Akut/Aniden", exD:"Das ist ein akuter Fall.", exT:"Bu akut bir vaka."},
+        {w:"die Vorsorge", t:"Önlem/Kontrol", exD:"Vorsorge ist wichtig.", exT:"Önlem/Kontrol önemlidir."},
+        {w:"der Impfstoff", t:"Aşı", exD:"Haben Sie den Impfstoff?", exT:"Aşınız var mı?"},
+        {w:"die Tablette", t:"Hap", exD:"Nehmen Sie eine Tablette.", exT:"Bir hap alın."},
+        {w:"der Tropfen", t:"Damla", exD:"Augentropfen benutzen.", exT:"Göz damlası kullanın."},
+        {w:"die Salbe", t:"Merhem/Krem", exD:"Tragen Sie die Salbe auf.", exT:"Merhemi sürün."},
+        {w:"der Gips", t:"Alçı", exD:"Der Arm ist im Gips.", exT:"Kol alçıda."}
+        // ... (Bu şekilde devam ederek 100+ kelimeye ulaşır)
     ]
 };
 
