@@ -1053,7 +1053,36 @@ function vUpdateProgress(){
   document.getElementById('vProgressPct').textContent=pct+'%';
   document.getElementById('vPFill').style.width=pct+'%';
 }
+// SESLENDİRME FONKSİYONU
+function speak(text) {
+  if ('speechSynthesis' in window) {
+    window.speechSynthesis.cancel(); 
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'de-DE';
+    utterance.rate = 0.85;
+    window.speechSynthesis.speak(utterance);
+  }
+}
 
+// SAYFAYI BAŞLATMA KOMUTLARI
+window.addEventListener('DOMContentLoaded', () => {
+  // Verileri çek ve yükle
+  if (typeof vGetWords === 'function') {
+    vFiltered = vGetWords();
+    vLoad();
+  }
+  
+  // Diğer modülleri hazırla
+  if (typeof renderGrammarGrid === 'function') renderGrammarGrid();
+  if (typeof renderTextSelector === 'function') renderTextSelector();
+  if (typeof loadReading === 'function') loadReading(0);
+  if (typeof renderSpeakGrid === 'function') renderSpeakGrid();
+});
+
+// Sayfa kapanış etiketleri (Eğer aşağıda zaten varsa bunları silme)
+</script>
+</body>
+</html>
 function vMark(ok){
   if(ok)vCor++;else vWro++;
   document.getElementById('vSC').textContent=vCor;
