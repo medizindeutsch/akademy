@@ -3,965 +3,117 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Deutsch B1 – TELC & Goethe Hazırlık Platformu</title>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,700;0,900;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<title>Deutsch B1 – Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;700;900&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #f5f0e8;
-  --surface: #ede8df;
-  --card: #ffffff;
-  --dark: #1a1612;
-  --dark2: #2d2820;
-  --accent: #c8391a;
-  --accent2: #2a6b4e;
-  --accent3: #c4861a;
-  --text: #1a1612;
-  --muted: #7a7060;
-  --border: #d8d0c0;
-  --shadow: rgba(26,22,18,0.12);
+  --bg: #f5f0e8; --surface: #ede8df; --card: #ffffff; --dark: #1a1612;
+  --accent: #c8391a; --accent2: #2a6b4e; --border: #d8d0c0; --shadow: rgba(26,22,18,0.12);
 }
 *{margin:0;padding:0;box-sizing:border-box;}
-html{scroll-behavior:smooth;}
-body{
-  background:var(--bg);
-  color:var(--text);
-  font-family:'Outfit',sans-serif;
-  min-height:100vh;
-  overflow-x:hidden;
-}
-body::before{
-  content:'';
-  position:fixed;inset:0;
-  background:
-    radial-gradient(circle 600px at 10% 20%, rgba(200,57,26,0.06) 0%,transparent 70%),
-    radial-gradient(circle 500px at 90% 80%, rgba(42,107,78,0.05) 0%,transparent 70%);
-  pointer-events:none;z-index:0;
-}
+body{background:var(--bg); color:var(--dark); font-family:'Outfit',sans-serif; min-height:100vh;}
 
-/* HEADER */
 header{
-  position:sticky;top:0;z-index:100;
-  background:rgba(245,240,232,0.92);
-  backdrop-filter:blur(12px);
-  border-bottom:1px solid var(--border);
-  padding:0 2.5rem;
-  display:flex;align-items:center;justify-content:space-between;
-  height:64px;
+  position:sticky; top:0; z-index:100; background:rgba(245,240,232,0.92);
+  backdrop-filter:blur(12px); border-bottom:1px solid var(--border);
+  padding:0 2rem; display:flex; align-items:center; justify-content:space-between; height:64px;
 }
-.logo{
-  font-family:'Fraunces',serif;
-  font-size:1.5rem;font-weight:900;
-  letter-spacing:-0.5px;
-}
-.logo em{color:var(--accent);font-style:normal;}
+.logo{font-family:'Fraunces',serif; font-size:1.5rem; font-weight:900;}
+.logo em{color:var(--accent); font-style:normal;}
 
-.nav{display:flex;gap:0.3rem;}
-.nav-btn{
-  background:none;border:none;
-  font-family:'Outfit',sans-serif;
-  font-size:0.82rem;font-weight:500;
-  color:var(--muted);
-  padding:0.4rem 0.9rem;
-  border-radius:8px;
-  cursor:pointer;
-  transition:all 0.2s;
-  letter-spacing:0.2px;
-}
-.nav-btn:hover{background:var(--surface);color:var(--text);}
-.nav-btn.active{
-  background:var(--dark);
-  color:#fff;
-}
-.badge{
-  background:var(--dark);color:#fff;
-  border-radius:50px;padding:0.25rem 0.8rem;
-  font-size:0.72rem;font-weight:600;
-  letter-spacing:0.5px;
-}
+nav{display:flex; gap:0.5rem;}
+.nav-btn{background:none; border:none; padding:0.5rem 1rem; cursor:pointer; font-weight:500; border-radius:8px; transition:0.2s;}
+.nav-btn.active{background:var(--dark); color:#fff;}
 
-/* SECTIONS */
-.section{display:none;position:relative;z-index:1;}
+.section{display:none; padding:2rem;}
 .section.active{display:block;}
 
-/* HERO */
-.hero{
-  padding:5rem 2.5rem 4rem;
-  max-width:1100px;margin:0 auto;
-  display:grid;grid-template-columns:1fr 1fr;
-  gap:4rem;align-items:center;
-}
-.hero-title{
-  font-family:'Fraunces',serif;
-  font-size:clamp(2.8rem,5vw,4.2rem);
-  font-weight:900;line-height:1.05;
-  letter-spacing:-1.5px;
-}
-.hero-title .red{color:var(--accent);}
-.hero-title .green{color:var(--accent2);}
-.hero-sub{
-  margin-top:1.2rem;
-  color:var(--muted);
-  font-size:1rem;line-height:1.7;
-  max-width:420px;
-}
-.hero-cta{
-  margin-top:2rem;
-  display:flex;gap:0.8rem;flex-wrap:wrap;
-}
-.btn-primary{
-  background:var(--accent);color:#fff;
-  border:none;border-radius:12px;
-  padding:0.85rem 1.8rem;
-  font-family:'Outfit',sans-serif;
-  font-size:0.95rem;font-weight:600;
-  cursor:pointer;transition:all 0.2s;
-  box-shadow:0 4px 16px rgba(200,57,26,0.3);
-}
-.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(200,57,26,0.35);}
-.btn-secondary{
-  background:var(--card);color:var(--text);
-  border:1.5px solid var(--border);
-  border-radius:12px;padding:0.85rem 1.8rem;
-  font-family:'Outfit',sans-serif;
-  font-size:0.95rem;font-weight:500;
-  cursor:pointer;transition:all 0.2s;
-}
-.btn-secondary:hover{border-color:var(--dark);background:var(--dark);color:#fff;}
-
-.hero-modules{display:flex;flex-direction:column;gap:0.8rem;}
-.module-card{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:16px;
-  padding:1.2rem 1.4rem;
-  display:flex;align-items:center;gap:1rem;
-  cursor:pointer;
-  transition:all 0.25s;
-  box-shadow:0 2px 8px var(--shadow);
-}
-.module-card:hover{transform:translateX(6px);box-shadow:0 4px 20px var(--shadow);}
-.module-icon{
-  width:48px;height:48px;
-  border-radius:12px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:1.4rem;flex-shrink:0;
-}
-.mod-vocab .module-icon{background:#fef3ee;}
-.mod-grammar .module-icon{background:#eef7f2;}
-.mod-reading .module-icon{background:#fef9ee;}
-.mod-speaking .module-icon{background:#eef0fb;}
-.module-title{font-weight:600;font-size:0.95rem;}
-.module-desc{font-size:0.78rem;color:var(--muted);margin-top:0.15rem;}
-.module-arrow{margin-left:auto;color:var(--muted);font-size:1rem;}
-
-/* ═══════════════════════════════════════
-   KELİME MODÜLÜ
-═══════════════════════════════════════ */
-.module-wrapper{
-  max-width:860px;margin:0 auto;
-  padding:3rem 2rem;
-}
-.module-header{
-  display:flex;align-items:center;gap:1rem;
-  margin-bottom:2rem;
-}
-.module-header-icon{
-  width:52px;height:52px;border-radius:14px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:1.6rem;
-}
-.module-header h2{
-  font-family:'Fraunces',serif;
-  font-size:1.8rem;font-weight:900;
-}
-.module-header p{color:var(--muted);font-size:0.87rem;margin-top:0.2rem;}
-
-/* Kategori sekmeleri */
-.tab-bar{
-  display:flex;gap:0.4rem;flex-wrap:wrap;
-  margin-bottom:1.5rem;
-}
-.tab{
-  background:var(--surface);
-  border:1px solid var(--border);
-  border-radius:50px;
-  padding:0.38rem 1rem;
-  font-size:0.8rem;font-weight:500;
-  color:var(--muted);cursor:pointer;
-  transition:all 0.2s;
-  font-family:'Outfit',sans-serif;
-}
-.tab:hover,.tab.active{
-  background:var(--dark);color:#fff;border-color:var(--dark);
-}
-
-/* Kelime kartı */
+/* Flashcard Tasarımı */
 .vocab-card{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:20px;
-  overflow:hidden;
-  box-shadow:0 4px 24px var(--shadow);
-  max-width:560px;margin:0 auto;
+  background:var(--card); border:1px solid var(--border); border-radius:24px;
+  padding:3rem; max-width:500px; margin:2rem auto; text-align:center;
+  box-shadow:0 15px 35px var(--shadow); position:relative;
 }
-.vocab-img{
-  width:100%;height:240px;
-  object-fit:cover;
-  display:block;
-}
-.vocab-img-skeleton{
-  width:100%;height:240px;
-  background:linear-gradient(90deg,var(--surface) 25%,var(--border) 50%,var(--surface) 75%);
-  background-size:200% 100%;
-  animation:shimmer 1.5s infinite;
-}
-@keyframes shimmer{
-  0%{background-position:200% 0;}
-  100%{background-position:-200% 0;}
-}
-.vocab-body{padding:1.6rem 1.8rem;}
-.vocab-artikel{
-  font-size:0.7rem;text-transform:uppercase;
-  letter-spacing:2.5px;color:var(--accent);
-  font-weight:600;margin-bottom:0.3rem;
-}
-.vocab-word{
-  font-family:'Fraunces',serif;
-  font-size:2.4rem;font-weight:900;
-  letter-spacing:-0.5px;
-}
-.vocab-phonetic{
-  color:var(--muted);font-size:0.87rem;
-  font-style:italic;margin-top:0.2rem;
-}
-.vocab-translation{
-  font-family:'Fraunces',serif;
-  font-size:1.8rem;font-weight:700;
-  color:var(--accent2);margin-top:1rem;
-}
-.vocab-example{
-  background:var(--surface);
-  border-radius:10px;
-  padding:0.9rem 1.1rem;
-  margin-top:1rem;
-  font-size:0.88rem;line-height:1.6;
-  color:var(--muted);
-  border-left:3px solid var(--accent3);
-}
-.vocab-example b{color:var(--text);}
-.vocab-actions{
-  display:flex;gap:0.8rem;margin-top:1.2rem;
-}
-.btn-know{
-  flex:1;padding:0.75rem;
-  background:var(--accent2);color:#fff;
-  border:none;border-radius:10px;
-  font-family:'Outfit',sans-serif;
-  font-weight:600;font-size:0.87rem;
-  cursor:pointer;transition:all 0.2s;
-}
-.btn-know:hover{opacity:0.9;transform:translateY(-1px);}
-.btn-next-v{
-  flex:1.5;padding:0.75rem;
-  background:var(--dark);color:#fff;
-  border:none;border-radius:10px;
-  font-family:'Outfit',sans-serif;
-  font-weight:600;font-size:0.87rem;
-  cursor:pointer;transition:all 0.2s;
-}
-.btn-next-v:hover{background:var(--dark2);}
-.btn-forget{
-  flex:1;padding:0.75rem;
-  background:var(--surface);color:var(--muted);
-  border:1px solid var(--border);
-  border-radius:10px;
-  font-family:'Outfit',sans-serif;
-  font-weight:500;font-size:0.87rem;
-  cursor:pointer;transition:all 0.2s;
-}
-.btn-forget:hover{border-color:var(--accent);color:var(--accent);}
+.vocab-word{font-family:'Fraunces',serif; font-size:2.8rem; margin:1rem 0; color:var(--dark);}
+.vocab-translation{font-size:1.4rem; color:var(--accent2); margin-bottom:2rem; opacity:0; transition:0.3s;}
+.vocab-translation.show{opacity:1;}
 
-/* Progress */
-.progress-row{
-  display:flex;justify-content:space-between;
-  font-size:0.78rem;color:var(--muted);
-  margin-bottom:0.4rem;
+.btn-main{
+  background:var(--dark); color:#fff; border:none; padding:1rem 2rem;
+  border-radius:12px; cursor:pointer; font-weight:600; width:100%; margin-top:1rem;
 }
-.pbar{height:5px;background:var(--border);border-radius:99px;overflow:hidden;margin-bottom:1.5rem;}
-.pfill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent3));border-radius:99px;transition:width 0.4s;}
-
-/* Skor */
-.score-row{
-  display:flex;gap:0.8rem;margin-top:1.5rem;
-  max-width:560px;margin-left:auto;margin-right:auto;
-}
-.sbox{
-  flex:1;background:var(--card);
-  border:1px solid var(--border);
-  border-radius:12px;padding:0.9rem;text-align:center;
-}
-.sbox .snum{font-family:'Fraunces',serif;font-size:1.7rem;font-weight:900;}
-.sbox .slbl{font-size:0.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;}
-.sbox.sc .snum{color:var(--accent2);}
-.sbox.sw .snum{color:var(--accent);}
-.sbox.st .snum{color:var(--accent3);}
-
-/* ═══════════════════════════════════════
-   GRAMATİK MODÜLÜ
-═══════════════════════════════════════ */
-.grammar-list{
-  display:grid;gap:1rem;
-  grid-template-columns:1fr 1fr;
-  margin-bottom:2rem;
-}
-.grammar-topic{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:16px;
-  padding:1.4rem;
-  cursor:pointer;
-  transition:all 0.2s;
-  box-shadow:0 2px 8px var(--shadow);
-}
-.grammar-topic:hover{transform:translateY(-3px);box-shadow:0 6px 24px var(--shadow);}
-.grammar-topic .gt-icon{font-size:1.8rem;margin-bottom:0.7rem;}
-.grammar-topic h3{font-weight:600;font-size:0.95rem;margin-bottom:0.3rem;}
-.grammar-topic p{font-size:0.78rem;color:var(--muted);line-height:1.5;}
-.grammar-topic .gt-badge{
-  display:inline-block;margin-top:0.7rem;
-  font-size:0.68rem;font-weight:600;
-  text-transform:uppercase;letter-spacing:1px;
-  padding:0.2rem 0.6rem;border-radius:50px;
-}
-.gt-badge.b1{background:#eef7f2;color:var(--accent2);}
-.gt-badge.a2{background:#fef3ee;color:var(--accent);}
-
-/* Gramer ders ekranı */
-.grammar-lesson{display:none;}
-.grammar-lesson.show{display:block;}
-.grammar-grid-view{display:block;}
-.grammar-grid-view.hide{display:none;}
-.lesson-back{
-  background:none;border:1px solid var(--border);
-  border-radius:8px;padding:0.4rem 0.9rem;
-  font-family:'Outfit',sans-serif;
-  font-size:0.82rem;color:var(--muted);
-  cursor:pointer;margin-bottom:1.5rem;
-  transition:all 0.2s;
-}
-.lesson-back:hover{background:var(--dark);color:#fff;border-color:var(--dark);}
-.lesson-box{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:20px;
-  padding:2rem;
-  box-shadow:0 4px 24px var(--shadow);
-  margin-bottom:1.5rem;
-}
-.lesson-box h3{
-  font-family:'Fraunces',serif;
-  font-size:1.4rem;font-weight:900;
-  margin-bottom:1rem;color:var(--dark);
-}
-.rule-table{width:100%;border-collapse:collapse;margin:1rem 0;}
-.rule-table th{
-  background:var(--dark);color:#fff;
-  padding:0.6rem 0.9rem;
-  font-size:0.8rem;text-align:left;
-  font-weight:500;
-}
-.rule-table th:first-child{border-radius:8px 0 0 8px;}
-.rule-table th:last-child{border-radius:0 8px 8px 0;}
-.rule-table td{
-  padding:0.6rem 0.9rem;
-  border-bottom:1px solid var(--border);
-  font-size:0.87rem;
-}
-.rule-table tr:last-child td{border-bottom:none;}
-.rule-table td b{color:var(--accent);}
-.rule-table td em{color:var(--accent2);font-style:normal;}
-.rule-note{
-  background:rgba(196,134,26,0.08);
-  border:1px solid rgba(196,134,26,0.2);
-  border-radius:10px;padding:0.9rem 1.1rem;
-  font-size:0.87rem;color:var(--dark);
-  margin-top:0.8rem;line-height:1.6;
-}
-.rule-note::before{content:'💡 ';font-size:1rem;}
-
-/* Quiz alanı */
-.quiz-box{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:20px;
-  padding:2rem;
-  box-shadow:0 4px 24px var(--shadow);
-}
-.quiz-box h3{
-  font-family:'Fraunces',serif;
-  font-size:1.2rem;font-weight:900;
-  margin-bottom:1.5rem;
-}
-.quiz-q{
-  font-size:0.95rem;line-height:1.7;
-  margin-bottom:1.2rem;color:var(--dark);
-}
-.quiz-q .blank{
-  display:inline-block;
-  border-bottom:2px solid var(--accent);
-  min-width:80px;text-align:center;
-  color:var(--accent);font-weight:600;
-}
-.options-grid{
-  display:grid;grid-template-columns:1fr 1fr;
-  gap:0.6rem;margin-bottom:1.2rem;
-}
-.opt-btn{
-  background:var(--surface);
-  border:1.5px solid var(--border);
-  border-radius:10px;padding:0.7rem;
-  font-family:'Outfit',sans-serif;
-  font-size:0.87rem;font-weight:500;
-  cursor:pointer;transition:all 0.2s;
-  text-align:center;
-}
-.opt-btn:hover{border-color:var(--dark);background:var(--dark);color:#fff;}
-.opt-btn.correct{background:#eef7f2;border-color:var(--accent2);color:var(--accent2);}
-.opt-btn.wrong{background:#fef0ee;border-color:var(--accent);color:var(--accent);}
-.quiz-feedback{
-  padding:0.8rem 1rem;
-  border-radius:10px;
-  font-size:0.87rem;
-  margin-top:0.5rem;
-  display:none;
-}
-.quiz-feedback.show{display:block;}
-.quiz-feedback.ok{background:#eef7f2;color:var(--accent2);}
-.quiz-feedback.bad{background:#fef0ee;color:var(--accent);}
-.btn-quiz-next{
-  background:var(--dark);color:#fff;
-  border:none;border-radius:10px;
-  padding:0.75rem 2rem;
-  font-family:'Outfit',sans-serif;
-  font-weight:600;font-size:0.87rem;
-  cursor:pointer;margin-top:1rem;
-  transition:all 0.2s;
-  display:none;
-}
-.btn-quiz-next.show{display:inline-block;}
-.btn-quiz-next:hover{background:var(--dark2);}
-
-/* ═══════════════════════════════════════
-   OKUMA MODÜLÜ
-═══════════════════════════════════════ */
-.reading-card{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:20px;
-  padding:2rem;
-  box-shadow:0 4px 24px var(--shadow);
-  margin-bottom:1.5rem;
-}
-.reading-meta{
-  display:flex;gap:0.6rem;align-items:center;
-  margin-bottom:1rem;
-}
-.reading-tag{
-  font-size:0.7rem;font-weight:600;
-  text-transform:uppercase;letter-spacing:1px;
-  padding:0.25rem 0.7rem;border-radius:50px;
-}
-.reading-tag.brief{background:#fef3ee;color:var(--accent);}
-.reading-tag.letter{background:#eef7f2;color:var(--accent2);}
-.reading-tag.article{background:#fef9ee;color:var(--accent3);}
-.reading-difficulty{
-  font-size:0.75rem;color:var(--muted);
-}
-.reading-title{
-  font-family:'Fraunces',serif;
-  font-size:1.5rem;font-weight:900;
-  margin-bottom:1rem;line-height:1.2;
-}
-.reading-text{
-  font-size:0.92rem;line-height:1.9;
-  color:var(--dark);
-  border-top:1px solid var(--border);
-  padding-top:1rem;
-}
-.reading-text .word-highlight{
-  background:rgba(200,57,26,0.08);
-  border-radius:3px;padding:0 2px;
-  cursor:pointer;border-bottom:1px dotted var(--accent);
-  transition:all 0.15s;
-}
-.reading-text .word-highlight:hover{background:rgba(200,57,26,0.18);}
-.word-tooltip{
-  position:fixed;
-  background:var(--dark);color:#fff;
-  border-radius:8px;padding:0.5rem 0.9rem;
-  font-size:0.82rem;
-  pointer-events:none;
-  z-index:999;
-  opacity:0;transition:opacity 0.15s;
-  box-shadow:0 4px 16px rgba(0,0,0,0.3);
-}
-.word-tooltip.show{opacity:1;}
-
-.reading-questions{margin-top:1.5rem;}
-.reading-questions h4{
-  font-weight:700;font-size:0.95rem;
-  margin-bottom:1rem;
-}
-.rq{margin-bottom:1.5rem;}
-.rq p{font-size:0.88rem;margin-bottom:0.6rem;color:var(--dark);}
-.rq label{
-  display:block;
-  background:var(--surface);
-  border:1.5px solid var(--border);
-  border-radius:8px;padding:0.6rem 0.9rem;
-  font-size:0.85rem;margin-bottom:0.4rem;
-  cursor:pointer;transition:all 0.2s;
-}
-.rq label:hover{border-color:var(--dark);}
-.rq label.selected{border-color:var(--dark2);background:var(--dark2);color:#fff;}
-.rq label.correct-ans{border-color:var(--accent2);background:#eef7f2;color:var(--accent2);}
-.rq label.wrong-ans{border-color:var(--accent);background:#fef0ee;color:var(--accent);}
-.rq input[type=radio]{display:none;}
-.btn-check-reading{
-  background:var(--accent);color:#fff;
-  border:none;border-radius:10px;
-  padding:0.8rem 2rem;
-  font-family:'Outfit',sans-serif;
-  font-weight:600;font-size:0.9rem;
-  cursor:pointer;margin-top:0.5rem;
-  transition:all 0.2s;
-}
-.btn-check-reading:hover{opacity:0.9;transform:translateY(-1px);}
-.reading-result{
-  background:var(--surface);border-radius:12px;
-  padding:1rem 1.2rem;margin-top:1rem;
-  font-size:0.88rem;display:none;
-  border:1px solid var(--border);
-}
-.reading-result.show{display:block;}
-
-/* Metin seçici */
-.text-selector{
-  display:flex;gap:0.6rem;flex-wrap:wrap;
-  margin-bottom:1.5rem;
-}
-.tsel-btn{
-  background:var(--surface);
-  border:1px solid var(--border);
-  border-radius:50px;
-  padding:0.4rem 1rem;
-  font-size:0.8rem;font-weight:500;
-  color:var(--muted);cursor:pointer;
-  transition:all 0.2s;
-  font-family:'Outfit',sans-serif;
-}
-.tsel-btn.active,.tsel-btn:hover{background:var(--dark);color:#fff;border-color:var(--dark);}
-
-/* ═══════════════════════════════════════
-   KONUŞMA MODÜLÜ
-═══════════════════════════════════════ */
-.speaking-topics{
-  display:grid;grid-template-columns:1fr 1fr;
-  gap:1rem;margin-bottom:2rem;
-}
-.speak-topic-card{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:16px;padding:1.4rem;
-  cursor:pointer;transition:all 0.25s;
-  box-shadow:0 2px 8px var(--shadow);
-}
-.speak-topic-card:hover{transform:translateY(-3px);box-shadow:0 8px 28px var(--shadow);}
-.stc-icon{font-size:2rem;margin-bottom:0.6rem;}
-.stc-title{font-weight:700;font-size:0.95rem;margin-bottom:0.3rem;}
-.stc-desc{font-size:0.78rem;color:var(--muted);line-height:1.5;}
-.stc-type{
-  margin-top:0.8rem;font-size:0.68rem;
-  font-weight:600;text-transform:uppercase;letter-spacing:1px;
-  color:var(--accent3);
+.btn-speak{
+  background:var(--surface); border:none; width:60px; height:60px;
+  border-radius:50%; cursor:pointer; font-size:1.5rem; margin-bottom:1rem;
 }
 
-.speak-practice{display:none;}
-.speak-practice.show{display:block;}
-.speak-grid-view{display:block;}
-.speak-grid-view.hide{display:none;}
-
-.speak-card{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:20px;padding:2rem;
-  box-shadow:0 4px 24px var(--shadow);
-  margin-bottom:1.5rem;
-}
-.speak-card h3{
-  font-family:'Fraunces',serif;
-  font-size:1.3rem;font-weight:900;
-  margin-bottom:0.5rem;
-}
-.speak-type-tag{
-  display:inline-block;
-  font-size:0.7rem;font-weight:600;
-  text-transform:uppercase;letter-spacing:1px;
-  padding:0.2rem 0.7rem;border-radius:50px;
-  background:#fef9ee;color:var(--accent3);
-  margin-bottom:1.2rem;
-}
-
-.speak-prompt{
-  background:var(--surface);
-  border-radius:12px;
-  padding:1.2rem 1.4rem;
-  margin-bottom:1.2rem;
-  border-left:3px solid var(--accent3);
-}
-.speak-prompt .sp-label{
-  font-size:0.7rem;font-weight:600;
-  text-transform:uppercase;letter-spacing:1.5px;
-  color:var(--accent3);margin-bottom:0.4rem;
-}
-.speak-prompt p{font-size:0.9rem;line-height:1.7;color:var(--dark);}
-.speak-prompt img{
-  width:100%;max-height:200px;
-  object-fit:cover;border-radius:8px;
-  margin-top:0.8rem;
-}
-
-.key-phrases{margin-bottom:1.2rem;}
-.key-phrases h4{
-  font-size:0.8rem;font-weight:700;
-  text-transform:uppercase;letter-spacing:1px;
-  color:var(--muted);margin-bottom:0.7rem;
-}
-.phrase-grid{display:flex;flex-wrap:wrap;gap:0.4rem;}
-.phrase-chip{
-  background:var(--dark);color:#fff;
-  border-radius:50px;
-  padding:0.3rem 0.8rem;
-  font-size:0.8rem;font-weight:500;
-  cursor:pointer;transition:all 0.15s;
-}
-.phrase-chip:hover{background:var(--accent);transform:translateY(-1px);}
-
-.sample-answer{
-  background:rgba(42,107,78,0.05);
-  border:1px solid rgba(42,107,78,0.15);
-  border-radius:12px;
-  padding:1.2rem;
-  margin-top:1rem;
-  display:none;
-}
-.sample-answer.show{display:block;}
-.sample-answer h4{
-  font-size:0.78rem;font-weight:700;
-  text-transform:uppercase;letter-spacing:1px;
-  color:var(--accent2);margin-bottom:0.7rem;
-}
-.sample-answer p{font-size:0.87rem;line-height:1.8;color:var(--dark);}
-.sample-answer .sa-tr{
-  margin-top:0.6rem;
-  font-size:0.82rem;color:var(--muted);
-  border-top:1px solid rgba(42,107,78,0.1);
-  padding-top:0.6rem;
-}
-
-.speak-actions{display:flex;gap:0.8rem;flex-wrap:wrap;}
-.btn-sample{
-  background:var(--accent2);color:#fff;
-  border:none;border-radius:10px;
-  padding:0.7rem 1.4rem;
-  font-family:'Outfit',sans-serif;font-weight:600;
-  font-size:0.87rem;cursor:pointer;
-  transition:all 0.2s;
-}
-.btn-sample:hover{opacity:0.9;}
-.btn-speak-next{
-  background:var(--dark);color:#fff;
-  border:none;border-radius:10px;
-  padding:0.7rem 1.4rem;
-  font-family:'Outfit',sans-serif;font-weight:600;
-  font-size:0.87rem;cursor:pointer;
-  transition:all 0.2s;
-}
-.btn-speak-next:hover{background:var(--dark2);}
-.btn-speak-back{
-  background:var(--surface);color:var(--muted);
-  border:1px solid var(--border);
-  border-radius:10px;padding:0.7rem 1.4rem;
-  font-family:'Outfit',sans-serif;font-weight:500;
-  font-size:0.87rem;cursor:pointer;
-  transition:all 0.2s;
-}
-.btn-speak-back:hover{background:var(--dark);color:#fff;border-color:var(--dark);}
-
-/* Dialog bölümü */
-.dialog-box{
-  background:var(--surface);
-  border-radius:14px;padding:1.2rem;
-  margin-bottom:1rem;
-}
-.dialog-line{
-  display:flex;gap:0.8rem;
-  margin-bottom:0.8rem;align-items:flex-start;
-}
-.dialog-line:last-child{margin-bottom:0;}
-.dlg-speaker{
-  font-size:0.72rem;font-weight:700;
-  text-transform:uppercase;letter-spacing:1px;
-  width:50px;flex-shrink:0;padding-top:2px;
-}
-.dlg-a .dlg-speaker{color:var(--accent);}
-.dlg-b .dlg-speaker{color:var(--accent2);}
-.dlg-text{font-size:0.87rem;line-height:1.7;}
-.dlg-text .fill{
-  color:var(--accent3);font-weight:600;
-  border-bottom:1.5px dashed var(--accent3);
-}
-
-/* Responsive */
-@media(max-width:768px){
-  .hero{grid-template-columns:1fr;gap:2rem;padding:3rem 1.5rem;}
-  .grammar-list,.speaking-topics,.options-grid{grid-template-columns:1fr;}
-  header{padding:0 1.2rem;}
-  .nav-btn{font-size:0.75rem;padding:0.35rem 0.65rem;}
-  .module-wrapper{padding:2rem 1.2rem;}
-}
-
-/* Finish screen */
-.finish-overlay{
-  text-align:center;padding:3rem 1rem;
-  display:none;
-}
-.finish-overlay.show{display:block;}
-.finish-overlay h2{
-  font-family:'Fraunces',serif;
-  font-size:2.8rem;font-weight:900;
-  margin-bottom:0.8rem;
-}
-.finish-overlay p{color:var(--muted);margin-bottom:2rem;}
+/* Progress Bar */
+.progress-container{max-width:500px; margin:0 auto; margin-top:2rem;}
+.progress-bar{background:var(--border); height:8px; border-radius:4px; overflow:hidden;}
+.progress-fill{background:var(--accent); height:100%; width:0%; transition:0.3s;}
 </style>
 </head>
 <body>
 
-<!-- Tooltip -->
-<div class="word-tooltip" id="tooltip"></div>
-
 <header>
   <div class="logo">Deutsch<em>.</em>B1</div>
-  <nav class="nav">
-    <button class="nav-btn active" onclick="goTo('home')">Ana Sayfa</button>
-    <button class="nav-btn" onclick="goTo('vocab')">📚 Kelime</button>
-    <button class="nav-btn" onclick="goTo('grammar')">✏️ Gramer</button>
-    <button class="nav-btn" onclick="goTo('reading')">📄 Okuma</button>
-    <button class="nav-btn" onclick="goTo('speaking')">🎙️ Konuşma</button>
+  <nav>
+    <button class="nav-btn active" onclick="showSec('vocab')">Kelimeler</button>
+    <button class="nav-btn" onclick="showSec('info')">Bilgi</button>
   </nav>
-  <div class="badge">TELC · Goethe B1</div>
 </header>
 
-<!-- ════════════ ANA SAYFA ════════════ -->
-<section class="section active" id="sec-home">
-  <div class="hero">
-    <div>
-      <div class="hero-title">
-        Almanca<br><span class="red">B1</span> seviyene<br><span class="green">ulaş.</span>
-      </div>
-      <p class="hero-sub">TELC ve Goethe B1 sınavlarıyla eş değer içerik. Kelime, gramer, okuma anlama ve konuşma pratiği — hepsi bir arada.</p>
-      <div class="hero-cta">
-        <button class="btn-primary" onclick="goTo('vocab')">Hemen Başla</button>
-        <button class="btn-secondary" onclick="goTo('grammar')">Gramer Çalış</button>
-      </div>
+<section id="sec-vocab" class="section active">
+  <div class="vocab-card">
+    <button class="btn-speak" onclick="speakCurrent()">🔊</button>
+    <div id="vWord" class="vocab-word">Yükleniyor...</div>
+    <div id="vTr" class="vocab-translation">Anlamı Göster</div>
+    <button class="btn-main" onclick="toggleTr()">Anlamı Gör / Gizle</button>
+    <button class="btn-main" style="background:var(--accent2);" onclick="nextWord()">Sonraki Kelime →</button>
+  </div>
+  
+  <div class="progress-container">
+    <div style="display:flex; justify-content:space-between; margin-bottom:0.5rem;">
+      <span id="vCount">0 / 0</span>
+      <span id="vPct">0%</span>
     </div>
-    <div class="hero-modules">
-      <div class="module-card mod-vocab" onclick="goTo('vocab')">
-        <div class="module-icon">📚</div>
-        <div>
-          <div class="module-title">Kelime Hazinesi</div>
-          <div class="module-desc">Görselli flashcard sistemi · B1 zorunlu kelimeler · Tematik kategoriler</div>
-        </div>
-        <div class="module-arrow">→</div>
-      </div>
-      <div class="module-card mod-grammar" onclick="goTo('grammar')">
-        <div class="module-icon">✏️</div>
-        <div>
-          <div class="module-title">Gramer & Yapılar</div>
-          <div class="module-desc">Konjunktiv II · Passiv · Relativsatz · Sınav odaklı alıştırmalar</div>
-        </div>
-        <div class="module-arrow">→</div>
-      </div>
-      <div class="module-card mod-reading" onclick="goTo('reading')">
-        <div class="module-icon">📄</div>
-        <div>
-          <div class="module-title">Okuma Anlama</div>
-          <div class="module-desc">TELC tipi metinler · Çoktan seçmeli sorular · Kelime ipuçları</div>
-        </div>
-        <div class="module-arrow">→</div>
-      </div>
-      <div class="module-card mod-speaking" onclick="goTo('speaking')">
-        <div class="module-icon">🎙️</div>
-        <div>
-          <div class="module-title">Konuşma Pratiği</div>
-          <div class="module-desc">Monolog · Diyalog · Fotoğraf yorumlama · Örnek cevaplar</div>
-        </div>
-        <div class="module-arrow">→</div>
-      </div>
-    </div>
+    <div class="progress-bar"><div id="vFill" class="progress-fill"></div></div>
   </div>
 </section>
 
-<!-- ════════════ KELİME ════════════ -->
-<section class="section" id="sec-vocab">
-  <div class="module-wrapper">
-    <div class="module-header">
-      <div class="module-header-icon" style="background:#fef3ee">📚</div>
-      <div>
-        <h2>Kelime Hazinesi</h2>
-        <p>TELC & Goethe B1 sınavı için zorunlu kelimeler — görselli flashcard sistemi</p>
-      </div>
-    </div>
-
-    <div class="tab-bar" id="vocabCats">
-      <button class="tab active" data-cat="all">Tümü</button>
-      <button class="tab" data-cat="alltag">Günlük Hayat</button>
-      <button class="tab" data-cat="arbeit">İş & Kariyer</button>
-      <button class="tab" data-cat="gesundheit">Sağlık</button>
-      <button class="tab" data-cat="umwelt">Çevre</button>
-      <button class="tab" data-cat="gesellschaft">Toplum</button>
-      <button class="tab" data-cat="reise">Seyahat</button>
-      <button class="tab" data-cat="bildung">Eğitim</button>
-    </div>
-
-    <div class="progress-row">
-      <span id="vProgressText">1 / 1</span>
-      <span id="vProgressPct">0%</span>
-    </div>
-    <div class="pbar"><div class="pfill" id="vPFill" style="width:0%"></div></div>
-
-    <div class="vocab-card" id="vocabCard">
-      <div id="vImgWrap"><div class="vocab-img-skeleton"></div></div>
-      <div class="vocab-body">
-        <div class="vocab-artikel" id="vArtikel"></div>
-        <div class="vocab-word" id="vWord"></div>
-        <div class="vocab-phonetic" id="vPhonetic"></div>
-        <div class="vocab-translation" id="vTr"></div>
-        <div class="vocab-example" id="vExample"></div>
-        <div class="vocab-actions">
-          <button class="btn-forget" onclick="vMark(false)">✗ Tekrar</button>
-          <button class="btn-next-v" onclick="vNext()">Sonraki →</button>
-          <button class="btn-know" onclick="vMark(true)">✓ Bildim</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="finish-overlay" id="vFinish">
-      <h2>Tebrikler! 🎉</h2>
-      <p id="vFinishText"></p>
-      <button class="btn-primary" onclick="vRestart()">Tekrar Başla</button>
-    </div>
-
-    <div class="score-row">
-      <div class="sbox sc"><div class="snum" id="vSC">0</div><div class="slbl">Bildim</div></div>
-      <div class="sbox st"><div class="snum" id="vST">0</div><div class="slbl">Toplam</div></div>
-      <div class="sbox sw"><div class="snum" id="vSW">0</div><div class="slbl">Tekrar</div></div>
-    </div>
-  </div>
-</section>
-
-<!-- ════════════ GRAMER ════════════ -->
-<section class="section" id="sec-grammar">
-  <div class="module-wrapper">
-    <div class="module-header">
-      <div class="module-header-icon" style="background:#eef7f2">✏️</div>
-      <div>
-        <h2>Gramer & Yapılar</h2>
-        <p>B1 sınavında sıkça çıkan gramer konuları — kural + alıştırma</p>
-      </div>
-    </div>
-
-    <div class="grammar-grid-view" id="grammarGrid">
-      <div class="grammar-list" id="grammarList"></div>
-    </div>
-
-    <div class="grammar-lesson" id="grammarLesson">
-      <button class="lesson-back" onclick="backToGrammarGrid()">← Konulara Dön</button>
-      <div id="lessonContent"></div>
-      <div class="quiz-box" id="grammarQuiz">
-        <h3>🧩 Alıştırma</h3>
-        <div class="quiz-q" id="gQuizQ"></div>
-        <div class="options-grid" id="gOptions"></div>
-        <div class="quiz-feedback" id="gFeedback"></div>
-        <button class="btn-quiz-next" id="gNextBtn" onclick="nextGrammarQ()">Sonraki Soru →</button>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ════════════ OKUMA ════════════ -->
-<section class="section" id="sec-reading">
-  <div class="module-wrapper">
-    <div class="module-header">
-      <div class="module-header-icon" style="background:#fef9ee">📄</div>
-      <div>
-        <h2>Okuma Anlama</h2>
-        <p>TELC & Goethe B1 tipi metinler — okuyun, anlayın, soruları cevaplayın</p>
-      </div>
-    </div>
-
-    <div class="text-selector" id="textSelector"></div>
-    <div id="readingContent"></div>
-  </div>
-</section>
-
-<!-- ════════════ KONUŞMA ════════════ -->
-<section class="section" id="sec-speaking">
-  <div class="module-wrapper">
-    <div class="module-header">
-      <div class="module-header-icon" style="background:#eef0fb">🎙️</div>
-      <div>
-        <h2>Konuşma Pratiği</h2>
-        <p>B1 sözlü sınavı için monolog, diyalog ve fotoğraf yorumlama alıştırmaları</p>
-      </div>
-    </div>
-
-    <div class="speak-grid-view" id="speakGrid">
-      <div class="speaking-topics" id="speakTopics"></div>
-    </div>
-
-    <div class="speak-practice" id="speakPractice">
-      <button class="lesson-back" onclick="backToSpeakGrid()">← Konulara Dön</button>
-      <div id="speakContent"></div>
-    </div>
+<section id="sec-info" class="section">
+  <div style="max-width:600px; margin:0 auto; text-align:center;">
+    <h2>Deutsch B1 Hazırlık</h2>
+    <p style="margin-top:1rem;">Bu platform Almanca B1 sınavı için kelime çalışmanıza yardımcı olur.</p>
   </div>
 </section>
 
 <script>
-vUpdateProgress();
-  
-  // Yeni kelimeyi seslendir
-  const currentItem = vFiltered[vIdx];
-  if(currentItem) speak(currentItem.de);
+// KELİME VERİLERİ (Burası senin ana listen)
+const vocabList = [
+  {de: "die Verabredung", tr: "Randevu / Buluşma"},
+  {de: "die Herausforderung", tr: "Zorluk / Meydan okuma"},
+  {de: "sich entscheiden", tr: "Karar vermek"},
+  {de: "beeindruckend", tr: "Etkileyici"},
+  {de: "nachhaltig", tr: "Sürdürülebilir"},
+  {de: "der Erfolg", tr: "Başarı"},
+  {de: "verantwortlich", tr: "Sorumlu"}
+];
+
+let currentIndex = 0;
+
+// SAYFA YÖNETİMİ
+function showSec(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('sec-' + id).classList.add('active');
+  event.currentTarget.classList.add('active');
 }
 
-function vUpdateProgress(){
-  const total = vFiltered.length;
-  if(total === 0) return;
-  const pct = Math.round((vIdx + 1) / total * 100);
-  const pText = document.getElementById('vProgressText');
-  const pPct = document.getElementById('vProgressPct');
-  const pFill = document.getElementById('vPFill');
-  
-  if(pText) pText.textContent = (vIdx + 1) + ' / ' + total;
-  if(pPct) pPct.textContent = pct + '%';
-  if(pFill) pFill.style.width = pct + '%';
-}
-
-// SESLENDİRME MOTORU (SPEAK)
+// SESLENDİRME MOTORU
 function speak(text) {
   if ('speechSynthesis' in window) {
-    window.speechSynthesis.cancel(); 
+    window.speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = 'de-DE';
     utterance.rate = 0.85;
@@ -969,18 +121,41 @@ function speak(text) {
   }
 }
 
-// SAYFAYI ÇALIŞTIRAN ANA ŞALTER
-window.addEventListener('DOMContentLoaded', () => {
-  if (typeof vGetWords === 'function') {
-    vFiltered = vGetWords();
-    vLoad();
-  }
-  if (typeof renderGrammarGrid === 'function') renderGrammarGrid();
-  if (typeof renderTextSelector === 'function') renderTextSelector();
-  if (typeof loadReading === 'function') loadReading(0);
-  if (typeof renderSpeakGrid === 'function') renderSpeakGrid();
-});
+function speakCurrent() {
+  speak(vocabList[currentIndex].de);
+}
 
+// KELİME GÜNCELLEME
+function updateCard() {
+  const item = vocabList[currentIndex];
+  document.getElementById('vWord').textContent = item.de;
+  document.getElementById('vTr').textContent = item.tr;
+  document.getElementById('vTr').classList.remove('show');
+  
+  // Progress Güncelle
+  const total = vocabList.length;
+  const pct = Math.round(((currentIndex + 1) / total) * 100);
+  document.getElementById('vCount').textContent = (currentIndex + 1) + " / " + total;
+  document.getElementById('vPct').textContent = pct + "%";
+  document.getElementById('vFill').style.width = pct + "%";
+
+  // Kelime geldiğinde oku
+  speak(item.de);
+}
+
+function nextWord() {
+  currentIndex = (currentIndex + 1) % vocabList.length;
+  updateCard();
+}
+
+function toggleTr() {
+  document.getElementById('vTr').classList.toggle('show');
+}
+
+// İLK AÇILIŞ
+window.onload = () => {
+  updateCard();
+};
 </script>
 </body>
 </html>
