@@ -938,6 +938,24 @@ header{
 </section>
 
 <script>
+  // SESLENDİRME FONKSİYONU - Buradan kopyala
+function speak(text) {
+  if ('speechSynthesis' in window) {
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'de-DE'; // Almanca aksanı
+    utterance.rate = 0.85;    // Anlaşılır hız
+    window.speechSynthesis.speak(utterance);
+  }
+}
+  function speak(text) {
+  if ('speechSynthesis' in window) {
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'de-DE';
+    utterance.rate = 0.85;
+    window.speechSynthesis.speak(utterance);
+  }
+}
+//
 // ════════════════════════════════════════════
 // NAVİGASYON
 // ════════════════════════════════════════════
@@ -1023,6 +1041,9 @@ function vLoad(){
   document.getElementById('vocabCard').style.display='block';
   document.getElementById('vFinish').classList.remove('show');
   vUpdateProgress();
+  const item = vFiltered[vIdx]; // O anki kelimeyi seçer
+  if(item) speak(item.de);      // Ve seslendirir
+}
 }
 
 function vUpdateProgress(){
