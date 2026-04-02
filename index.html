@@ -1,188 +1,983 @@
+
 <!DOCTYPE html>
-<html lang="de">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MedDeutsch | Tıp Almancası</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary: #2c3e50;
-            --bg: #f0f4f8;
-            --card-bg: #ffffff;
-            --text: #2c3e50;
-            --accent: #3498db;
-            --success: #2ecc71;
-            --error: #e74c3c;
-        }
+<div id="app" style="font-family: 'Segoe UI', system-ui, sans-serif; min-height: 600px; background: var(--color-background-tertiary); padding: 0;">
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
-            margin: 0;
-            transition: all 0.5s ease;
-        }
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --green: #1D9E75; --green-light: #E1F5EE; --green-dark: #085041;
+  --red: #E24B4A; --red-light: #FCEBEB;
+  --amber: #BA7517; --amber-light: #FAEEDA;
+  --blue: #185FA5; --blue-light: #E6F1FB;
+  --purple: #534AB7; --purple-light: #EEEDFE;
+  --gray: #5F5E5A; --gray-light: #F1EFE8;
+}
+.btn { cursor: pointer; border: none; border-radius: 12px; font-weight: 600; font-size: 15px; padding: 12px 20px; transition: all 0.15s; }
+.btn:hover { filter: brightness(1.08); transform: translateY(-1px); }
+.btn:active { transform: scale(0.97); }
+.btn-green { background: var(--green); color: white; }
+.btn-red { background: var(--red); color: white; }
+.btn-blue { background: var(--blue); color: white; }
+.btn-gray { background: var(--color-background-secondary, #f5f5f5); color: var(--color-text-primary); border: 1px solid var(--color-border-tertiary); }
+.screen { display: none; padding: 16px; max-width: 700px; margin: 0 auto; }
+.screen.active { display: block; }
+.heart { color: #E24B4A; font-size: 18px; }
+.xp-bar { height: 8px; border-radius: 4px; background: var(--color-border-tertiary); overflow: hidden; }
+.xp-fill { height: 100%; background: var(--green); border-radius: 4px; transition: width 0.5s; }
+.card { background: var(--color-background-primary); border-radius: 16px; border: 0.5px solid var(--color-border-tertiary); padding: 20px; margin-bottom: 12px; }
+.category-card { cursor: pointer; transition: all 0.2s; }
+.category-card:hover { transform: translateY(-2px); border-color: var(--green); }
+.answer-btn { width: 100%; text-align: left; padding: 14px 18px; border-radius: 12px; border: 2px solid var(--color-border-tertiary); background: var(--color-background-primary); cursor: pointer; font-size: 15px; color: var(--color-text-primary); transition: all 0.15s; margin-bottom: 8px; }
+.answer-btn:hover { border-color: var(--blue); background: var(--blue-light); }
+.answer-btn.correct { border-color: var(--green); background: var(--green-light); color: var(--green-dark); font-weight: 600; }
+.answer-btn.wrong { border-color: var(--red); background: var(--red-light); color: #791F1F; }
+.answer-btn.disabled { pointer-events: none; }
+.badge { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+.badge-green { background: var(--green-light); color: var(--green-dark); }
+.badge-blue { background: var(--blue-light); color: var(--blue); }
+.badge-amber { background: var(--amber-light); color: #633806; }
+.badge-purple { background: var(--purple-light); color: var(--purple); }
+.badge-red { background: var(--red-light); color: #791F1F; }
+.modal-bg { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.4); border-radius: 16px; display: flex; align-items: center; justify-content: center; z-index: 10; }
+.modal { background: var(--color-background-primary); border-radius: 20px; padding: 28px; max-width: 340px; width: 90%; text-align: center; }
+.result-correct { background: var(--green-light); border: 2px solid var(--green); }
+.result-wrong { background: var(--red-light); border: 2px solid var(--red); }
+.tab-btn { padding: 8px 16px; border: none; background: none; cursor: pointer; font-size: 14px; font-weight: 500; color: var(--color-text-secondary); border-bottom: 3px solid transparent; transition: all 0.15s; }
+.tab-btn.active { color: var(--green); border-bottom-color: var(--green); }
+.progress-ring { transform: rotate(-90deg); }
+.word-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
+.word-item { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: 10px; padding: 12px 14px; cursor: pointer; transition: all 0.15s; }
+.word-item:hover { border-color: var(--blue); }
+.streak-flame { font-size: 24px; }
+.level-badge { background: linear-gradient(135deg, #F0C040, #E09B20); color: white; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 16px; }
+input[type=text] { width: 100%; padding: 12px 16px; border-radius: 12px; border: 2px solid var(--color-border-tertiary); font-size: 15px; background: var(--color-background-primary); color: var(--color-text-primary); outline: none; }
+input[type=text]:focus { border-color: var(--blue); }
+.notification { position: fixed; top: 20px; right: 20px; background: var(--green); color: white; padding: 12px 20px; border-radius: 12px; font-weight: 600; z-index: 100; animation: slideIn 0.3s ease; }
+@keyframes slideIn { from { transform: translateX(100px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+@keyframes bounce { 0%,100% { transform: scale(1); } 50% { transform: scale(1.3); } }
+.bounce { animation: bounce 0.4s ease; }
+@keyframes shake { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-8px); } 75% { transform: translateX(8px); } }
+.shake { animation: shake 0.4s ease; }
+.speaker-btn { background: none; border: 1px solid var(--color-border-tertiary); border-radius: 50%; width: 36px; height: 36px; cursor: pointer; font-size: 16px; display: inline-flex; align-items: center; justify-content: center; transition: all 0.15s; }
+.speaker-btn:hover { background: var(--green-light); border-color: var(--green); }
+.add-word-form { background: var(--color-background-secondary); border-radius: 12px; padding: 16px; margin-top: 12px; }
+</style>
 
-        /* Üst Bar ve İlerleme */
-        .header {
-            background: white;
-            padding: 15px 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
+<script>
+const VOCAB = [
+  {id:1,de:"der Arzt",tr:"doktor (erkek)",cat:"Genel",ex:"Der Arzt untersucht den Patienten.",level:"A1"},
+  {id:2,de:"die Ärztin",tr:"doktor (kadın)",cat:"Genel",ex:"Die Ärztin verschreibt ein Medikament.",level:"A1"},
+  {id:3,de:"das Krankenhaus",tr:"hastane",cat:"Genel",ex:"Er wurde ins Krankenhaus eingeliefert.",level:"A1"},
+  {id:4,de:"die Krankenschwester",tr:"hemşire",cat:"Genel",ex:"Die Krankenschwester misst den Blutdruck.",level:"A1"},
+  {id:5,de:"der Patient",tr:"hasta (erkek)",cat:"Genel",ex:"Der Patient klagt über Schmerzen.",level:"A1"},
+  {id:6,de:"die Patientin",tr:"hasta (kadın)",cat:"Genel",ex:"Die Patientin hat Fieber.",level:"A1"},
+  {id:7,de:"das Medikament",tr:"ilaç",cat:"Genel",ex:"Das Medikament muss täglich eingenommen werden.",level:"A1"},
+  {id:8,de:"die Tablette",tr:"tablet / hap",cat:"Genel",ex:"Nehmen Sie drei Tabletten täglich.",level:"A1"},
+  {id:9,de:"das Rezept",tr:"reçete",cat:"Genel",ex:"Der Arzt stellt ein Rezept aus.",level:"A1"},
+  {id:10,de:"die Apotheke",tr:"eczane",cat:"Genel",ex:"Holen Sie das Medikament in der Apotheke.",level:"A1"},
+  {id:11,de:"der Schmerz",tr:"ağrı / acı",cat:"Semptomlar",ex:"Er hat starke Schmerzen im Rücken.",level:"A1"},
+  {id:12,de:"das Fieber",tr:"ateş",cat:"Semptomlar",ex:"Das Kind hat hohes Fieber.",level:"A1"},
+  {id:13,de:"der Husten",tr:"öksürük",cat:"Semptomlar",ex:"Sie hat starken Husten.",level:"A1"},
+  {id:14,de:"der Schnupfen",tr:"nezle",cat:"Semptomlar",ex:"Er hat Schnupfen und Halsschmerzen.",level:"A1"},
+  {id:15,de:"die Übelkeit",tr:"mide bulantısı",cat:"Semptomlar",ex:"Die Übelkeit begann nach dem Essen.",level:"A2"},
+  {id:16,de:"der Schwindel",tr:"baş dönmesi",cat:"Semptomlar",ex:"Sie klagte über Schwindel und Kopfschmerzen.",level:"A2"},
+  {id:17,de:"die Erschöpfung",tr:"yorgunluk / tükenme",cat:"Semptomlar",ex:"Der Patient leidet unter starker Erschöpfung.",level:"B1"},
+  {id:18,de:"der Durchfall",tr:"ishal",cat:"Semptomlar",ex:"Durchfall kann auf eine Infektion hinweisen.",level:"A2"},
+  {id:19,de:"die Verstopfung",tr:"kabızlık",cat:"Semptomlar",ex:"Er leidet seit einer Woche unter Verstopfung.",level:"A2"},
+  {id:20,de:"das Erbrechen",tr:"kusma",cat:"Semptomlar",ex:"Erbrechen und Durchfall sind häufige Symptome.",level:"A2"},
+  {id:21,de:"der Kopfschmerz",tr:"baş ağrısı",cat:"Semptomlar",ex:"Kopfschmerzen können viele Ursachen haben.",level:"A1"},
+  {id:22,de:"der Bauchschmerz",tr:"karın ağrısı",cat:"Semptomlar",ex:"Die Patientin klagt über starke Bauchschmerzen.",level:"A1"},
+  {id:23,de:"der Rückenschmerz",tr:"sırt ağrısı",cat:"Semptomlar",ex:"Rückenschmerzen sind sehr verbreitet.",level:"A1"},
+  {id:24,de:"die Atemnot",tr:"nefes darlığı",cat:"Semptomlar",ex:"Bei Atemnot sofort den Notarzt rufen.",level:"B1"},
+  {id:25,de:"das Herzklopfen",tr:"çarpıntı",cat:"Semptomlar",ex:"Sie bemerkte Herzklopfen beim Treppensteigen.",level:"B1"},
+  {id:26,de:"das Herz",tr:"kalp",cat:"Anatomi",ex:"Das Herz pumpt das Blut durch den Körper.",level:"A1"},
+  {id:27,de:"die Lunge",tr:"akciğer",cat:"Anatomi",ex:"Die Lunge nimmt Sauerstoff auf.",level:"A1"},
+  {id:28,de:"die Leber",tr:"karaciğer",cat:"Anatomi",ex:"Die Leber filtert das Blut.",level:"A1"},
+  {id:29,de:"die Niere",tr:"böbrek",cat:"Anatomi",ex:"Die Nieren regulieren den Wasserhaushalt.",level:"A1"},
+  {id:30,de:"der Magen",tr:"mide",cat:"Anatomi",ex:"Der Magen verdaut die Nahrung.",level:"A1"},
+  {id:31,de:"der Darm",tr:"bağırsak",cat:"Anatomi",ex:"Der Darm ist für die Nährstoffaufnahme zuständig.",level:"A2"},
+  {id:32,de:"das Gehirn",tr:"beyin",cat:"Anatomi",ex:"Das Gehirn steuert alle Körperfunktionen.",level:"A2"},
+  {id:33,de:"die Wirbelsäule",tr:"omurga",cat:"Anatomi",ex:"Die Wirbelsäule schützt das Rückenmark.",level:"B1"},
+  {id:34,de:"der Knochen",tr:"kemik",cat:"Anatomi",ex:"Der Knochen ist gebrochen.",level:"A1"},
+  {id:35,de:"der Muskel",tr:"kas",cat:"Anatomi",ex:"Die Muskeln ziehen sich bei Kälte zusammen.",level:"A1"},
+  {id:36,de:"die Arterie",tr:"atardamar",cat:"Anatomi",ex:"Die Arterie führt sauerstoffreiches Blut.",level:"B1"},
+  {id:37,de:"die Vene",tr:"toplardamar",cat:"Anatomi",ex:"Das Blut fließt durch die Vene zurück.",level:"B1"},
+  {id:38,de:"das Blut",tr:"kan",cat:"Anatomi",ex:"Eine Blutprobe wird entnommen.",level:"A1"},
+  {id:39,de:"die Haut",tr:"deri / cilt",cat:"Anatomi",ex:"Die Haut schützt den Körper.",level:"A1"},
+  {id:40,de:"der Knochen",tr:"kemik",cat:"Anatomi",ex:"Der Knochen ist gebrochen.",level:"A1"},
+  {id:41,de:"der Blutdruck",tr:"tansiyon",cat:"Tanı",ex:"Der Blutdruck ist zu hoch.",level:"A2"},
+  {id:42,de:"die Blutgruppe",tr:"kan grubu",cat:"Tanı",ex:"Welche Blutgruppe haben Sie?",level:"A2"},
+  {id:43,de:"das Röntgen",tr:"röntgen",cat:"Tanı",ex:"Das Röntgenbild zeigt einen Bruch.",level:"A2"},
+  {id:44,de:"die Ultraschall",tr:"ultrason",cat:"Tanı",ex:"Das Ultraschall zeigt keine Auffälligkeiten.",level:"B1"},
+  {id:45,de:"das EKG",tr:"EKG (elektrokardiyogram)",cat:"Tanı",ex:"Das EKG zeigt einen normalen Herzrhythmus.",level:"B1"},
+  {id:46,de:"die Blutuntersuchung",tr:"kan tahlili",cat:"Tanı",ex:"Die Blutuntersuchung ergab erhöhte Werte.",level:"A2"},
+  {id:47,de:"die Diagnose",tr:"tanı / teşhis",cat:"Tanı",ex:"Die Diagnose lautet Lungenentzündung.",level:"B1"},
+  {id:48,de:"der Befund",tr:"bulgular / sonuç",cat:"Tanı",ex:"Die Befunde sind unauffällig.",level:"B1"},
+  {id:49,de:"die Überweisung",tr:"sevk",cat:"Tanı",ex:"Ich stelle eine Überweisung zum Spezialisten aus.",level:"B1"},
+  {id:50,de:"die Untersuchung",tr:"muayene",cat:"Tanı",ex:"Die Untersuchung dauert etwa 30 Minuten.",level:"A2"},
+  {id:51,de:"der Herzinfarkt",tr:"kalp krizi",cat:"Hastalıklar",ex:"Er erlitt einen Herzinfarkt.",level:"B1"},
+  {id:52,de:"der Schlaganfall",tr:"felç / inme",cat:"Hastalıklar",ex:"Ein Schlaganfall erfordert sofortige Behandlung.",level:"B1"},
+  {id:53,de:"die Lungenentzündung",tr:"zatürre / pnömoni",cat:"Hastalıklar",ex:"Die Lungenentzündung wurde antibiotisch behandelt.",level:"B1"},
+  {id:54,de:"der Diabetes",tr:"şeker hastalığı",cat:"Hastalıklar",ex:"Diabetes muss regelmäßig kontrolliert werden.",level:"B1"},
+  {id:55,de:"der Bluthochdruck",tr:"yüksek tansiyon",cat:"Hastalıklar",ex:"Bluthochdruck ist ein Risikofaktor für Herzerkrankungen.",level:"B1"},
+  {id:56,de:"die Allergie",tr:"alerji",cat:"Hastalıklar",ex:"Er hat eine Allergie gegen Penicillin.",level:"A2"},
+  {id:57,de:"die Infektion",tr:"enfeksiyon",cat:"Hastalıklar",ex:"Die Infektion muss antibiotisch behandelt werden.",level:"B1"},
+  {id:58,de:"die Entzündung",tr:"iltihap / enflamasyon",cat:"Hastalıklar",ex:"Die Entzündung ist zurückgegangen.",level:"B1"},
+  {id:59,de:"der Bruch",tr:"kırık",cat:"Hastalıklar",ex:"Der Bruch muss mit Gips behandelt werden.",level:"A2"},
+  {id:60,de:"die Wunde",tr:"yara",cat:"Hastalıklar",ex:"Die Wunde muss desinfiziert werden.",level:"A1"},
+  {id:61,de:"der Krebs",tr:"kanser",cat:"Hastalıklar",ex:"Krebs wird in verschiedenen Stadien behandelt.",level:"B2"},
+  {id:62,de:"die Tuberkulose",tr:"tüberküloz",cat:"Hastalıklar",ex:"Tuberkulose ist eine ansteckende Krankheit.",level:"B2"},
+  {id:63,de:"die Grippe",tr:"grip",cat:"Hastalıklar",ex:"Die Grippe ist sehr ansteckend.",level:"A1"},
+  {id:64,de:"der Asthma",tr:"astım",cat:"Hastalıklar",ex:"Asthma wird mit Inhalatoren behandelt.",level:"B1"},
+  {id:65,de:"die Depression",tr:"depresyon",cat:"Hastalıklar",ex:"Depression ist eine ernste psychische Erkrankung.",level:"B1"},
+  {id:66,de:"das Antibiotikum",tr:"antibiyotik",cat:"İlaçlar",ex:"Das Antibiotikum muss vollständig eingenommen werden.",level:"B1"},
+  {id:67,de:"das Schmerzmittel",tr:"ağrı kesici",cat:"İlaçlar",ex:"Das Schmerzmittel wirkt innerhalb einer Stunde.",level:"A2"},
+  {id:68,de:"das Fiebermittel",tr:"ateş düşürücü",cat:"İlaçlar",ex:"Geben Sie dem Kind ein Fiebermittel.",level:"A2"},
+  {id:69,de:"der Blutdruckmittel",tr:"tansiyon ilacı",cat:"İlaçlar",ex:"Das Blutdruckmittel muss täglich eingenommen werden.",level:"B1"},
+  {id:70,de:"die Spritze",tr:"iğne / enjeksiyon",cat:"İlaçlar",ex:"Die Krankenschwester verabreicht eine Spritze.",level:"A2"},
+  {id:71,de:"der Tropfen",tr:"damla",cat:"İlaçlar",ex:"Nehmen Sie drei Tropfen dreimal täglich.",level:"A2"},
+  {id:72,de:"die Salbe",tr:"merhem",cat:"İlaçlar",ex:"Tragen Sie die Salbe zweimal täglich auf.",level:"A2"},
+  {id:73,de:"das Zäpfchen",tr:"fitil (ilaç)",cat:"İlaçlar",ex:"Das Zäpfchen wirkt schnell.",level:"B1"},
+  {id:74,de:"die Dosis",tr:"doz",cat:"İlaçlar",ex:"Die Dosis wurde erhöht.",level:"B1"},
+  {id:75,de:"der Wirkstoff",tr:"etken madde",cat:"İlaçlar",ex:"Der Wirkstoff ist Ibuprofen.",level:"B2"},
+  {id:76,de:"die Operation",tr:"ameliyat",cat:"Cerrahi",ex:"Die Operation dauerte drei Stunden.",level:"B1"},
+  {id:77,de:"der Operationssaal",tr:"ameliyathane",cat:"Cerrahi",ex:"Der Patient wurde in den Operationssaal gebracht.",level:"B1"},
+  {id:78,de:"die Narkose",tr:"anestezi",cat:"Cerrahi",ex:"Der Patient ist unter Vollnarkose.",level:"B1"},
+  {id:79,de:"die Vollnarkose",tr:"genel anestezi",cat:"Cerrahi",ex:"Bei der Vollnarkose ist der Patient bewusstlos.",level:"B2"},
+  {id:80,de:"die Lokalanästhesie",tr:"lokal anestezi",cat:"Cerrahi",ex:"Die Extraktion wird unter Lokalanästhesie durchgeführt.",level:"B2"},
+  {id:81,de:"der Chirurg",tr:"cerrah",cat:"Cerrahi",ex:"Der Chirurg hat die Operation erfolgreich durchgeführt.",level:"B1"},
+  {id:82,de:"die Naht",tr:"dikiş (cerrahi)",cat:"Cerrahi",ex:"Die Naht muss nach einer Woche entfernt werden.",level:"B1"},
+  {id:83,de:"der Verband",tr:"bandaj / pansuman",cat:"Cerrahi",ex:"Der Verband muss täglich gewechselt werden.",level:"A2"},
+  {id:84,de:"die Rehabilitation",tr:"rehabilitasyon",cat:"Cerrahi",ex:"Nach der Operation folgt die Rehabilitation.",level:"B2"},
+  {id:85,de:"die Wundversorgung",tr:"yara bakımı",cat:"Cerrahi",ex:"Die Wundversorgung verhindert Infektionen.",level:"B1"},
+  {id:86,de:"die Notaufnahme",tr:"acil servis",cat:"Hastane",ex:"Er wurde in die Notaufnahme eingeliefert.",level:"A2"},
+  {id:87,de:"die Intensivstation",tr:"yoğun bakım",cat:"Hastane",ex:"Der Patient liegt auf der Intensivstation.",level:"B1"},
+  {id:88,de:"die Ambulanz",tr:"poliklinik / ambulans",cat:"Hastane",ex:"Gehen Sie bitte in die Ambulanz.",level:"B1"},
+  {id:89,de:"die Station",tr:"servis / koğuş",cat:"Hastane",ex:"Der Patient ist auf Station 3.",level:"B1"},
+  {id:90,de:"das Bett",tr:"yatak",cat:"Hastane",ex:"Auf der Station sind alle Betten belegt.",level:"A1"},
+  {id:91,de:"die Visite",tr:"vizit",cat:"Hastane",ex:"Die Visite findet täglich um 8 Uhr statt.",level:"B1"},
+  {id:92,de:"die Aufnahme",tr:"kabul / başvuru",cat:"Hastane",ex:"Die Aufnahme erfolgt über die Zentrale.",level:"B1"},
+  {id:93,de:"die Entlassung",tr:"taburculuk",cat:"Hastane",ex:"Die Entlassung ist für Freitag geplant.",level:"B1"},
+  {id:94,de:"der Krankenpfleger",tr:"erkek hemşire",cat:"Hastane",ex:"Der Krankenpfleger wechselt den Verband.",level:"A2"},
+  {id:95,de:"der Chefarzt",tr:"başhekim",cat:"Hastane",ex:"Der Chefarzt leitet die Abteilung.",level:"B1"},
+  {id:96,de:"die Kardiologie",tr:"kardiyoloji",cat:"Uzmanlıklar",ex:"Er ist Facharzt für Kardiologie.",level:"B2"},
+  {id:97,de:"die Neurologie",tr:"nöroloji",cat:"Uzmanlıklar",ex:"Die Neurologie befasst sich mit Erkrankungen des Nervensystems.",level:"B2"},
+  {id:98,de:"die Orthopädie",tr:"ortopedi",cat:"Uzmanlıklar",ex:"Orthopädie behandelt Erkrankungen des Bewegungsapparates.",level:"B2"},
+  {id:99,de:"die Gynäkologie",tr:"jinekololji",cat:"Uzmanlıklar",ex:"Die Gynäkologie betreut Schwangerschaften.",level:"B2"},
+  {id:100,de:"die Pädiatrie",tr:"pediatri / çocuk hekimliği",cat:"Uzmanlıklar",ex:"Die Pädiatrie behandelt Kinder.",level:"B2"},
+  {id:101,de:"die Psychiatrie",tr:"psikiyatri",cat:"Uzmanlıklar",ex:"Er wurde in die Psychiatrie überwiesen.",level:"B2"},
+  {id:102,de:"die Dermatologie",tr:"dermatoloji",cat:"Uzmanlıklar",ex:"Dermatologie befasst sich mit Hauterkrankungen.",level:"B2"},
+  {id:103,de:"die Ophthalmologie",tr:"oftalmoloji / göz hastalıkları",cat:"Uzmanlıklar",ex:"Ophthalmologie behandelt Erkrankungen der Augen.",level:"C1"},
+  {id:104,de:"die Urologie",tr:"üroloji",cat:"Uzmanlıklar",ex:"Urologie befasst sich mit Erkrankungen der Harnwege.",level:"B2"},
+  {id:105,de:"die Onkologie",tr:"onkoloji",cat:"Uzmanlıklar",ex:"Die Onkologie behandelt Krebserkrankungen.",level:"C1"},
+  {id:106,de:"der Puls",tr:"nabız",cat:"Vital",ex:"Der Puls ist zu schnell.",level:"A2"},
+  {id:107,de:"die Temperatur",tr:"vücut ısısı",cat:"Vital",ex:"Die Temperatur beträgt 38,5 Grad.",level:"A2"},
+  {id:108,de:"die Sauerstoffsättigung",tr:"oksijen saturasyonu",cat:"Vital",ex:"Die Sauerstoffsättigung liegt bei 95%.",level:"C1"},
+  {id:109,de:"der Atemfrequenz",tr:"solunum hızı",cat:"Vital",ex:"Die Atemfrequenz ist erhöht.",level:"C1"},
+  {id:110,de:"das Gewicht",tr:"kilo / ağırlık",cat:"Vital",ex:"Das Gewicht des Patienten hat abgenommen.",level:"A1"},
+  {id:111,de:"die Größe",tr:"boy / uzunluk",cat:"Vital",ex:"Wie groß sind Sie?",level:"A1"},
+  {id:112,de:"der BMI",tr:"vücut kitle indeksi",cat:"Vital",ex:"Der BMI liegt im normalen Bereich.",level:"B2"},
+  {id:113,de:"der Bewusstsein",tr:"bilinç",cat:"Vital",ex:"Der Patient ist bei vollem Bewusstsein.",level:"B2"},
+  {id:114,de:"die Reflexe",tr:"refleksler",cat:"Vital",ex:"Die Reflexe sind normal.",level:"B2"},
+  {id:115,de:"die Pupille",tr:"göz bebeği",cat:"Vital",ex:"Die Pupillen reagieren auf Licht.",level:"B2"},
+  {id:116,de:"die Schwangerschaft",tr:"hamilelik",cat:"Özel Durumlar",ex:"Die Schwangerschaft verläuft komplikationslos.",level:"B1"},
+  {id:117,de:"die Geburt",tr:"doğum",cat:"Özel Durumlar",ex:"Die Geburt verlief ohne Probleme.",level:"A2"},
+  {id:118,de:"die Fehlgeburt",tr:"düşük / düşük yapma",cat:"Özel Durumlar",ex:"Sie hatte leider eine Fehlgeburt.",level:"B2"},
+  {id:119,de:"die Notfall",tr:"acil durum",cat:"Özel Durumlar",ex:"Im Notfall rufen Sie bitte 112.",level:"A2"},
+  {id:120,de:"die Wiederbelebung",tr:"canlandırma / resüsitasyon",cat:"Özel Durumlar",ex:"Die Wiederbelebungsmaßnahmen waren erfolgreich.",level:"C1"},
+  {id:121,de:"die Impfung",tr:"aşılama",cat:"Önlem",ex:"Die Impfung schützt vor Infektionskrankheiten.",level:"B1"},
+  {id:122,de:"der Impfpass",tr:"aşı kartı",cat:"Önlem",ex:"Bringen Sie bitte Ihren Impfpass mit.",level:"B1"},
+  {id:123,de:"die Vorsorgeuntersuchung",tr:"tarama / önleyici muayene",cat:"Önlem",ex:"Regelmäßige Vorsorgeuntersuchungen sind wichtig.",level:"B2"},
+  {id:124,de:"die Krankenversicherung",tr:"sağlık sigortası",cat:"Önlem",ex:"Haben Sie eine Krankenversicherung?",level:"B1"},
+  {id:125,de:"die Krankenakte",tr:"tıbbi kayıtlar",cat:"Önlem",ex:"Die Krankenakte wird digital gespeichert.",level:"B2"},
+  {id:126,de:"der Mundschutz",tr:"maske",cat:"Önlem",ex:"Bitte tragen Sie einen Mundschutz.",level:"A2"},
+  {id:127,de:"die Desinfektion",tr:"dezenfeksiyon",cat:"Önlem",ex:"Desinfektion ist essenziell zur Keimbekämpfung.",level:"B2"},
+  {id:128,de:"der Handschuhe",tr:"eldiven",cat:"Önlem",ex:"Der Arzt trägt sterile Handschuhe.",level:"A1"},
+  {id:129,de:"die Sterilisation",tr:"sterilizasyon",cat:"Önlem",ex:"Alle Instrumente müssen sterilisiert werden.",level:"C1"},
+  {id:130,de:"die Hygiene",tr:"hijyen",cat:"Önlem",ex:"Hygiene ist das A und O in der Medizin.",level:"A2"},
+  {id:131,de:"das Nervensystem",tr:"sinir sistemi",cat:"Anatomi",ex:"Das Nervensystem steuert Reflexe und Bewegungen.",level:"B2"},
+  {id:132,de:"die Bauchspeicheldrüse",tr:"pankreas",cat:"Anatomi",ex:"Die Bauchspeicheldrüse produziert Insulin.",level:"C1"},
+  {id:133,de:"die Gallenblase",tr:"safra kesesi",cat:"Anatomi",ex:"Die Gallenblase speichert die Gallenflüssigkeit.",level:"B2"},
+  {id:134,de:"die Milz",tr:"dalak",cat:"Anatomi",ex:"Die Milz filtert das Blut.",level:"B2"},
+  {id:135,de:"das Rückenmark",tr:"omurilik",cat:"Anatomi",ex:"Das Rückenmark ist Teil des Zentralnervensystems.",level:"C1"},
+  {id:136,de:"der Lymphknoten",tr:"lenf düğümü",cat:"Anatomi",ex:"Die Lymphknoten sind geschwollen.",level:"B2"},
+  {id:137,de:"die Schilddrüse",tr:"tiroid bezi",cat:"Anatomi",ex:"Die Schilddrüse regelt den Stoffwechsel.",level:"B2"},
+  {id:138,de:"die Nebenniere",tr:"böbreküstü bezi",cat:"Anatomi",ex:"Die Nebenniere produziert Adrenalin.",level:"C1"},
+  {id:139,de:"der Hoden",tr:"testis",cat:"Anatomi",ex:"Hodenkrebs ist eine häufige Erkrankung bei jungen Männern.",level:"C1"},
+  {id:140,de:"die Eierstock",tr:"yumurtalık",cat:"Anatomi",ex:"Die Eierstöcke produzieren Östrogen.",level:"C1"},
+  {id:141,de:"chronisch",tr:"kronik",cat:"Sıfatlar",ex:"Er leidet an einer chronischen Erkrankung.",level:"B1"},
+  {id:142,de:"akut",tr:"akut",cat:"Sıfatlar",ex:"Es handelt sich um eine akute Situation.",level:"B1"},
+  {id:143,de:"gutartig",tr:"iyi huylu",cat:"Sıfatlar",ex:"Der Tumor ist gutartig.",level:"B2"},
+  {id:144,de:"bösartig",tr:"kötü huylu / habis",cat:"Sıfatlar",ex:"Der Befund zeigt bösartige Zellen.",level:"B2"},
+  {id:145,de:"stationär",tr:"yatarak tedavi",cat:"Sıfatlar",ex:"Er wird stationär behandelt.",level:"B2"},
+  {id:146,de:"ambulant",tr:"ayakta tedavi",cat:"Sıfatlar",ex:"Die Behandlung erfolgt ambulant.",level:"B2"},
+  {id:147,de:"stabil",tr:"stabil / kararlı",cat:"Sıfatlar",ex:"Der Zustand des Patienten ist stabil.",level:"B1"},
+  {id:148,de:"kritisch",tr:"kritik",cat:"Sıfatlar",ex:"Der Patient befindet sich in einem kritischen Zustand.",level:"B1"},
+  {id:149,de:"infektiös",tr:"bulaşıcı",cat:"Sıfatlar",ex:"Die Krankheit ist hochgradig infektiös.",level:"B2"},
+  {id:150,de:"steril",tr:"steril",cat:"Sıfatlar",ex:"Das Besteck muss steril sein.",level:"B1"},
+  {id:151,de:"einatmen",tr:"nefes almak (içeri)",cat:"Fiiller",ex:"Bitte einatmen und nicht bewegen.",level:"A2"},
+  {id:152,de:"ausatmen",tr:"nefes vermek (dışarı)",cat:"Fiiller",ex:"Jetzt bitte tief ausatmen.",level:"A2"},
+  {id:153,de:"schlucken",tr:"yutmak",cat:"Fiiller",ex:"Können Sie ohne Schmerzen schlucken?",level:"A2"},
+  {id:154,de:"husten",tr:"öksürmek",cat:"Fiiller",ex:"Bitte einmal kräftig husten.",level:"A2"},
+  {id:155,de:"niesen",tr:"hapşırmak",cat:"Fiiller",ex:"Er muss ständig niesen.",level:"A2"},
+  {id:156,de:"untersuchen",tr:"muayene etmek",cat:"Fiiller",ex:"Der Arzt untersucht die Wunde.",level:"B1"},
+  {id:157,de:"verschreiben",tr:"reçete yazmak",cat:"Fiiller",ex:"Ich verschreibe Ihnen ein Antibiotikum.",level:"B1"},
+  {id:158,de:"operieren",tr:"ameliyat etmek",cat:"Fiiller",ex:"Der Chirurg operiert morgen.",level:"B1"},
+  {id:159,de:"verbinden",tr:"sarmak / pansuman yapmak",cat:"Fiiller",ex:"Die Wunde muss verbunden werden.",level:"B1"},
+  {id:160,de:"bluten",tr:"kanamak",cat:"Fiiller",ex:"Die Wunde blutet stark.",level:"A2"},
+  {id:161,de:"schwellen",tr:"şişmek",cat:"Fiiller",ex:"Das Bein ist stark geschwollen.",level:"B1"},
+  {id:162,de:"heilen",tr:"iyileşmek / iyileştirmek",cat:"Fiiller",ex:"Die Wunde heilt gut.",level:"B1"},
+  {id:163,de:"erholen",tr:"iyileşmek / toparlamak",cat:"Fiiller",ex:"Er erholt sich langsam.",level:"B1"},
+  {id:164,de:"klagen",tr:"şikâyet etmek",cat:"Fiiller",ex:"Die Patientin klagt über starke Schmerzen.",level:"B1"},
+  {id:165,de:"leiden",tr:"acı çekmek / muzdarip olmak",cat:"Fiiller",ex:"Er leidet an einer chronischen Erkrankung.",level:"B1"},
+  {id:166,de:"die Sepsis",tr:"sepsis / kan zehirlenmesi",cat:"Acil",ex:"Eine Sepsis kann lebensbedrohlich sein.",level:"C1"},
+  {id:167,de:"der Kollaps",tr:"çöküş / bayılma",cat:"Acil",ex:"Der Patient erlitt einen Kreislaufkollaps.",level:"B2"},
+  {id:168,de:"die Reanimation",tr:"yeniden canlandırma",cat:"Acil",ex:"Die Reanimation war erfolgreich.",level:"C1"},
+  {id:169,de:"der Defibrillator",tr:"defibrilatör",cat:"Acil",ex:"Ein Defibrillator gibt elektrische Schocks ans Herz.",level:"C1"},
+  {id:170,de:"der Bewusstlosigkeit",tr:"bilinç kaybı",cat:"Acil",ex:"Bei Bewusstlosigkeit sofort Notruf wählen.",level:"B2"},
+  {id:171,de:"die Wunde",tr:"yara",cat:"Acil",ex:"Die Wunde wurde sofort versorgt.",level:"A1"},
+  {id:172,de:"der Notruf",tr:"acil çağrı",cat:"Acil",ex:"Rufen Sie den Notruf 112 an.",level:"B1"},
+  {id:173,de:"der Rettungswagen",tr:"ambulans",cat:"Acil",ex:"Der Rettungswagen kam in 5 Minuten.",level:"A2"},
+  {id:174,de:"die erste Hilfe",tr:"ilk yardım",cat:"Acil",ex:"Erste Hilfe kann Leben retten.",level:"A2"},
+  {id:175,de:"der Notarzt",tr:"acil doktor",cat:"Acil",ex:"Der Notarzt behandelt lebensbedrohliche Situationen.",level:"B1"},
+  {id:176,de:"die Zuckerkrankheit",tr:"şeker hastalığı",cat:"Kronik",ex:"Zuckerkrankheit erfordert lebenslange Behandlung.",level:"B1"},
+  {id:177,de:"die Herzinsuffizienz",tr:"kalp yetmezliği",cat:"Kronik",ex:"Herzinsuffizienz ist eine ernste Erkrankung.",level:"C1"},
+  {id:178,de:"die Niereninsuffizienz",tr:"böbrek yetmezliği",cat:"Kronik",ex:"Bei Niereninsuffizienz ist Dialyse nötig.",level:"C1"},
+  {id:179,de:"die Leberinsuffizienz",tr:"karaciğer yetmezliği",cat:"Kronik",ex:"Leberinsuffizienz kann lebensbedrohlich sein.",level:"C1"},
+  {id:180,de:"die Multiple Sklerose",tr:"multipl skleroz",cat:"Kronik",ex:"Multiple Sklerose ist eine autoimmune Erkrankung.",level:"C1"},
+  {id:181,de:"die Epilepsie",tr:"epilepsi",cat:"Kronik",ex:"Epilepsie wird mit Antiepileptika behandelt.",level:"C1"},
+  {id:182,de:"der Morbus Parkinson",tr:"Parkinson hastalığı",cat:"Kronik",ex:"Morbus Parkinson verursacht Zittern.",level:"C1"},
+  {id:183,de:"die Demenz",tr:"bunama / demans",cat:"Kronik",ex:"Demenz ist eine häufige Erkrankung im Alter.",level:"B2"},
+  {id:184,de:"der Alzheimer",tr:"Alzheimer",cat:"Kronik",ex:"Alzheimer ist die häufigste Form der Demenz.",level:"B2"},
+  {id:185,de:"die Rheuma",tr:"romatizma",cat:"Kronik",ex:"Rheuma betrifft vor allem Gelenke und Muskeln.",level:"B2"},
+  {id:186,de:"die Probe",tr:"örnek / numune",cat:"Laboratuvar",ex:"Eine Blutprobe wird ins Labor geschickt.",level:"B1"},
+  {id:187,de:"das Labor",tr:"laboratuvar",cat:"Laboratuvar",ex:"Das Labor analysiert die Blutprobe.",level:"B1"},
+  {id:188,de:"der Harnstoff",tr:"üre",cat:"Laboratuvar",ex:"Der Harnstoff im Blut ist erhöht.",level:"C1"},
+  {id:189,de:"der Blutzucker",tr:"kan şekeri",cat:"Laboratuvar",ex:"Der Blutzucker wird nüchtern gemessen.",level:"B2"},
+  {id:190,de:"das Cholesterin",tr:"kolesterol",cat:"Laboratuvar",ex:"Das Cholesterin liegt im Normbereich.",level:"B2"},
+  {id:191,de:"der Hämoglobin",tr:"hemoglobin",cat:"Laboratuvar",ex:"Der Hämoglobinwert ist erniedrigt.",level:"C1"},
+  {id:192,de:"die Leukozyten",tr:"akyuvarlar",cat:"Laboratuvar",ex:"Erhöhte Leukozyten deuten auf Infektion hin.",level:"C1"},
+  {id:193,de:"die Erythrozyten",tr:"kırmızı kan hücreleri",cat:"Laboratuvar",ex:"Erythrozyten sind die roten Blutkörperchen.",level:"C1"},
+  {id:194,de:"die Thrombozyten",tr:"trombositler (plateletler)",cat:"Laboratuvar",ex:"Niedrige Thrombozyten können zu Blutungen führen.",level:"C1"},
+  {id:195,de:"der Kreatinin",tr:"kreatinin",cat:"Laboratuvar",ex:"Erhöhter Kreatinin deutet auf Nierenprobleme hin.",level:"C1"},
+  {id:196,de:"die Blinddarmentzündung",tr:"apandisit",cat:"Hastalıklar",ex:"Eine Blinddarmentzündung muss sofort operiert werden.",level:"B2"},
+  {id:197,de:"der Bandscheibenvorfall",tr:"disk fıtığı",cat:"Hastalıklar",ex:"Ein Bandscheibenvorfall verursacht starke Rückenschmerzen.",level:"B2"},
+  {id:198,de:"die Migräne",tr:"migren",cat:"Hastalıklar",ex:"Migräne ist durch starke Kopfschmerzen gekennzeichnet.",level:"B1"},
+  {id:199,de:"das Magengeschwür",tr:"mide ülseri",cat:"Hastalıklar",ex:"Magengeschwüre können durch Helicobacter pylori verursacht werden.",level:"B2"},
+  {id:200,de:"die Thrombose",tr:"tromboz",cat:"Hastalıklar",ex:"Eine Thrombose kann zu Lungenembolie führen.",level:"C1"},
+  {id:201,de:"die Leber",tr:"karaciğer",cat:"Anatomi",ex:"Die Leber ist das größte innere Organ.",level:"A1"},
+  {id:202,de:"das Kniegelenk",tr:"diz eklemi",cat:"Anatomi",ex:"Das Kniegelenk ist oft von Arthrose betroffen.",level:"B1"},
+  {id:203,de:"die Schulter",tr:"omuz",cat:"Anatomi",ex:"Die Schulter ist ein komplexes Gelenk.",level:"A1"},
+  {id:204,de:"der Ellenbogen",tr:"dirsek",cat:"Anatomi",ex:"Er hat sich den Ellenbogen verletzt.",level:"A1"},
+  {id:205,de:"das Sprunggelenk",tr:"ayak bileği",cat:"Anatomi",ex:"Das Sprunggelenk ist verstaucht.",level:"B1"},
+  {id:206,de:"die Rippe",tr:"kaburga",cat:"Anatomi",ex:"Er hat eine gebrochene Rippe.",level:"A2"},
+  {id:207,de:"das Sternum",tr:"göğüs kemiği",cat:"Anatomi",ex:"Das Sternum schützt das Herz.",level:"B2"},
+  {id:208,de:"das Schlüsselbein",tr:"köprücük kemiği",cat:"Anatomi",ex:"Das Schlüsselbein ist gebrochen.",level:"B1"},
+  {id:209,de:"die Achillessehne",tr:"aşil tendonu",cat:"Anatomi",ex:"Eine gerissene Achillessehne erfordert Operation.",level:"B2"},
+  {id:210,de:"der Meniskus",tr:"menisküs",cat:"Anatomi",ex:"Der Meniskus ist gerissen.",level:"B2"},
+  {id:211,de:"das Insulin",tr:"insülin",cat:"İlaçlar",ex:"Diabetiker spritzen täglich Insulin.",level:"B2"},
+  {id:212,de:"das Kortison",tr:"kortizon",cat:"İlaçlar",ex:"Kortison wirkt entzündungshemmend.",level:"B2"},
+  {id:213,de:"das Morphin",tr:"morfin",cat:"İlaçlar",ex:"Morphin ist ein starkes Schmerzmittel.",level:"B2"},
+  {id:214,de:"das Aspirin",tr:"aspirin",cat:"İlaçlar",ex:"Aspirin verdünnt das Blut.",level:"A2"},
+  {id:215,de:"das Ibuprofen",tr:"ibuprofen",cat:"İlaçlar",ex:"Ibuprofen wirkt schmerzstillend und entzündungshemmend.",level:"A2"},
+  {id:216,de:"das Paracetamol",tr:"parasetamol",cat:"İlaçlar",ex:"Paracetamol ist besonders für Kinder geeignet.",level:"A2"},
+  {id:217,de:"der Blutgerinnungshemmer",tr:"kan sulandırıcı",cat:"İlaçlar",ex:"Ein Blutgerinnungshemmer verhindert Thrombosen.",level:"C1"},
+  {id:218,de:"das Diuretikum",tr:"idrar söktürücü",cat:"İlaçlar",ex:"Diuretika fördern die Urinproduktion.",level:"C1"},
+  {id:219,de:"das Antidepressivum",tr:"antidepresan",cat:"İlaçlar",ex:"Das Antidepressivum wirkt erst nach Wochen.",level:"C1"},
+  {id:220,de:"das Sedativum",tr:"sakinleştirici",cat:"İlaçlar",ex:"Das Sedativum beruhigt den Patienten.",level:"C1"},
+  {id:221,de:"die Anamnese",tr:"anamnez / tıbbi öykü",cat:"Klinik",ex:"Die Anamnese gibt wichtige Hinweise auf die Erkrankung.",level:"C1"},
+  {id:222,de:"die Prognose",tr:"prognoz / beklenti",cat:"Klinik",ex:"Die Prognose ist günstig.",level:"B2"},
+  {id:223,de:"die Therapie",tr:"tedavi",cat:"Klinik",ex:"Die Therapie wird individuell angepasst.",level:"B1"},
+  {id:224,de:"die Chemotherapie",tr:"kemoterapi",cat:"Klinik",ex:"Die Chemotherapie hat Nebenwirkungen.",level:"B2"},
+  {id:225,de:"die Radiotherapie",tr:"radyoterapi",cat:"Klinik",ex:"Radiotherapie nutzt Strahlen zur Tumorbehandlung.",level:"C1"},
+  {id:226,de:"die Physiotherapie",tr:"fizyoterapi",cat:"Klinik",ex:"Physiotherapie hilft bei Rückenschmerzen.",level:"B1"},
+  {id:227,de:"die Ergotherapie",tr:"ergo terapi",cat:"Klinik",ex:"Ergotherapie fördert die Selbstständigkeit.",level:"B2"},
+  {id:228,de:"die Psychotherapie",tr:"psikоterapi",cat:"Klinik",ex:"Psychotherapie ist bei Depression hilfreich.",level:"B2"},
+  {id:229,de:"die Palliativmedizin",tr:"palyatif tıp",cat:"Klinik",ex:"Palliativmedizin lindert Schmerzen bei unheilbaren Krankheiten.",level:"C1"},
+  {id:230,de:"die Nachsorge",tr:"takip / kontrol",cat:"Klinik",ex:"Die Nachsorge findet alle drei Monate statt.",level:"B2"},
+  {id:231,de:"das Auge",tr:"göz",cat:"Anatomi",ex:"Das Auge verarbeitet Licht zu Bildern.",level:"A1"},
+  {id:232,de:"das Ohr",tr:"kulak",cat:"Anatomi",ex:"Das Ohr ermöglicht das Hören.",level:"A1"},
+  {id:233,de:"die Nase",tr:"burun",cat:"Anatomi",ex:"Die Nase filtert die Luft.",level:"A1"},
+  {id:234,de:"der Mund",tr:"ağız",cat:"Anatomi",ex:"Im Mund beginnt die Verdauung.",level:"A1"},
+  {id:235,de:"der Hals",tr:"boyun / boğaz",cat:"Anatomi",ex:"Er hat Halsschmerzen.",level:"A1"},
+  {id:236,de:"die Zunge",tr:"dil",cat:"Anatomi",ex:"Die Zunge hilft beim Sprechen und Schmecken.",level:"A1"},
+  {id:237,de:"die Zähne",tr:"dişler",cat:"Anatomi",ex:"Regelmäßiges Zähneputzen verhindert Karies.",level:"A1"},
+  {id:238,de:"die Brust",tr:"göğüs",cat:"Anatomi",ex:"Brustschmerzen sollten sofort untersucht werden.",level:"A1"},
+  {id:239,de:"der Bauch",tr:"karın",cat:"Anatomi",ex:"Der Bauch tut weh.",level:"A1"},
+  {id:240,de:"der Rücken",tr:"sırt",cat:"Anatomi",ex:"Er hat starke Rückenschmerzen.",level:"A1"},
+  {id:241,de:"die Hüfte",tr:"kalça",cat:"Anatomi",ex:"Die Hüfte wurde operiert.",level:"A2"},
+  {id:242,de:"das Bein",tr:"bacak",cat:"Anatomi",ex:"Das Bein ist gebrochen.",level:"A1"},
+  {id:243,de:"der Arm",tr:"kol",cat:"Anatomi",ex:"Er hat den Arm verletzt.",level:"A1"},
+  {id:244,de:"die Hand",tr:"el",cat:"Anatomi",ex:"Die Hand wurde genäht.",level:"A1"},
+  {id:245,de:"der Fuß",tr:"ayak",cat:"Anatomi",ex:"Der Fuß ist verstaucht.",level:"A1"},
+  {id:246,de:"der Finger",tr:"parmak",cat:"Anatomi",ex:"Der Finger ist gebrochen.",level:"A1"},
+  {id:247,de:"der Zeh",tr:"ayak parmağı",cat:"Anatomi",ex:"Er hat sich den Zeh verletzt.",level:"A1"},
+  {id:248,de:"das Knie",tr:"diz",cat:"Anatomi",ex:"Das Knie ist entzündet.",level:"A1"},
+  {id:249,de:"der Oberschenkel",tr:"uyluk",cat:"Anatomi",ex:"Der Oberschenkel ist gebrochen.",level:"B1"},
+  {id:250,de:"der Unterschenkel",tr:"bacak alt kısmı",cat:"Anatomi",ex:"Der Unterschenkel schwillt an.",level:"B1"},
+  {id:251,de:"die Halsschmerzen",tr:"boğaz ağrısı",cat:"Semptomlar",ex:"Sie hat starke Halsschmerzen.",level:"A1"},
+  {id:252,de:"der Juckreiz",tr:"kaşıntı",cat:"Semptomlar",ex:"Der Juckreiz ist unerträglich.",level:"B1"},
+  {id:253,de:"die Taubheit",tr:"uyuşma",cat:"Semptomlar",ex:"Er spürt Taubheit im linken Arm.",level:"B1"},
+  {id:254,de:"das Kribbeln",tr:"karıncalanma",cat:"Semptomlar",ex:"Ein Kribbeln in den Fingern ist ein Warnsignal.",level:"B1"},
+  {id:255,de:"der Tremor",tr:"titreme",cat:"Semptomlar",ex:"Tremor kann ein Symptom von Parkinson sein.",level:"C1"},
+  {id:256,de:"die Schwäche",tr:"halsizlik / güçsüzlük",cat:"Semptomlar",ex:"Er klagt über allgemeine Schwäche.",level:"B1"},
+  {id:257,de:"der Appetitlosigkeit",tr:"iştahsızlık",cat:"Semptomlar",ex:"Appetitlosigkeit ist ein häufiges Symptom.",level:"B1"},
+  {id:258,de:"der Schlaflosigkeit",tr:"uykusuzluk",cat:"Semptomlar",ex:"Schlaflosigkeit beeinträchtigt die Gesundheit.",level:"B1"},
+  {id:259,de:"die Blässe",tr:"solukluk",cat:"Semptomlar",ex:"Der Patient sieht sehr blass aus.",level:"B1"},
+  {id:260,de:"der Ausschlag",tr:"döküntü",cat:"Semptomlar",ex:"Der Ausschlag breitet sich aus.",level:"B1"},
+  {id:261,de:"die Thromboembolie",tr:"tromboembolizm",cat:"Hastalıklar",ex:"Eine Thromboembolie ist ein medizinischer Notfall.",level:"C1"},
+  {id:262,de:"die Lungenembolie",tr:"pulmoner emboli",cat:"Hastalıklar",ex:"Lungenembolie kann plötzlich auftreten.",level:"C1"},
+  {id:263,de:"der Herzstillstand",tr:"kalp durması",cat:"Hastalıklar",ex:"Bei Herzstillstand sofort reanimieren.",level:"C1"},
+  {id:264,de:"die Hypoglykämie",tr:"hipoglisemi",cat:"Hastalıklar",ex:"Bei Hypoglykämie sofort Zucker geben.",level:"C1"},
+  {id:265,de:"die Hyperglykämie",tr:"hiperglisemi",cat:"Hastalıklar",ex:"Hyperglykämie ist ein Zeichen für schlecht eingestellten Diabetes.",level:"C1"},
+  {id:266,de:"die Hypothermie",tr:"hipotermi",cat:"Hastalıklar",ex:"Hypothermie tritt bei extremer Kälte auf.",level:"C1"},
+  {id:267,de:"die Hyperthermie",tr:"hipertermi",cat:"Hastalıklar",ex:"Hyperthermie ist eine lebensbedrohliche Überhitzung.",level:"C1"},
+  {id:268,de:"der Anaphylaxie",tr:"anafilaksi",cat:"Hastalıklar",ex:"Anaphylaxie ist eine schwere allergische Reaktion.",level:"C1"},
+  {id:269,de:"der Pneumothorax",tr:"pnömotoraks",cat:"Hastalıklar",ex:"Pneumothorax erfordert sofortige Behandlung.",level:"C1"},
+  {id:270,de:"die Peritonitis",tr:"peritonit",cat:"Hastalıklar",ex:"Peritonitis ist eine Entzündung der Bauchhöhle.",level:"C1"},
+  {id:271,de:"der Rollstuhl",tr:"tekerlekli sandalye",cat:"Rehabilitasyon",ex:"Nach der Operation braucht er einen Rollstuhl.",level:"A2"},
+  {id:272,de:"die Krücken",tr:"koltuk değneği",cat:"Rehabilitasyon",ex:"Er geht mit Krücken.",level:"A2"},
+  {id:273,de:"die Prothese",tr:"protez",cat:"Rehabilitasyon",ex:"Er trägt eine Beinprothese.",level:"B2"},
+  {id:274,de:"das Hörgerät",tr:"işitme cihazı",cat:"Rehabilitasyon",ex:"Das Hörgerät hilft ihm besser zu hören.",level:"B1"},
+  {id:275,de:"die Brille",tr:"gözlük",cat:"Rehabilitasyon",ex:"Sie trägt eine Brille seit der Kindheit.",level:"A1"},
+  {id:276,de:"die Infusion",tr:"infüzyon / serum",cat:"Tedavi",ex:"Der Patient bekommt eine Infusion.",level:"B1"},
+  {id:277,de:"die Dialyse",tr:"diyaliz",cat:"Tedavi",ex:"Er muss dreimal wöchentlich zur Dialyse.",level:"B2"},
+  {id:278,de:"die Transplantation",tr:"nakil / transplantasyon",cat:"Tedavi",ex:"Die Transplantation war erfolgreich.",level:"B2"},
+  {id:279,de:"die Strahlentherapie",tr:"radyasyon tedavisi",cat:"Tedavi",ex:"Strahlentherapie wird bei Krebs eingesetzt.",level:"B2"},
+  {id:280,de:"die Immuntherapie",tr:"immünoterapi",cat:"Tedavi",ex:"Immuntherapie stärkt das Immunsystem gegen Krebs.",level:"C1"},
+  {id:281,de:"die Biopsie",tr:"biyopsi",cat:"Tanı",ex:"Die Biopsie bestätigt die Diagnose.",level:"C1"},
+  {id:282,de:"das MRT",tr:"MR görüntüleme",cat:"Tanı",ex:"Das MRT zeigt keine Auffälligkeiten.",level:"B2"},
+  {id:283,de:"das CT",tr:"bilgisayarlı tomografi",cat:"Tanı",ex:"Das CT zeigt eine Fraktur.",level:"B2"},
+  {id:284,de:"die Endoskopie",tr:"endoskopi",cat:"Tanı",ex:"Bei der Endoskopie wird ein Schlauch eingeführt.",level:"C1"},
+  {id:285,de:"die Szintigraphie",tr:"sintigrafi",cat:"Tanı",ex:"Szintigraphie nutzt radioaktive Substanzen.",level:"C1"},
+  {id:286,de:"der Abstrich",tr:"sürüntü (tanı testi)",cat:"Tanı",ex:"Ein Abstrich wird aus dem Hals entnommen.",level:"B2"},
+  {id:287,de:"die Kultur",tr:"kültür (mikrobiyoloji)",cat:"Tanı",ex:"Die Kultur zeigt Bakterienwachstum.",level:"C1"},
+  {id:288,de:"das Antibiotikogramm",tr:"antibiyogram",cat:"Tanı",ex:"Das Antibiotikogramm zeigt Resistenzen.",level:"C1"},
+  {id:289,de:"die Sonographie",tr:"ultrasonografi",cat:"Tanı",ex:"Die Sonographie des Abdomens ist unauffällig.",level:"C1"},
+  {id:290,de:"die Laparoskopie",tr:"laparoskopi",cat:"Tanı",ex:"Laparoskopie ist ein minimalinvasiver Eingriff.",level:"C1"},
+  {id:291,de:"der Fachmann",tr:"uzman",cat:"Personel",ex:"Ein Fachmann wurde konsultiert.",level:"B1"},
+  {id:292,de:"der Radiologe",tr:"radyolog",cat:"Personel",ex:"Der Radiologe wertet das Röntgenbild aus.",level:"B2"},
+  {id:293,de:"der Anästhesist",tr:"anestezist",cat:"Personel",ex:"Der Anästhesist bereitet die Narkose vor.",level:"B2"},
+  {id:294,de:"der Internist",tr:"dahiliyeci",cat:"Personel",ex:"Der Internist behandelt innere Erkrankungen.",level:"B2"},
+  {id:295,de:"der Allgemeinarzt",tr:"pratisyen hekim",cat:"Personel",ex:"Der Allgemeinarzt ist der erste Ansprechpartner.",level:"B1"},
+  {id:296,de:"die Hebamme",tr:"ebe",cat:"Personel",ex:"Die Hebamme begleitet die Geburt.",level:"B1"},
+  {id:297,de:"der Physiotherapeut",tr:"fizyoterapist",cat:"Personel",ex:"Der Physiotherapeut hilft bei der Mobilisation.",level:"B1"},
+  {id:298,de:"der Sozialarbeiter",tr:"sosyal hizmetler görevlisi",cat:"Personel",ex:"Der Sozialarbeiter unterstützt die Familie.",level:"B2"},
+  {id:299,de:"der Apotheker",tr:"eczacı",cat:"Personel",ex:"Der Apotheker erklärt die Einnahme.",level:"B1"},
+  {id:300,de:"der Sanitäter",tr:"sağlık görevlisi",cat:"Personel",ex:"Der Sanitäter leistet erste Hilfe.",level:"B1"},
+  {id:301,de:"die Herzkranzgefäße",tr:"koroner arterler",cat:"Anatomi",ex:"Verstopfte Herzkranzgefäße führen zum Herzinfarkt.",level:"C1"},
+  {id:302,de:"die Aorta",tr:"aort",cat:"Anatomi",ex:"Die Aorta ist die größte Arterie.",level:"C1"},
+  {id:303,de:"der Herzklappenfehler",tr:"kalp kapak hastalığı",cat:"Hastalıklar",ex:"Ein Herzklappenfehler kann angeboren sein.",level:"C1"},
+  {id:304,de:"die Arteriosklerose",tr:"ateroskleroz",cat:"Hastalıklar",ex:"Arteriosklerose ist eine Verhärtung der Gefäßwände.",level:"C1"},
+  {id:305,de:"die Angina pectoris",tr:"angina pektoris",cat:"Hastalıklar",ex:"Angina pectoris äußert sich als Brustschmerz.",level:"C1"},
+  {id:306,de:"das Vorhofflimmern",tr:"atriyal fibrilasyon",cat:"Hastalıklar",ex:"Vorhofflimmern erhöht das Schlaganfallrisiko.",level:"C1"},
+  {id:307,de:"die Herzrhythmusstörung",tr:"kalp ritim bozukluğu",cat:"Hastalıklar",ex:"Herzrhythmusstörungen können gefährlich sein.",level:"C1"},
+  {id:308,de:"der Herzschrittmacher",tr:"kalp pili",cat:"Tedavi",ex:"Ein Herzschrittmacher reguliert den Herzrhythmus.",level:"C1"},
+  {id:309,de:"der Stent",tr:"stent",cat:"Tedavi",ex:"Ein Stent hält die Arterie offen.",level:"C1"},
+  {id:310,de:"der Bypass",tr:"bypass",cat:"Tedavi",ex:"Der Bypass überbrückt eine verstopfte Arterie.",level:"C1"},
+  {id:311,de:"das Immunsystem",tr:"bağışıklık sistemi",cat:"Anatomi",ex:"Das Immunsystem schützt vor Krankheitserregern.",level:"B2"},
+  {id:312,de:"die Antikörper",tr:"antikorlar",cat:"Anatomi",ex:"Antikörper bekämpfen Krankheitserreger.",level:"C1"},
+  {id:313,de:"die Autoimmunerkrankung",tr:"otoimmün hastalık",cat:"Hastalıklar",ex:"Bei Autoimmunerkrankungen greift der Körper sich selbst an.",level:"C1"},
+  {id:314,de:"der Vitamin",tr:"vitamin",cat:"Önlem",ex:"Vitaminmangel kann Krankheiten verursachen.",level:"A2"},
+  {id:315,de:"das Mineral",tr:"mineral",cat:"Önlem",ex:"Minerale sind wichtig für den Stoffwechsel.",level:"B1"},
+  {id:316,de:"der Kalzium",tr:"kalsiyum",cat:"Önlem",ex:"Kalzium ist wichtig für die Knochen.",level:"B1"},
+  {id:317,de:"das Eisen",tr:"demir",cat:"Önlem",ex:"Eisenmangel führt zu Anämie.",level:"B1"},
+  {id:318,de:"die Anämie",tr:"anemi / kansızlık",cat:"Hastalıklar",ex:"Anämie wird durch Eisenmangel verursacht.",level:"B2"},
+  {id:319,de:"der Folsäure",tr:"folik asit",cat:"Önlem",ex:"Folsäure ist besonders in der Schwangerschaft wichtig.",level:"B2"},
+  {id:320,de:"das Vitamin D",tr:"D vitamini",cat:"Önlem",ex:"Vitamin D wird durch Sonnenlicht gebildet.",level:"B1"},
+  {id:321,de:"der Schock",tr:"şok",cat:"Acil",ex:"Ein anaphylaktischer Schock ist lebensgefährlich.",level:"B2"},
+  {id:322,de:"die Verbrennung",tr:"yanık",cat:"Acil",ex:"Verbrennungen dritten Grades brauchen sofort Behandlung.",level:"B1"},
+  {id:323,de:"die Vergiftung",tr:"zehirlenme",cat:"Acil",ex:"Bei Vergiftung sofort Notarzt rufen.",level:"B1"},
+  {id:324,de:"das Trauma",tr:"travma",cat:"Acil",ex:"Das Trauma erfordert intensivmedizinische Betreuung.",level:"B2"},
+  {id:325,de:"die Erfrierung",tr:"donma",cat:"Acil",ex:"Erfrierungen betreffen häufig die Extremitäten.",level:"B2"},
+  {id:326,de:"die Bauchspeicheldrüsenentzündung",tr:"pankreatit",cat:"Hastalıklar",ex:"Pankreatitis verursacht starke Bauchschmerzen.",level:"C1"},
+  {id:327,de:"die Gallenkolik",tr:"safra koliği",cat:"Hastalıklar",ex:"Eine Gallenkolik verursacht krampfartige Bauchschmerzen.",level:"C1"},
+  {id:328,de:"der Gallenstein",tr:"safra taşı",cat:"Hastalıklar",ex:"Gallensteine können Koliken verursachen.",level:"B2"},
+  {id:329,de:"der Nierenstein",tr:"böbrek taşı",cat:"Hastalıklar",ex:"Nierensteine verursachen starke Flankenschmerzen.",level:"B2"},
+  {id:330,de:"die Gelbsucht",tr:"sarılık",cat:"Semptomlar",ex:"Gelbsucht deutet auf Leberprobleme hin.",level:"B2"},
+  {id:331,de:"die Ödeme",tr:"ödem",cat:"Semptomlar",ex:"Ödeme sind Wassereinlagerungen im Gewebe.",level:"B2"},
+  {id:332,de:"die Zyanose",tr:"siyanoz",cat:"Semptomlar",ex:"Zyanose zeigt sich als Blaufärbung der Haut.",level:"C1"},
+  {id:333,de:"das Papier",tr:"kâğıt",cat:"Genel",ex:"Füllen Sie bitte das Formular aus.",level:"A1"},
+  {id:334,de:"die Unterschrift",tr:"imza",cat:"Genel",ex:"Bitte schreiben Sie Ihre Unterschrift hier.",level:"A2"},
+  {id:335,de:"das Formular",tr:"form / belge",cat:"Genel",ex:"Bitte füllen Sie das Formular vollständig aus.",level:"A2"},
+  {id:336,de:"der Termin",tr:"randevu",cat:"Genel",ex:"Ich möchte einen Termin vereinbaren.",level:"A1"},
+  {id:337,de:"die Wartezeit",tr:"bekleme süresi",cat:"Genel",ex:"Die Wartezeit beträgt etwa 20 Minuten.",level:"A2"},
+  {id:338,de:"die Krankmeldung",tr:"hastalık raporu",cat:"Genel",ex:"Ich brauche eine Krankmeldung.",level:"B1"},
+  {id:339,de:"das Attest",tr:"doktor raporu",cat:"Genel",ex:"Das Attest muss dem Arbeitgeber vorgelegt werden.",level:"B1"},
+  {id:340,de:"die Einwilligung",tr:"onay / rıza",cat:"Genel",ex:"Die Einwilligung des Patienten ist erforderlich.",level:"B2"},
+  {id:341,de:"der Datenschutz",tr:"veri gizliliği",cat:"Genel",ex:"Der Datenschutz ist im Krankenhaus sehr wichtig.",level:"B2"},
+  {id:342,de:"die Schweigepflicht",tr:"mesleki sır yükümlülüğü",cat:"Genel",ex:"Ärzte unterliegen der Schweigepflicht.",level:"B2"},
+  {id:343,de:"die Magensonde",tr:"nazogastrik sonda",cat:"Tedavi",ex:"Die Magensonde versorgt den Patienten mit Nahrung.",level:"C1"},
+  {id:344,de:"der Katheter",tr:"kateter",cat:"Tedavi",ex:"Ein Blasenkatheter wird eingesetzt.",level:"B2"},
+  {id:345,de:"das Beatmungsgerät",tr:"solunum cihazı",cat:"Tedavi",ex:"Das Beatmungsgerät unterstützt die Atmung.",level:"C1"},
+  {id:346,de:"der Gips",tr:"alçı",cat:"Tedavi",ex:"Der Gips schützt den gebrochenen Knochen.",level:"A2"},
+  {id:347,de:"die Schiene",tr:"atel",cat:"Tedavi",ex:"Die Schiene hält das Gelenk stabil.",level:"B1"},
+  {id:348,de:"der Port",tr:"port (damar erişimi)",cat:"Tedavi",ex:"Der Port ermöglicht regelmäßige Chemotherapie.",level:"C1"},
+  {id:349,de:"die Wundnaht",tr:"yara dikişi",cat:"Tedavi",ex:"Die Wundnaht hält die Ränder zusammen.",level:"B1"},
+  {id:350,de:"die Drainage",tr:"drenaj",cat:"Tedavi",ex:"Die Drainage leitet Flüssigkeit ab.",level:"B2"},
+  {id:351,de:"die Magenspiegelung",tr:"gastroskopi",cat:"Tanı",ex:"Bei der Magenspiegelung wird der Magen untersucht.",level:"C1"},
+  {id:352,de:"die Darmspiegelung",tr:"kolonoskopi",cat:"Tanı",ex:"Die Darmspiegelung erkennt Polypen frühzeitig.",level:"C1"},
+  {id:353,de:"das Herzecho",tr:"ekokardiyografi",cat:"Tanı",ex:"Das Herzecho zeigt die Herzfunktion.",level:"C1"},
+  {id:354,de:"die Spirometrie",tr:"spirometri",cat:"Tanı",ex:"Die Spirometrie misst die Lungenfunktion.",level:"C1"},
+  {id:355,de:"die Elektroenzephalographie",tr:"EEG",cat:"Tanı",ex:"Das EEG misst Gehirnwellen.",level:"C1"},
+  {id:356,de:"das Liquor",tr:"beyin omurilik sıvısı",cat:"Tanı",ex:"Der Liquor wird bei Verdacht auf Meningitis untersucht.",level:"C1"},
+  {id:357,de:"die Punktion",tr:"ponksiyon",cat:"Tanı",ex:"Die Punktion dient der Gewebeentnahme.",level:"C1"},
+  {id:358,de:"der Tumormarker",tr:"tümör belirteci",cat:"Tanı",ex:"Tumormarker können auf Krebs hinweisen.",level:"C1"},
+  {id:359,de:"die Allergiediagnostik",tr:"alerji testleri",cat:"Tanı",ex:"Allergiediagnostik umfasst Hauttests und Bluttests.",level:"B2"},
+  {id:360,de:"der Schilddrüsenwert",tr:"tiroid değeri",cat:"Tanı",ex:"Die Schilddrüsenwerte sind im Normbereich.",level:"B2"},
+  {id:361,de:"die Wochenbettdepression",tr:"doğum sonrası depresyon",cat:"Özel Durumlar",ex:"Wochenbettdepression betrifft viele Mütter.",level:"C1"},
+  {id:362,de:"die Frühgeburt",tr:"erken doğum",cat:"Özel Durumlar",ex:"Eine Frühgeburt erfolgt vor der 37. Woche.",level:"B2"},
+  {id:363,de:"der Kaiserschnitt",tr:"sezaryen",cat:"Özel Durumlar",ex:"Der Kaiserschnitt wurde geplant durchgeführt.",level:"B2"},
+  {id:364,de:"die Wehen",tr:"sancılar / doğum kasılmaları",cat:"Özel Durumlar",ex:"Die Wehen haben begonnen.",level:"B2"},
+  {id:365,de:"der Mutterpass",tr:"hamilelik kartı",cat:"Özel Durumlar",ex:"Der Mutterpass dokumentiert die Schwangerschaft.",level:"B2"},
+  {id:366,de:"der Kinderwunsch",tr:"çocuk sahibi olma isteği",cat:"Özel Durumlar",ex:"Sie hat einen Kinderwunsch.",level:"B2"},
+  {id:367,de:"die Unfruchtbarkeit",tr:"kısırlık",cat:"Özel Durumlar",ex:"Unfruchtbarkeit kann behandelt werden.",level:"B2"},
+  {id:368,de:"die künstliche Befruchtung",tr:"yapay döllenme",cat:"Özel Durumlar",ex:"Künstliche Befruchtung ist eine Möglichkeit bei Unfruchtbarkeit.",level:"C1"},
+  {id:369,de:"die Menopause",tr:"menopoz",cat:"Özel Durumlar",ex:"Die Menopause beginnt meist zwischen 45 und 55 Jahren.",level:"B2"},
+  {id:370,de:"die Pubertät",tr:"ergenlik",cat:"Özel Durumlar",ex:"In der Pubertät verändert sich der Körper stark.",level:"B1"},
+  {id:371,de:"der Schmerzkatheter",tr:"ağrı kateteri",cat:"Tedavi",ex:"Der Schmerzkatheter wird nach der OP eingesetzt.",level:"C1"},
+  {id:372,de:"die PDA",tr:"epidural anestezi",cat:"Tedavi",ex:"Die PDA wird häufig bei Geburten angewendet.",level:"C1"},
+  {id:373,de:"die Nervenbetäubung",tr:"sinir bloğu",cat:"Tedavi",ex:"Die Nervenbetäubung wirkt lokal.",level:"C1"},
+  {id:374,de:"der Bluttransfusion",tr:"kan transfüzyonu",cat:"Tedavi",ex:"Eine Bluttransfusion war notwendig.",level:"B2"},
+  {id:375,de:"die Stammzellentherapie",tr:"kök hücre tedavisi",cat:"Tedavi",ex:"Stammzellentherapie ist eine neue Behandlungsform.",level:"C1"},
+  {id:376,de:"der Soor",tr:"pamukçuk",cat:"Hastalıklar",ex:"Soor ist eine Pilzinfektion.",level:"C1"},
+  {id:377,de:"die Herpes",tr:"uçuk",cat:"Hastalıklar",ex:"Herpes ist eine virale Infektion.",level:"B2"},
+  {id:378,de:"der Tinea",tr:"mantar enfeksiyonu",cat:"Hastalıklar",ex:"Tinea ist eine Pilzinfektion der Haut.",level:"C1"},
+  {id:379,de:"die Psoriasis",tr:"sedef hastalığı",cat:"Hastalıklar",ex:"Psoriasis ist eine chronische Hauterkrankung.",level:"C1"},
+  {id:380,de:"das Ekzem",tr:"egzama",cat:"Hastalıklar",ex:"Ekzem verursacht juckende Hautausschläge.",level:"B2"},
+  {id:381,de:"der Bandwurm",tr:"tenya",cat:"Hastalıklar",ex:"Ein Bandwurm ist ein Darmparasit.",level:"C1"},
+  {id:382,de:"die Hepatitis",tr:"hepatit",cat:"Hastalıklar",ex:"Hepatitis B ist eine impfpräventable Erkrankung.",level:"B2"},
+  {id:383,de:"die Zirrhose",tr:"siroz",cat:"Hastalıklar",ex:"Leberzirrhose ist eine schwere Lebererkrankung.",level:"C1"},
+  {id:384,de:"der Ikterus",tr:"sarılık (tıbbi terim)",cat:"Semptomlar",ex:"Ikterus zeigt sich als Gelbfärbung.",level:"C1"},
+  {id:385,de:"die Aszites",tr:"asit (karın sıvısı)",cat:"Semptomlar",ex:"Aszites ist Flüssigkeitsansammlung im Bauchraum.",level:"C1"},
+  {id:386,de:"das Delir",tr:"deliryum",cat:"Semptomlar",ex:"Delir tritt häufig bei älteren Patienten auf.",level:"C1"},
+  {id:387,de:"die Aphasie",tr:"afazi",cat:"Semptomlar",ex:"Nach dem Schlaganfall leidet er an Aphasie.",level:"C1"},
+  {id:388,de:"die Dysphagie",tr:"yutma güçlüğü",cat:"Semptomlar",ex:"Dysphagie kann durch neurologische Erkrankungen verursacht werden.",level:"C1"},
+  {id:389,de:"die Dyspnoe",tr:"nefes darlığı (tıbbi)",cat:"Semptomlar",ex:"Dyspnoe ist ein häufiges Symptom bei Herzinsuffizienz.",level:"C1"},
+  {id:390,de:"die Tachykardie",tr:"taşikardi",cat:"Semptomlar",ex:"Tachykardie bedeutet Herzschlag über 100/min.",level:"C1"},
+  {id:391,de:"die Bradykardie",tr:"bradikardi",cat:"Semptomlar",ex:"Bradykardie bedeutet Herzschlag unter 60/min.",level:"C1"},
+  {id:392,de:"die Hypertonie",tr:"hipertansiyon",cat:"Hastalıklar",ex:"Hypertonie ist ein Risikofaktor für Schlaganfall.",level:"B2"},
+  {id:393,de:"die Hypotonie",tr:"hipotansiyon",cat:"Hastalıklar",ex:"Hypotonie verursacht Schwindel beim Aufstehen.",level:"B2"},
+  {id:394,de:"die Hyperurikämie",tr:"gut hastalığı (ürik asit)",cat:"Hastalıklar",ex:"Hyperurikämie kann zu Gichtanfällen führen.",level:"C1"},
+  {id:395,de:"die Gicht",tr:"gut hastalığı",cat:"Hastalıklar",ex:"Gicht verursacht plötzliche Gelenkschmerzen.",level:"B2"},
+  {id:396,de:"die Osteoporose",tr:"osteoporoz",cat:"Hastalıklar",ex:"Osteoporose erhöht das Frakturrisiko.",level:"B2"},
+  {id:397,de:"die Arthrose",tr:"artrose / kireçlenme",cat:"Hastalıklar",ex:"Arthrose betrifft häufig das Kniegelenk.",level:"B2"},
+  {id:398,de:"die Arthritis",tr:"artrit / eklem iltihabı",cat:"Hastalıklar",ex:"Arthritis verursacht Gelenkschmerzen und Schwellungen.",level:"B2"},
+  {id:399,de:"der Morbus Crohn",tr:"Crohn hastalığı",cat:"Hastalıklar",ex:"Morbus Crohn ist eine entzündliche Darmerkrankung.",level:"C1"},
+  {id:400,de:"die Colitis ulcerosa",tr:"ülseratif kolit",cat:"Hastalıklar",ex:"Colitis ulcerosa betrifft den Dickdarm.",level:"C1"},
+  {id:401,de:"die Fraktur",tr:"kırık (tıbbi)",cat:"Hastalıklar",ex:"Die Fraktur muss operativ versorgt werden.",level:"B2"},
+  {id:402,de:"die Luxation",tr:"çıkık (eklem)",cat:"Hastalıklar",ex:"Die Schulter ist luxiert.",level:"B2"},
+  {id:403,de:"die Distorsion",tr:"burkulma",cat:"Hastalıklar",ex:"Die Distorsion des Sprunggelenks ist häufig.",level:"B2"},
+  {id:404,de:"die Kontusion",tr:"ezilme / leke",cat:"Hastalıklar",ex:"Eine Kontusion ist eine Prellung ohne Knochenbruch.",level:"B2"},
+  {id:405,de:"die Hämatom",tr:"hematom / morluk",cat:"Semptomlar",ex:"Das Hämatom bildet sich nach dem Sturz.",level:"B2"},
+  {id:406,de:"der Abszess",tr:"apse",cat:"Hastalıklar",ex:"Der Abszess muss chirurgisch geöffnet werden.",level:"B2"},
+  {id:407,de:"die Zyste",tr:"kist",cat:"Hastalıklar",ex:"Die Zyste am Eierstock ist gutartig.",level:"B2"},
+  {id:408,de:"der Tumor",tr:"tümör",cat:"Hastalıklar",ex:"Der Tumor muss biopsiert werden.",level:"B2"},
+  {id:409,de:"die Metastase",tr:"metastaz",cat:"Hastalıklar",ex:"Die Metastasen haben sich auf die Leber ausgebreitet.",level:"C1"},
+  {id:410,de:"das Lymphom",tr:"lenfoma",cat:"Hastalıklar",ex:"Lymphome sind Erkrankungen des Lymphsystems.",level:"C1"},
+  {id:411,de:"die Leukämie",tr:"lösemi",cat:"Hastalıklar",ex:"Leukämie ist Blutkrebs.",level:"C1"},
+  {id:412,de:"das Melanom",tr:"melanom",cat:"Hastalıklar",ex:"Das Melanom ist ein bösartiger Hauttumor.",level:"C1"},
+  {id:413,de:"das Karzinom",tr:"karsinom",cat:"Hastalıklar",ex:"Das Karzinom wird operativ entfernt.",level:"C1"},
+  {id:414,de:"das Sarkom",tr:"sarkom",cat:"Hastalıklar",ex:"Sarkome sind seltene Tumoren des Bindegewebes.",level:"C1"},
+  {id:415,de:"die Sonne",tr:"güneş",cat:"Genel",ex:"Zu viel Sonne erhöht das Hautkrebsrisiko.",level:"A1"},
+  {id:416,de:"der Schlaf",tr:"uyku",cat:"Genel",ex:"Guter Schlaf ist wichtig für die Gesundheit.",level:"A1"},
+  {id:417,de:"die Ernährung",tr:"beslenme",cat:"Genel",ex:"Gesunde Ernährung beugt Krankheiten vor.",level:"B1"},
+  {id:418,de:"die Bewegung",tr:"hareket / egzersiz",cat:"Genel",ex:"Regelmäßige Bewegung hält das Herz gesund.",level:"A2"},
+  {id:419,de:"der Stress",tr:"stres",cat:"Genel",ex:"Chronischer Stress kann krank machen.",level:"A2"},
+  {id:420,de:"das Rauchen",tr:"sigara içmek",cat:"Genel",ex:"Rauchen ist ein Hauptrisikofaktor für Lungenkrebs.",level:"A2"},
+  {id:421,de:"der Alkohol",tr:"alkol",cat:"Genel",ex:"Zu viel Alkohol schädigt die Leber.",level:"A1"},
+  {id:422,de:"die Übergewicht",tr:"fazla kilo",cat:"Genel",ex:"Übergewicht erhöht das Diabetesrisiko.",level:"B1"},
+  {id:423,de:"die Untergewicht",tr:"düşük kilo",cat:"Genel",ex:"Untergewicht kann auf Essstörungen hinweisen.",level:"B1"},
+  {id:424,de:"der Lebensstil",tr:"yaşam tarzı",cat:"Genel",ex:"Ein gesunder Lebensstil verlängert das Leben.",level:"B2"},
+  {id:425,de:"das Gehör",tr:"işitme",cat:"Anatomi",ex:"Das Gehör nimmt Schallwellen wahr.",level:"B1"},
+  {id:426,de:"das Sehen",tr:"görme",cat:"Anatomi",ex:"Das Sehen ist der wichtigste Sinn des Menschen.",level:"A2"},
+  {id:427,de:"der Geruch",tr:"koku alma",cat:"Anatomi",ex:"Manche Patienten verlieren nach COVID den Geruch.",level:"B1"},
+  {id:428,de:"der Geschmack",tr:"tat alma",cat:"Anatomi",ex:"Der Geschmack kann bei Erkältung beeinträchtigt sein.",level:"B1"},
+  {id:429,de:"das Gleichgewicht",tr:"denge",cat:"Anatomi",ex:"Das Gleichgewicht wird im Innenohr reguliert.",level:"B1"},
+  {id:430,de:"das Innenohr",tr:"iç kulak",cat:"Anatomi",ex:"Das Innenohr regelt Gleichgewicht und Hören.",level:"B2"},
+  {id:431,de:"die Bindehaut",tr:"konjonktiva",cat:"Anatomi",ex:"Die Bindehautentzündung ist ansteckend.",level:"B2"},
+  {id:432,de:"die Hornhaut",tr:"kornea",cat:"Anatomi",ex:"Die Hornhaut schützt das Auge.",level:"B2"},
+  {id:433,de:"die Netzhaut",tr:"retina",cat:"Anatomi",ex:"Eine Netzhautablösung ist ein Notfall.",level:"B2"},
+  {id:434,de:"der Sehnerv",tr:"optik sinir",cat:"Anatomi",ex:"Der Sehnerv verbindet Auge und Gehirn.",level:"B2"},
+  {id:435,de:"das Trommelfell",tr:"kulak zarı",cat:"Anatomi",ex:"Ein gerissenes Trommelfell heilt oft von selbst.",level:"B2"},
+  {id:436,de:"die Ohrenentzündung",tr:"kulak iltihabı",cat:"Hastalıklar",ex:"Ohrenentzündung ist häufig bei Kindern.",level:"B1"},
+  {id:437,de:"die Bindehautentzündung",tr:"konjonktivit",cat:"Hastalıklar",ex:"Bindehautentzündung wird oft durch Viren verursacht.",level:"B1"},
+  {id:438,de:"der Graue Star",tr:"katarakt",cat:"Hastalıklar",ex:"Grauer Star wird durch eine OP behandelt.",level:"B2"},
+  {id:439,de:"der Grüne Star",tr:"glokom",cat:"Hastalıklar",ex:"Grüner Star kann zur Erblindung führen.",level:"B2"},
+  {id:440,de:"die Kurzsichtigkeit",tr:"miyopluk",cat:"Hastalıklar",ex:"Kurzsichtigkeit wird mit Brille korrigiert.",level:"A2"},
+  {id:441,de:"die Weitsichtigkeit",tr:"hipermetropi",cat:"Hastalıklar",ex:"Weitsichtigkeit betrifft oft ältere Menschen.",level:"A2"},
+  {id:442,de:"die Schwerhörigkeit",tr:"işitme kaybı",cat:"Hastalıklar",ex:"Schwerhörigkeit kann mit Hörgerät behandelt werden.",level:"B1"},
+  {id:443,de:"die Taubheit",tr:"sağırlık",cat:"Hastalıklar",ex:"Taubheit kann angeboren oder erworben sein.",level:"B1"},
+  {id:444,de:"das Tinnitus",tr:"kulak çınlaması",cat:"Hastalıklar",ex:"Tinnitus ist ein chronisches Ohrgeräusch.",level:"B1"},
+  {id:445,de:"der Schwindel",tr:"baş dönmesi",cat:"Semptomlar",ex:"Schwindelanfälle können auf Innenohrprobleme hinweisen.",level:"A2"},
+  {id:446,de:"die Hormontherapie",tr:"hormon tedavisi",cat:"Tedavi",ex:"Hormontherapie wird in der Menopause eingesetzt.",level:"B2"},
+  {id:447,de:"die Substitutionstherapie",tr:"yerine koyma tedavisi",cat:"Tedavi",ex:"Substitutionstherapie ersetzt fehlende Hormone.",level:"C1"},
+  {id:448,de:"die Schutzimpfung",tr:"koruyucu aşı",cat:"Önlem",ex:"Schutzimpfungen verhindern Infektionskrankheiten.",level:"B1"},
+  {id:449,de:"die Nachimpfung",tr:"hatırlatma aşısı",cat:"Önlem",ex:"Die Nachimpfung ist nach zehn Jahren fällig.",level:"B2"},
+  {id:450,de:"die Herdenimmunität",tr:"sürü bağışıklığı",cat:"Önlem",ex:"Herdenimmunität schützt auch Ungeimpfte.",level:"C1"},
+  {id:451,de:"die Quarantäne",tr:"karantina",cat:"Önlem",ex:"Bei Ansteckung ist Quarantäne notwendig.",level:"B1"},
+  {id:452,de:"die Isolierung",tr:"izolasyon",cat:"Önlem",ex:"Isolierung schützt andere Patienten.",level:"B1"},
+  {id:453,de:"die Händedesinfektion",tr:"el dezenfeksiyonu",cat:"Önlem",ex:"Regelmäßige Händedesinfektion verhindert Infektionen.",level:"B1"},
+  {id:454,de:"das Schmerzprotokoll",tr:"ağrı protokolü",cat:"Klinik",ex:"Das Schmerzprotokoll dokumentiert die Schmerzintensität.",level:"C1"},
+  {id:455,de:"das Stufenschema",tr:"basamaklı şema",cat:"Klinik",ex:"WHO-Stufenschema regelt die Schmerztherapie.",level:"C1"},
+  {id:456,de:"die Pflegedokumentation",tr:"bakım kaydı",cat:"Klinik",ex:"Die Pflegedokumentation muss vollständig sein.",level:"C1"},
+  {id:457,de:"die Arztbrief",tr:"taburculuk özeti",cat:"Klinik",ex:"Der Arztbrief fasst die Behandlung zusammen.",level:"B2"},
+  {id:458,de:"die Epikrise",tr:"epikriz",cat:"Klinik",ex:"Die Epikrise enthält den gesamten Behandlungsverlauf.",level:"C1"},
+  {id:459,de:"die Fallbesprechung",tr:"vaka toplantısı",cat:"Klinik",ex:"Die Fallbesprechung findet wöchentlich statt.",level:"C1"},
+  {id:460,de:"die Morgenbesprechung",tr:"sabah toplantısı",cat:"Klinik",ex:"Die Morgenbesprechung beginnt um 7:30 Uhr.",level:"B2"},
+  {id:461,de:"die Übergabe",tr:"hasta devir teslimi",cat:"Klinik",ex:"Die Übergabe zwischen Schichten ist sehr wichtig.",level:"B2"},
+  {id:462,de:"der Dienst",tr:"nöbet / görev",cat:"Klinik",ex:"Er hat heute Nachtdienst.",level:"B1"},
+  {id:463,de:"die Bereitschaft",tr:"hazır bulunuşluk / nöbet",cat:"Klinik",ex:"Der Arzt hat Bereitschaftsdienst.",level:"B2"},
+  {id:464,de:"das Rufbereitschaft",tr:"çağrı nöbeti",cat:"Klinik",ex:"Bei Rufbereitschaft muss man erreichbar sein.",level:"B2"},
+  {id:465,de:"der Hintergrunddienst",tr:"arka plan nöbeti",cat:"Klinik",ex:"Der Facharzt hat Hintergrunddienst.",level:"C1"},
+  {id:466,de:"die Abteilung",tr:"bölüm / servis",cat:"Hastane",ex:"Die internistische Abteilung ist voll.",level:"B1"},
+  {id:467,de:"der Chefarzt",tr:"bölüm başkanı / klinik şefi",cat:"Hastane",ex:"Der Chefarzt führt die Abteilung.",level:"B1"},
+  {id:468,de:"der Oberarzt",tr:"kıdemli uzman",cat:"Hastane",ex:"Der Oberarzt überwacht die Assistenzärzte.",level:"B2"},
+  {id:469,de:"der Assistenzarzt",tr:"asistan doktor",cat:"Hastane",ex:"Der Assistenzarzt ist noch in der Weiterbildung.",level:"B2"},
+  {id:470,de:"die Weiterbildung",tr:"uzmanlık eğitimi",cat:"Hastane",ex:"Die Weiterbildung zum Facharzt dauert 5 Jahre.",level:"B2"},
+  {id:471,de:"der Facharzt",tr:"uzman doktor",cat:"Hastane",ex:"Der Facharzt für Innere Medizin behandelt ihn.",level:"B1"},
+  {id:472,de:"die Approbation",tr:"hekimlik lisansı",cat:"Hastane",ex:"Ohne Approbation darf man nicht praktizieren.",level:"C1"},
+  {id:473,de:"die Niederlassung",tr:"muayenehane açma",cat:"Hastane",ex:"Nach der Weiterbildung folgte die Niederlassung.",level:"C1"},
+  {id:474,de:"die Gemeinschaftspraxis",tr:"ortak muayenehane",cat:"Hastane",ex:"In der Gemeinschaftspraxis arbeiten drei Ärzte.",level:"C1"},
+  {id:475,de:"die MVZ",tr:"tıp merkezi",cat:"Hastane",ex:"Das MVZ bietet verschiedene Fachrichtungen.",level:"C1"},
+  {id:476,de:"das Zentralnervensystem",tr:"merkezi sinir sistemi",cat:"Anatomi",ex:"Das ZNS besteht aus Gehirn und Rückenmark.",level:"C1"},
+  {id:477,de:"das periphere Nervensystem",tr:"periferik sinir sistemi",cat:"Anatomi",ex:"Das periphere Nervensystem verbindet ZNS mit dem Körper.",level:"C1"},
+  {id:478,de:"das autonome Nervensystem",tr:"otonom sinir sistemi",cat:"Anatomi",ex:"Das autonome NS regelt unwillkürliche Funktionen.",level:"C1"},
+  {id:479,de:"der Sympathikus",tr:"sempatik sinir sistemi",cat:"Anatomi",ex:"Der Sympathikus bereitet den Körper auf Stress vor.",level:"C1"},
+  {id:480,de:"der Parasympathikus",tr:"parasempatik sinir sistemi",cat:"Anatomi",ex:"Der Parasympathikus fördert Ruhe und Verdauung.",level:"C1"},
+  {id:481,de:"die Synapse",tr:"sinaps",cat:"Anatomi",ex:"Synapsen übertragen Signale zwischen Neuronen.",level:"C1"},
+  {id:482,de:"das Neuron",tr:"nöron",cat:"Anatomi",ex:"Neuronen sind die Grundbausteine des Nervensystems.",level:"C1"},
+  {id:483,de:"der Neurotransmitter",tr:"nörotransmiter",cat:"Anatomi",ex:"Neurotransmitter übertragen Signale im Gehirn.",level:"C1"},
+  {id:484,de:"das Serotonin",tr:"serotonin",cat:"Anatomi",ex:"Serotonin beeinflusst die Stimmung.",level:"C1"},
+  {id:485,de:"das Dopamin",tr:"dopamin",cat:"Anatomi",ex:"Dopamin ist wichtig für das Belohnungssystem.",level:"C1"},
+  {id:486,de:"das Adrenalin",tr:"adrenalin",cat:"Anatomi",ex:"Adrenalin wird bei Stress ausgeschüttet.",level:"B2"},
+  {id:487,de:"das Cortisol",tr:"kortizol",cat:"Anatomi",ex:"Cortisol ist das Stresshormon.",level:"B2"},
+  {id:488,de:"das Östrogen",tr:"östrojen",cat:"Anatomi",ex:"Östrogen ist das weibliche Sexualhormon.",level:"B2"},
+  {id:489,de:"das Testosteron",tr:"testosteron",cat:"Anatomi",ex:"Testosteron ist das männliche Sexualhormon.",level:"B2"},
+  {id:490,de:"das Progesteron",tr:"progesteron",cat:"Anatomi",ex:"Progesteron ist wichtig in der Schwangerschaft.",level:"B2"},
+  {id:491,de:"der Stoffwechsel",tr:"metabolizma",cat:"Anatomi",ex:"Der Stoffwechsel verarbeitet Nahrung zu Energie.",level:"B2"},
+  {id:492,de:"die Zellteilung",tr:"hücre bölünmesi",cat:"Anatomi",ex:"Unkontrollierte Zellteilung führt zu Krebs.",level:"C1"},
+  {id:493,de:"die DNS",tr:"DNA",cat:"Anatomi",ex:"Die DNS trägt die genetische Information.",level:"B2"},
+  {id:494,de:"das Chromosom",tr:"kromozom",cat:"Anatomi",ex:"Menschen haben 46 Chromosomen.",level:"B2"},
+  {id:495,de:"die Mutation",tr:"mutasyon",cat:"Anatomi",ex:"Mutationen können Krebs verursachen.",level:"C1"},
+  {id:496,de:"die Genetik",tr:"genetik",cat:"Genel",ex:"Genetik spielt bei vielen Krankheiten eine Rolle.",level:"C1"},
+  {id:497,de:"die Erbkrankheit",tr:"kalıtsal hastalık",cat:"Hastalıklar",ex:"Eine Erbkrankheit wird von Eltern auf Kinder übertragen.",level:"B2"},
+  {id:498,de:"die Gentherapie",tr:"gen terapisi",cat:"Tedavi",ex:"Gentherapie ist eine Hoffnung für viele Erbkrankheiten.",level:"C1"},
+  {id:499,de:"die Stammzelle",tr:"kök hücre",cat:"Anatomi",ex:"Stammzellen können sich zu verschiedenen Zelltypen entwickeln.",level:"C1"},
+  {id:500,de:"die Biomedizin",tr:"biyomedikal",cat:"Genel",ex:"Biomedizin verbindet Biologie und Medizin.",level:"C1"},
+  {id:501,de:"die Telemedizin",tr:"teletıp",cat:"Genel",ex:"Telemedizin ermöglicht Arztbesuche per Video.",level:"C1"},
+  {id:502,de:"die künstliche Intelligenz",tr:"yapay zekâ",cat:"Genel",ex:"KI unterstützt die Diagnose in der modernen Medizin.",level:"C1"},
+  {id:503,de:"das Krankentagegeld",tr:"hastalık gündeliği",cat:"Genel",ex:"Das Krankentagegeld überbrückt den Einkommensverlust.",level:"C1"},
+  {id:504,de:"die Pflegeversicherung",tr:"bakım sigortası",cat:"Genel",ex:"Die Pflegeversicherung deckt Pflegekosten.",level:"C1"},
+  {id:505,de:"der Pflegegrad",tr:"bakım derecesi",cat:"Genel",ex:"Der Pflegegrad bestimmt den Leistungsumfang.",level:"C1"},
+];
 
-        .stats-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            max-width: 800px;
-            margin: 0 auto;
-        }
+let customWords = [];
+try { customWords = JSON.parse(localStorage.getItem('medDeutsch_custom') || '[]'); } catch(e) {}
+const allWords = () => [...VOCAB, ...customWords];
 
-        .progress-container {
-            flex-grow: 1;
-            height: 12px;
-            background: #e0e0e0;
-            border-radius: 10px;
-            margin: 0 20px;
-            overflow: hidden;
-        }
+const CATEGORIES = [...new Set(VOCAB.map(w=>w.cat))];
+const LEVELS = ['A1','A2','B1','B2','C1'];
 
-        .progress-fill {
-            height: 100%;
-            background: var(--success);
-            width: 0%;
-            transition: width 0.3s ease;
-        }
+let gameState = {
+  hearts: 30, xp: 0, streak: 0, level: 1,
+  consecutiveCorrect: 0, totalCorrect: 0, totalWrong: 0,
+  learnedIds: new Set(), weakIds: new Set(),
+  currentScreen: 'home',
+  quiz: { question: null, options: [], answered: false, correct: false },
+  selectedCat: null, selectedLevel: null,
+  activeTab: 'quiz'
+};
 
-        .stat-item { font-weight: bold; font-size: 1.2rem; }
+try {
+  const saved = JSON.parse(localStorage.getItem('medDeutsch_state') || 'null');
+  if (saved) {
+    gameState.hearts = saved.hearts ?? 30;
+    gameState.xp = saved.xp ?? 0;
+    gameState.streak = saved.streak ?? 0;
+    gameState.level = saved.level ?? 1;
+    gameState.consecutiveCorrect = saved.consecutiveCorrect ?? 0;
+    gameState.totalCorrect = saved.totalCorrect ?? 0;
+    gameState.totalWrong = saved.totalWrong ?? 0;
+    gameState.learnedIds = new Set(saved.learnedIds || []);
+    gameState.weakIds = new Set(saved.weakIds || []);
+  }
+} catch(e) {}
 
-        /* Ana Alan */
-        .container {
-            max-width: 800px;
-            margin: 30px auto;
-            padding: 0 20px;
-        }
+function saveState() {
+  try {
+    localStorage.setItem('medDeutsch_state', JSON.stringify({
+      hearts: gameState.hearts, xp: gameState.xp, streak: gameState.streak,
+      level: gameState.level, consecutiveCorrect: gameState.consecutiveCorrect,
+      totalCorrect: gameState.totalCorrect, totalWrong: gameState.totalWrong,
+      learnedIds: [...gameState.learnedIds], weakIds: [...gameState.weakIds]
+    }));
+  } catch(e) {}
+}
 
-        .hidden { display: none; }
+function getLevelFromXP(xp) {
+  return Math.floor(xp / 500) + 1;
+}
 
-        /* Branş Kartları */
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 20px;
-        }
+function speak(text, lang='de') {
+  if (!window.speechSynthesis) return;
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = lang === 'de' ? 'de-DE' : 'tr-TR';
+  u.rate = 0.85;
+  speechSynthesis.speak(u);
+}
 
-        .branch-card {
-            background: white;
-            padding: 40px 20px;
-            border-radius: 20px;
-            text-align: center;
-            cursor: pointer;
-            border: 3px solid #e0e0e0;
-            transition: all 0.2s;
-            font-weight: 800;
-        }
+function showNotification(msg, color='#1D9E75') {
+  const n = document.createElement('div');
+  n.className = 'notification';
+  n.style.background = color;
+  n.textContent = msg;
+  document.body.appendChild(n);
+  setTimeout(() => n.remove(), 2500);
+}
 
-        .branch-card:hover { transform: scale(1.05); border-color: var(--accent); }
+function getQuizWords(cat, level) {
+  let pool = allWords();
+  if (cat) pool = pool.filter(w => w.cat === cat);
+  if (level) pool = pool.filter(w => w.level === level);
+  if (pool.length < 4) pool = allWords().filter(w => !cat || w.cat === cat);
+  if (pool.length < 4) pool = allWords();
+  return pool;
+}
 
-        /* Kelime Kartı */
-        .flashcard-box {
-            perspective: 1000px;
-            width: 100%;
-            max-width: 400px;
-            height: 300px;
-            margin: 40px auto;
-        }
+function pickQuestion(cat, level) {
+  const pool = getQuizWords(cat, level);
+  if (pool.length < 2) return null;
+  
+  let weights = pool.map(w => gameState.weakIds.has(w.id) ? 3 : (gameState.learnedIds.has(w.id) ? 0.3 : 1));
+  const total = weights.reduce((a,b)=>a+b,0);
+  let r = Math.random() * total;
+  let qi = 0;
+  for (let i=0; i<weights.length; i++) { r -= weights[i]; if (r<=0) { qi=i; break; } }
+  
+  const correct = pool[qi];
+  const others = pool.filter((_,i)=>i!==qi);
+  const shuffled = others.sort(()=>Math.random()-0.5).slice(0,3);
+  const options = [...shuffled, correct].sort(()=>Math.random()-0.5);
+  
+  return { correct, options };
+}
 
-        .flashcard {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            text-align: center;
-            transition: transform 0.6s;
-            transform-style: preserve-3d;
-            cursor: pointer;
-        }
-
-        .flashcard.flipped { transform: rotateY(180deg); }
-
-        .card-face {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            backface-visibility: hidden;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            border-radius: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            border: 4px solid var(--accent);
-            background: white;
-        }
-
-        .card-back { transform: rotateY(180deg); background: var(--accent); color: white; }
-
-        .word-de { font-size: 2.5rem; font-weight: 800; }
-        .word-tr { font-size: 1.8rem; }
-
-        /* Kontroller */
-        .controls {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-top: 20px;
-        }
-
-        button {
-            padding: 15px 30px;
-            border-radius: 15px;
-            border: none;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 1rem;
-            transition: 0.2s;
-        }
-
-        .btn-main { background: var(--accent); color: white; box-shadow: 0 4px 0 #2980b9; }
-        .btn-main:active { transform: translateY(4px); box-shadow: none; }
-
-        .btn-audio { background: #eee; font-size: 1.5rem; }
-
-        /* Liste Görünümü */
-        .list-container {
-            background: white;
-            padding: 20px;
-            border-radius: 20px;
-            margin-top: 20px;
-        }
-        .list-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px;
-            border-bottom: 1px solid #eee;
-        }
-    </style>
-</head>
-<body>
-
-<div class="header">
-    <div class="stats-bar">
-        <span class="stat-item" id="heart-count">❤️ 5</span>
-        <div class="progress-container">
-            <div class="progress-fill" id="progress-bar"></div>
+function renderApp() {
+  const s = gameState;
+  const xpForLevel = (s.level - 1) * 500;
+  const xpInLevel = s.xp - xpForLevel;
+  const xpPct = Math.min(100, (xpInLevel / 500) * 100);
+  
+  document.getElementById('app').innerHTML = `
+<div style="background: var(--color-background-tertiary); min-height: 600px;">
+  
+  <!-- HEADER -->
+  <div style="background: var(--color-background-primary); border-bottom: 0.5px solid var(--color-border-tertiary); padding: 12px 16px; position: sticky; top: 0; z-index: 5;">
+    <div style="max-width: 700px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <div style="background: #1D9E75; color: white; border-radius: 10px; padding: 6px 12px; font-weight: 700; font-size: 14px; letter-spacing: 0.5px;">MedDeutsch</div>
+        <span style="font-size: 11px; color: var(--color-text-secondary);">Tıbbi Almanca</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 16px;">
+        <div style="display:flex;align-items:center;gap:4px;">
+          <span style="font-size:16px;">🔥</span>
+          <span style="font-weight:700;font-size:15px;color:#E24B4A;">${s.streak}</span>
         </div>
-        <span class="stat-item" id="score-count">⭐ 0</span>
+        <div style="display:flex;align-items:center;gap:4px;">
+          <span style="font-size:16px;">❤️</span>
+          <span style="font-weight:700;font-size:15px;color:#E24B4A;">${s.hearts}/30</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;">
+          <div class="level-badge">${s.level}</div>
+          <div style="width:80px;">
+            <div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:3px;">${s.xp} XP</div>
+            <div class="xp-bar"><div class="xp-fill" style="width:${xpPct}%;"></div></div>
+          </div>
+        </div>
+      </div>
     </div>
-</div>
+  </div>
 
-<div class="container">
-    <div id="screen-branches">
-        <h2 style="text-align:center">Öğrenmek istediğin branşı seç:</h2>
-        <div class="grid">
-            <div class="branch-card" onclick="selectBranch('Kardiologie', '#e74c3c', '#fdf2f2')" style="color:#e74c3c">KARDİYOLOJİ</div>
-            <div class="branch-card" onclick="selectBranch('Neurologie', '#9b59b6', '#f5eef8')" style="color:#9b59b6">
+  <!-- NAV TABS -->
+  <div style="background: var(--color-background-primary); border-bottom: 0.5px solid var(--color-border-tertiary);">
+    <div style="max-width:700px;margin:0 auto;display:flex;">
+      ${['quiz','sozluk','istatistik','kelime-ekle'].map(t=>
+        `<button class="tab-btn ${s.activeTab===t?'active':''}" onclick="switchTab('${t}')">${
+          t==='quiz'?'🎮 Alıştırma':t==='sozluk'?'📚 Sözlük':t==='istatistik'?'📊 İstatistik':'➕ Kelime Ekle'
+        }</button>`
+      ).join('')}
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div id="content" style="max-width:700px;margin:0 auto;padding:16px;">
+    ${s.activeTab === 'quiz' ? renderQuizTab() :
+      s.activeTab === 'sozluk' ? renderDictTab() :
+      s.activeTab === 'istatistik' ? renderStatsTab() :
+      renderAddWordTab()}
+  </div>
+</div>`;
+}
+
+function renderQuizTab() {
+  const s = gameState;
+  if (s.hearts <= 0) {
+    return `<div class="card" style="text-align:center;padding:40px 20px;">
+      <div style="font-size:48px;margin-bottom:16px;">💔</div>
+      <h2 style="font-size:22px;font-weight:600;margin-bottom:8px;">Canların Bitti!</h2>
+      <p style="color:var(--color-text-secondary);margin-bottom:20px;">5 doğru yaparak can kazanabilirsin.</p>
+      <button class="btn btn-blue" onclick="gameState.hearts=5;saveState();renderApp();">Devam Et (5 ❤️)</button>
+    </div>`;
+  }
+
+  const cats = [...new Set(allWords().map(w=>w.cat))];
+  const selCat = s.selectedCat;
+  const selLvl = s.selectedLevel;
+
+  if (!s.quiz.question) {
+    return `
+    <div class="card" style="margin-bottom:16px;">
+      <p style="font-size:14px;font-weight:500;margin-bottom:10px;color:var(--color-text-secondary);">Kategori seç:</p>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;">
+        <button class="badge ${!selCat?'badge-green':'badge-blue'}" style="cursor:pointer;font-size:13px;padding:6px 14px;" onclick="gameState.selectedCat=null;renderApp();">Tümü</button>
+        ${cats.map(c=>`<button class="badge ${selCat===c?'badge-green':'badge-blue'}" style="cursor:pointer;font-size:13px;padding:6px 14px;" onclick="gameState.selectedCat='${c}';renderApp();">${c}</button>`).join('')}
+      </div>
+      <p style="font-size:14px;font-weight:500;margin-bottom:10px;color:var(--color-text-secondary);">Seviye seç:</p>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;">
+        <button class="badge ${!selLvl?'badge-green':'badge-amber'}" style="cursor:pointer;font-size:13px;padding:6px 14px;" onclick="gameState.selectedLevel=null;renderApp();">Tümü</button>
+        ${LEVELS.map(l=>`<button class="badge ${selLvl===l?'badge-green':'badge-amber'}" style="cursor:pointer;font-size:13px;padding:6px 14px;" onclick="gameState.selectedLevel='${l}';renderApp();">${l}</button>`).join('')}
+      </div>
+    </div>
+    <button class="btn btn-green" style="width:100%;padding:16px;font-size:18px;" onclick="startQuiz();">🎮 Alıştırmaya Başla</button>`;
+  }
+
+  const q = s.quiz;
+  const w = q.correct;
+  const isDE = Math.random() < 0.5 || true; // always DE->TR for now stored in question
+
+  return `
+  <div class="card" style="margin-bottom:12px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+      <span class="badge badge-${w.level==='A1'||w.level==='A2'?'green':w.level==='B1'||w.level==='B2'?'amber':'purple'}">${w.level}</span>
+      <span class="badge badge-blue">${w.cat}</span>
+    </div>
+    <div style="text-align:center;padding:20px 0;">
+      <div style="font-size:28px;font-weight:700;color:var(--color-text-primary);margin-bottom:8px;">${w.de}</div>
+      <button class="speaker-btn" onclick="speak('${w.de.replace(/'/g,"\\'")}','de')">🔊</button>
+      <p style="font-size:13px;color:var(--color-text-secondary);margin-top:10px;font-style:italic;">"${w.ex}"</p>
+    </div>
+    <p style="text-align:center;font-size:14px;color:var(--color-text-secondary);">Türkçe karşılığı nedir?</p>
+  </div>
+
+  <div id="answers">
+    ${q.options.map((opt,i)=>`
+    <button class="answer-btn ${q.answered?(opt.id===w.id?'correct':q.selectedId===opt.id?'wrong':'disabled'):''}" 
+      onclick="${q.answered?'':'selectAnswer('+opt.id+')'}"
+      id="opt_${opt.id}">
+      ${q.answered && opt.id===w.id ? '✓ ' : q.answered && q.selectedId===opt.id && opt.id!==w.id ? '✗ ' : ''}${opt.tr}
+    </button>`).join('')}
+  </div>
+
+  ${q.answered ? `
+  <div class="card ${q.correct?'result-correct':'result-wrong'}" style="margin-top:12px;text-align:center;">
+    <div style="font-size:28px;margin-bottom:8px;">${q.correct?'🎉':'😔'}</div>
+    <p style="font-weight:600;font-size:16px;margin-bottom:4px;">${q.correct?'Harika! +'+q.xpGained+' XP':'Yanlış!'}</p>
+    <p style="font-size:14px;color:var(--color-text-secondary);margin-bottom:12px;">${w.de} = <strong>${w.tr}</strong></p>
+    <button class="btn btn-green" onclick="nextQuestion();">Devam →</button>
+  </div>` : ''}`;
+}
+
+function startQuiz() {
+  const q = pickQuestion(gameState.selectedCat, gameState.selectedLevel);
+  if (!q) { showNotification('Bu filtre için yeterli kelime yok!', '#BA7517'); return; }
+  gameState.quiz = { question: q.correct, correct: q.correct, options: q.options, answered: false, correct: false, selectedId: null, xpGained: 0 };
+  renderApp();
+}
+
+function selectAnswer(id) {
+  if (gameState.quiz.answered) return;
+  const q = gameState.quiz;
+  q.answered = true;
+  q.selectedId = id;
+  q.correct = id === q.question.id;
+
+  if (q.correct) {
+    gameState.consecutiveCorrect++;
+    gameState.totalCorrect++;
+    const xp = 10 + (gameState.consecutiveCorrect >= 5 ? 5 : 0);
+    q.xpGained = xp;
+    gameState.xp += xp;
+    gameState.level = getLevelFromXP(gameState.xp);
+    gameState.learnedIds.add(q.question.id);
+    gameState.weakIds.delete(q.question.id);
+    if (gameState.consecutiveCorrect % 5 === 0) {
+      gameState.hearts = Math.min(30, gameState.hearts + 1);
+      showNotification('🎉 5 doğru! +1 ❤️ Kazandın!');
+    }
+    gameState.streak++;
+  } else {
+    gameState.consecutiveCorrect = 0;
+    gameState.totalWrong++;
+    gameState.hearts = Math.max(0, gameState.hearts - 1);
+    gameState.weakIds.add(q.question.id);
+    if (gameState.hearts <= 0) showNotification('💔 Canın bitti!', '#E24B4A');
+  }
+  saveState();
+  renderApp();
+}
+
+function nextQuestion() {
+  startQuiz();
+}
+
+function renderDictTab() {
+  const words = allWords();
+  const cats = [...new Set(words.map(w=>w.cat))];
+  const selCat = gameState.selectedCat;
+  const filtered = selCat ? words.filter(w=>w.cat===selCat) : words;
+  
+  return `
+  <div style="margin-bottom:12px;display:flex;flex-wrap:wrap;gap:8px;">
+    <button class="badge ${!selCat?'badge-green':'badge-blue'}" style="cursor:pointer;font-size:13px;padding:6px 14px;" onclick="gameState.selectedCat=null;renderApp();">Tümü (${words.length})</button>
+    ${cats.map(c=>`<button class="badge ${selCat===c?'badge-green':'badge-blue'}" style="cursor:pointer;font-size:13px;padding:6px 14px;" onclick="gameState.selectedCat='${c}';renderApp();">${c}</button>`).join('')}
+  </div>
+  <div class="word-grid">
+    ${filtered.map(w=>`
+    <div class="word-item" onclick="speak('${w.de.replace(/'/g,"\\'")}','de')">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
+        <span class="badge badge-${w.level==='A1'||w.level==='A2'?'green':w.level==='B1'||w.level==='B2'?'amber':'purple'}" style="font-size:10px;">${w.level}</span>
+        <span style="font-size:16px;">${gameState.learnedIds.has(w.id)?'✅':gameState.weakIds.has(w.id)?'⚠️':'•'}</span>
+      </div>
+      <div style="font-weight:600;font-size:14px;color:var(--color-text-primary);">${w.de}</div>
+      <div style="font-size:13px;color:var(--color-text-secondary);margin-top:2px;">${w.tr}</div>
+      <div style="font-size:11px;color:var(--color-text-tertiary,#888);margin-top:4px;font-style:italic;">${w.cat}</div>
+    </div>`).join('')}
+  </div>`;
+}
+
+function renderStatsTab() {
+  const total = allWords().length;
+  const learned = gameState.learnedIds.size;
+  const weak = gameState.weakIds.size;
+  const acc = gameState.totalCorrect + gameState.totalWrong > 0 ?
+    Math.round(gameState.totalCorrect / (gameState.totalCorrect + gameState.totalWrong) * 100) : 0;
+  const catStats = [...new Set(allWords().map(w=>w.cat))].map(cat => {
+    const catWords = allWords().filter(w=>w.cat===cat);
+    const catLearned = catWords.filter(w=>gameState.learnedIds.has(w.id)).length;
+    return { cat, total: catWords.length, learned: catLearned, pct: Math.round(catLearned/catWords.length*100) };
+  }).sort((a,b)=>b.pct-a.pct);
+
+  return `
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:16px;">
+    ${[
+      {label:'Toplam Kelime', val:total, icon:'📚'},
+      {label:'Öğrenilen', val:learned, icon:'✅'},
+      {label:'Zayıf', val:weak, icon:'⚠️'},
+      {label:'Doğruluk', val:acc+'%', icon:'🎯'},
+      {label:'XP', val:gameState.xp, icon:'⭐'},
+      {label:'Seviye', val:gameState.level, icon:'🏆'},
+      {label:'Seri', val:gameState.streak, icon:'🔥'},
+      {label:'Toplam Doğru', val:gameState.totalCorrect, icon:'✓'},
+    ].map(m=>`<div style="background:var(--color-background-secondary);border-radius:10px;padding:14px;text-align:center;">
+      <div style="font-size:22px;">${m.icon}</div>
+      <div style="font-size:22px;font-weight:700;color:var(--color-text-primary);">${m.val}</div>
+      <div style="font-size:12px;color:var(--color-text-secondary);">${m.label}</div>
+    </div>`).join('')}
+  </div>
+  
+  <div class="card">
+    <h3 style="font-size:16px;font-weight:600;margin-bottom:14px;">Kategori İlerlemesi</h3>
+    ${catStats.map(cs=>`
+    <div style="margin-bottom:12px;">
+      <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+        <span style="font-size:14px;">${cs.cat}</span>
+        <span style="font-size:13px;color:var(--color-text-secondary);">${cs.learned}/${cs.total} (${cs.pct}%)</span>
+      </div>
+      <div class="xp-bar"><div class="xp-fill" style="width:${cs.pct}%;"></div></div>
+    </div>`).join('')}
+  </div>`;
+}
+
+function renderAddWordTab() {
+  const custom = customWords;
+  return `
+  <div class="card">
+    <h3 style="font-size:16px;font-weight:600;margin-bottom:14px;">Yeni Kelime Ekle</h3>
+    <div style="display:grid;gap:10px;">
+      <div><label style="font-size:13px;color:var(--color-text-secondary);display:block;margin-bottom:4px;">Almanca</label>
+        <input type="text" id="inp_de" placeholder="z.B. das Herz"></div>
+      <div><label style="font-size:13px;color:var(--color-text-secondary);display:block;margin-bottom:4px;">Türkçe</label>
+        <input type="text" id="inp_tr" placeholder="z.B. kalp"></div>
+      <div><label style="font-size:13px;color:var(--color-text-secondary);display:block;margin-bottom:4px;">Kategori</label>
+        <input type="text" id="inp_cat" placeholder="z.B. Anatomi" list="catlist">
+        <datalist id="catlist">${[...new Set(allWords().map(w=>w.cat))].map(c=>`<option value="${c}">`).join('')}</datalist>
+      </div>
+      <div><label style="font-size:13px;color:var(--color-text-secondary);display:block;margin-bottom:4px;">Örnek Cümle (opsiyonel)</label>
+        <input type="text" id="inp_ex" placeholder="Almanca örnek cümle"></div>
+      <div><label style="font-size:13px;color:var(--color-text-secondary);display:block;margin-bottom:4px;">Seviye</label>
+        <select id="inp_lvl" style="width:100%;padding:10px;border-radius:10px;border:1.5px solid var(--color-border-tertiary);background:var(--color-background-primary);color:var(--color-text-primary);font-size:14px;">
+          ${LEVELS.map(l=>`<option value="${l}">${l}</option>`).join('')}
+        </select>
+      </div>
+      <button class="btn btn-green" style="margin-top:4px;" onclick="addCustomWord();">➕ Kelime Ekle</button>
+    </div>
+  </div>
+  
+  ${custom.length > 0 ? `
+  <div class="card" style="margin-top:12px;">
+    <h3 style="font-size:16px;font-weight:600;margin-bottom:14px;">Eklediğim Kelimeler (${custom.length})</h3>
+    ${custom.map((w,i)=>`
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:0.5px solid var(--color-border-tertiary);">
+      <div>
+        <span style="font-weight:600;">${w.de}</span>
+        <span style="color:var(--color-text-secondary);margin-left:8px;">${w.tr}</span>
+        <span class="badge badge-blue" style="margin-left:8px;font-size:11px;">${w.cat}</span>
+      </div>
+      <button onclick="deleteCustomWord(${i})" style="background:none;border:none;cursor:pointer;font-size:16px;color:#E24B4A;">🗑</button>
+    </div>`).join('')}
+  </div>` : ''}`;
+}
+
+function addCustomWord() {
+  const de = document.getElementById('inp_de')?.value?.trim();
+  const tr = document.getElementById('inp_tr')?.value?.trim();
+  const cat = document.getElementById('inp_cat')?.value?.trim() || 'Özel';
+  const ex = document.getElementById('inp_ex')?.value?.trim() || de+'.';
+  const level = document.getElementById('inp_lvl')?.value || 'B1';
+  
+  if (!de || !tr) { showNotification('Almanca ve Türkçe zorunludur!', '#E24B4A'); return; }
+  
+  const newId = 9000 + customWords.length + 1;
+  customWords.push({ id: newId, de, tr, cat, ex, level });
+  try { localStorage.setItem('medDeutsch_custom', JSON.stringify(customWords)); } catch(e){}
+  showNotification(`"${de}" eklendi! ✅`);
+  renderApp();
+}
+
+function deleteCustomWord(idx) {
+  customWords.splice(idx, 1);
+  try { localStorage.setItem('medDeutsch_custom', JSON.stringify(customWords)); } catch(e){}
+  renderApp();
+}
+
+function switchTab(tab) {
+  gameState.activeTab = tab;
+  if (tab === 'quiz') gameState.quiz = { question: null };
+  renderApp();
+}
+
+window.startQuiz = startQuiz;
+window.selectAnswer = selectAnswer;
+window.nextQuestion = nextQuestion;
+window.switchTab = switchTab;
+window.addCustomWord = addCustomWord;
+window.deleteCustomWord = deleteCustomWord;
+window.speak = speak;
+window.gameState = gameState;
+window.saveState = saveState;
+window.renderApp = renderApp;
+
+renderApp();
+</script>
+</div>
