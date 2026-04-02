@@ -1,132 +1,153 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>PflegeDeutsch Wheel Pro</title>
+    <title>PflegeAkademy Portal</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800;900&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --nurse-blue: #0ea5e9; --med-green: #10b981; --warning-gold: #f59e0b;
-            --danger-red: #ef4444; --bg: #f0f4f8; --card: #ffffff;
+            --danger-red: #ef4444; --bg: #f8fafc; --card: #ffffff;
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { font-family: 'Poppins', sans-serif; background: var(--bg); margin: 0; display: flex; justify-content: center; height: 100vh; overflow: hidden; }
         
-        #app { width: 100%; max-width: 500px; height: 100%; display: flex; flex-direction: column; padding: 10px; position: relative; }
+        #app { width: 100%; max-width: 500px; height: 100%; display: flex; flex-direction: column; padding: 12px; position: relative; }
+
+        /* GİRİŞ EKRANI - SAĞLIK PORTALI */
+        #login { position: fixed; inset: 0; background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); z-index: 4000; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 30px; text-align: center; }
+        .hospital-logo { font-size: 80px; margin-bottom: 10px; filter: drop-shadow(0 10px 15px rgba(14,165,233,0.2)); }
 
         /* ÜST PANEL */
-        .header { background: white; padding: 10px 15px; border-radius: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; border: 2px solid var(--nurse-blue); flex-shrink: 0; }
+        .header { background: white; padding: 12px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; border-top: 4px solid var(--nurse-blue); flex-shrink: 0; }
 
-        /* ŞANS HEDİYESİ BUTONU (SAĞ ÜST) */
-        #gift-btn { position: absolute; right: 20px; top: 120px; z-index: 100; cursor: pointer; animation: bounce 1.5s infinite; }
-        @keyframes bounce { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); filter: drop-shadow(0 0 10px gold); } }
+        /* SERİ (STREAK) LAMBALARI */
+        .streak-dots { display: flex; gap: 5px; margin-top: 5px; }
+        .dot { width: 10px; height: 10px; border-radius: 50%; background: #e2e8f0; transition: 0.3s; }
+        .dot.active { background: var(--med-green); box-shadow: 0 0 8px var(--med-green); }
+
+        /* HEDİYE BUTONU (SAĞLIK PAKETİ) */
+        #gift-btn { position: absolute; right: 20px; top: 130px; z-index: 100; cursor: pointer; text-align: center; animation: pulse-med 2s infinite; }
+        @keyframes pulse-med { 0% { transform: scale(1); } 50% { transform: scale(1.1); filter: hue-rotate(20deg); } 100% { transform: scale(1); } }
 
         /* MARKET */
-        .market-belt { display: flex; justify-content: space-around; background: #1e293b; padding: 8px; border-radius: 18px; margin-bottom: 8px; color: white; flex-shrink: 0; }
-        .item { text-align: center; cursor: pointer; flex: 1; }
-        .item-price { font-size: 10px; background: var(--warning-gold); color: black; border-radius: 8px; padding: 1px 4px; font-weight: 800; }
+        .market-belt { display: flex; justify-content: space-around; background: #1e293b; padding: 10px; border-radius: 20px; margin-bottom: 10px; color: white; flex-shrink: 0; }
+        .item { text-align: center; cursor: pointer; flex: 1; border-right: 1px solid #334155; }
+        .item:last-child { border: none; }
+        .item-price { font-size: 10px; background: var(--warning-gold); color: black; border-radius: 10px; padding: 2px 6px; font-weight: 800; display: inline-block; margin-top: 2px; }
 
-        /* SORU KARTI */
-        .card { background: var(--card); border-radius: 25px; padding: 15px; box-shadow: 0 8px 25px rgba(0,0,0,0.05); text-align: center; border-bottom: 5px solid var(--nurse-blue); margin-bottom: 10px; }
-        .report-text { background: #f0f9ff; border-radius: 12px; padding: 10px; font-size: 12px; color: #1e40af; border-left: 4px solid var(--nurse-blue); text-align: left; margin-bottom: 10px; }
+        /* SORU ALANI */
+        .card { background: var(--card); border-radius: 30px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.04); text-align: center; margin-bottom: 15px; border: 1px solid #e2e8f0; }
+        .vaka-box { background: #f1f5f9; border-radius: 15px; padding: 12px; font-size: 13px; color: #334155; border-left: 5px solid var(--nurse-blue); text-align: left; margin-bottom: 12px; line-height: 1.4; font-style: italic; }
 
-        .opt-btn { background: white; border: 2px solid #e2e8f0; border-radius: 15px; padding: 12px 15px; font-weight: 600; text-align: left; cursor: pointer; font-size: 14px; margin-bottom: 6px; width: 100%; transition: 0.2s; }
-        .correct { background: #dcfce7 !important; border-color: var(--med-green) !important; }
-        .wrong { background: #fee2e2 !important; border-color: var(--danger-red) !important; }
+        .opt-btn { background: white; border: 2px solid #f1f5f9; border-radius: 18px; padding: 15px; font-weight: 600; text-align: left; cursor: pointer; font-size: 15px; margin-bottom: 8px; width: 100%; transition: 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
+        .opt-btn:active { transform: scale(0.98); }
+        .correct { background: #10b981 !important; color: white !important; border-color: #10b981 !important; }
+        .wrong { background: #ef4444 !important; color: white !important; border-color: #ef4444 !important; }
 
         /* ÇARK MODALI */
-        #wheel-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 3000; display: flex; flex-direction: column; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
-        .wheel-wrap { position: relative; width: 300px; height: 300px; border: 10px solid white; border-radius: 50%; box-shadow: 0 0 30px rgba(255,255,255,0.2); }
-        #wheel { width: 100%; height: 100%; border-radius: 50%; position: relative; transition: transform 4s cubic-bezier(0.1, 0, 0.2, 1); background: conic-gradient(
-            #10b981 0deg 60deg,  /* +1 CAN */
-            #ef4444 60deg 120deg, /* -50 XP */
-            #3b82f6 120deg 180deg, /* +100 XP */
-            #f59e0b 180deg 240deg, /* İPUCU */
-            #8b5cf6 240deg 300deg, /* +150 XP */
-            #64748b 300deg 360deg  /* PAS HAKKI SİL */
+        #wheel-modal { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.95); z-index: 3000; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .wheel-wrap { position: relative; width: 320px; height: 320px; border: 12px solid #fff; border-radius: 50%; box-shadow: 0 0 50px rgba(14,165,233,0.3); }
+        #wheel { width: 100%; height: 100%; border-radius: 50%; transition: transform 4s cubic-bezier(0.15, 0, 0.15, 1); background: conic-gradient(
+            #10b981 0deg 60deg, #ef4444 60deg 120deg, #3b82f6 120deg 180deg, #f59e0b 180deg 240deg, #8b5cf6 240deg 300deg, #475569 300deg 360deg
         ); }
-        .wheel-label { position: absolute; width: 50%; height: 50%; transform-origin: bottom right; padding: 20px; color: white; font-weight: 900; font-size: 12px; text-align: center; }
-        .wheel-pointer { position: absolute; top: -20px; left: 50%; transform: translateX(-50%); z-index: 10; width: 0; height: 0; border-left: 15px solid transparent; border-right: 15px solid transparent; border-top: 30px solid gold; }
+        .wheel-text { position: absolute; width: 50%; height: 50%; transform-origin: bottom right; padding: 25px 10px; color: white; font-weight: 800; font-size: 13px; text-align: center; }
+        .pointer { position: absolute; top: -25px; left: 50%; transform: translateX(-50%); z-index: 20; width: 0; height: 0; border-left: 20px solid transparent; border-right: 20px solid transparent; border-top: 35px solid #fff; }
 
         /* ÖDÜL KARTI */
-        #reward-card { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0); background: white; padding: 30px; border-radius: 30px; text-align: center; z-index: 3500; transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-shadow: 0 20px 50px rgba(0,0,0,0.3); width: 80%; max-width: 320px; }
-        #reward-card.active { transform: translate(-50%, -50%) scale(1); }
+        #reward-ui { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0); background: white; padding: 30px; border-radius: 35px; text-align: center; z-index: 3500; transition: 0.5s cubic-bezier(0.17, 0.89, 0.32, 1.28); width: 85%; max-width: 340px; box-shadow: 0 25px 60px rgba(0,0,0,0.4); }
+        #reward-ui.show { transform: translate(-50%, -50%) scale(1); }
 
         .hidden { display: none !important; }
-        #login { position: fixed; inset: 0; background: white; z-index: 4000; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
     </style>
 </head>
 <body>
 
     <div id="login">
-        <span style="font-size: 60px;">🎁</span>
-        <h1 style="font-family:'Montserrat'; margin:10px 0;">PflegeAkademy</h1>
-        <input type="text" id="user-name" placeholder="Adınız" style="width:100%; max-width:300px; padding:15px; border-radius:15px; border:2px solid #ddd; margin-bottom:15px; text-align:center;">
-        <button onclick="startApp()" style="background:var(--nurse-blue); color:white; border:none; padding:15px 50px; border-radius:15px; font-weight:900; cursor:pointer; width:100%; max-width:300px;">GİRİŞ YAP</button>
+        <div class="hospital-logo">🏥</div>
+        <h1 style="font-family:'Montserrat'; color:#1e293b; margin:0; font-size:28px;">PFLEGE AKADEMY</h1>
+        <p style="color:#64748b; font-size:14px; margin-top:5px;">Sağlık Personeli Eğitim Portalı</p>
+        <div style="width:100%; max-width:320px; margin-top:30px;">
+            <input type="text" id="user-name" placeholder="Personel Adı Soyadı" style="width:100%; padding:18px; border-radius:15px; border:2px solid #e2e8f0; margin-bottom:15px; outline:none; text-align:center; font-size:16px;">
+            <button onclick="startApp()" style="background:var(--nurse-blue); color:white; border:none; padding:18px; border-radius:15px; font-weight:900; width:100%; cursor:pointer; font-size:16px; box-shadow: 0 10px 20px rgba(14,165,233,0.2);">SİSTEME GİRİŞ YAP</button>
+        </div>
     </div>
 
     <div id="app" class="hidden">
-        <div id="gift-btn" class="hidden" onclick="openWheel()"><span style="font-size:40px;">🎁</span></div>
+        <div id="gift-btn" class="hidden" onclick="openWheel()">
+            <div style="background:white; border-radius:15px; padding:10px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); border:2px solid var(--warning-gold);">
+                <span style="font-size:35px;">📦</span>
+                <div style="font-size:10px; font-weight:900; color:var(--warning-gold);">BONUS PAKET</div>
+            </div>
+        </div>
 
         <div class="header">
-            <div><span id="rank-tag" style="font-size:9px; font-weight:900; color:var(--nurse-blue); border:1px solid; padding:1px 5px; border-radius:5px;">ÖĞRENCİ</span><div id="disp-name" style="font-weight:900; font-size:14px;">Dr. İsim</div></div>
-            <div style="text-align:right;"><div style="font-weight:900; color:var(--warning-gold); font-size:18px;">💰 <span id="xp-val">0</span></div><div style="font-size:11px; font-weight:700;">❤️ <span id="life-val">5</span></div></div>
+            <div>
+                <div id="disp-name" style="font-weight:900; font-size:15px; color:#1e293b;">Nurse</div>
+                <div class="streak-dots" id="streak-bar">
+                    <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+                </div>
+            </div>
+            <div style="text-align:right;">
+                <div style="font-weight:900; color:var(--warning-gold); font-size:20px;">💰 <span id="xp-val">0</span></div>
+                <div style="font-size:11px; font-weight:700; color:#64748b;">❤️ <span id="life-val">5</span></div>
+            </div>
         </div>
 
         <div class="market-belt">
-            <div class="item" onclick="buy('heart', 75)">💉 <span class="item-price">75XP</span></div>
-            <div class="item" onclick="buy('skip', 40)">🚑 <span class="item-price">40XP</span></div>
-            <div class="item" onclick="buy('hint', 25)">💡 <span class="item-price">25XP</span></div>
+            <div class="item" onclick="buy('heart', 75)">💉 <br><span class="item-price">75XP</span></div>
+            <div class="item" onclick="buy('skip', 40)">🚑 <br><span class="item-price">40XP</span></div>
+            <div class="item" onclick="buy('hint', 25)">💡 <br><span class="item-price">25XP</span></div>
         </div>
 
         <div style="flex-grow:1; display:flex; flex-direction:column;">
             <div class="card">
-                <div class="report-text" id="vaka-text">Yükleniyor...</div>
-                <div id="art-badge" style="background:var(--nurse-blue); color:white; display:inline-block; padding:1px 8px; border-radius:5px; font-size:10px; font-weight:900; margin-bottom:5px;">DIE</div>
-                <h2 id="q-word" style="margin:5px 0; font-size:24px;">Kelime</h2>
-                <button onclick="speak()" style="background:#f0f9ff; border:none; padding:8px; border-radius:10px; color:var(--nurse-blue); font-weight:700; cursor:pointer;">🔊 Dinle</button>
+                <div class="vaka-box" id="vaka-text">Wird geladen...</div>
+                <div id="art-badge" style="background:var(--nurse-blue); color:white; display:inline-block; padding:2px 10px; border-radius:8px; font-size:11px; font-weight:900; margin-bottom:8px;">ARTIKEL</div>
+                <h2 id="q-word" style="margin:5px 0; font-size:26px; color:#1e293b;">Wort</h2>
+                <button onclick="speak()" style="background:#f1f5f9; border:none; padding:10px 20px; border-radius:12px; color:var(--nurse-blue); font-weight:700; cursor:pointer; margin-top:10px;">🔊 Aussprache</button>
             </div>
-            <div id="opt-grid"></div>
+            <div id="opt-grid" style="overflow-y:auto; flex-grow:1;"></div>
         </div>
     </div>
 
     <div id="wheel-modal" class="hidden">
-        <h2 style="color:white; font-family:'Montserrat'; margin-bottom:30px;">ŞANS ÇARKI</h2>
+        <h2 style="color:white; font-family:'Montserrat'; margin-bottom:20px; letter-spacing:2px;">BAŞARI ÇARKI</h2>
         <div class="wheel-wrap">
-            <div class="wheel-pointer"></div>
+            <div class="pointer"></div>
             <div id="wheel">
-                <div class="wheel-label" style="transform: rotate(30deg) translate(20px, -20px);">+1 CAN</div>
-                <div class="wheel-label" style="transform: rotate(90deg) translate(20px, -20px);">-50 XP</div>
-                <div class="wheel-label" style="transform: rotate(150deg) translate(15px, -20px);">+100 XP</div>
-                <div class="wheel-label" style="transform: rotate(210deg) translate(10px, -20px);">İPUCU</div>
-                <div class="wheel-label" style="transform: rotate(270deg) translate(15px, -20px);">+150 XP</div>
-                <div class="wheel-label" style="transform: rotate(330deg) translate(20px, -20px);">KÖTÜ ŞANS</div>
+                <div class="wheel-text" style="transform: rotate(30deg) translate(25px, -25px);">+1 CAN</div>
+                <div class="wheel-text" style="transform: rotate(90deg) translate(25px, -25px);">-50 XP</div>
+                <div class="wheel-text" style="transform: rotate(150deg) translate(15px, -25px);">+100 XP</div>
+                <div class="wheel-text" style="transform: rotate(210deg) translate(15px, -25px);">İPUCU</div>
+                <div class="wheel-text" style="transform: rotate(270deg) translate(15px, -25px);">+150 XP</div>
+                <div class="wheel-text" style="transform: rotate(330deg) translate(25px, -25px);">KAYIP</div>
             </div>
         </div>
-        <button id="spin-btn" onclick="spinWheel()" style="margin-top:40px; padding:20px 60px; border-radius:40px; border:none; background:var(--med-green); color:white; font-weight:900; font-size:20px; cursor:pointer; box-shadow: 0 10px 0 #059669;">ÇEVİR!</button>
+        <button onclick="spinWheel()" id="spin-btn" style="margin-top:40px; padding:20px 70px; border-radius:40px; border:none; background:var(--med-green); color:white; font-weight:900; font-size:22px; cursor:pointer; box-shadow: 0 8px 0 #059669;">ÇEVİR!</button>
     </div>
 
-    <div id="reward-card">
-        <h1 id="reward-icon" style="font-size:60px; margin:0;">🎉</h1>
-        <h2 id="reward-title" style="margin:10px 0;">TEBRİKLER!</h2>
-        <p id="reward-desc" style="color:#64748b; font-weight:600;"></p>
-        <button onclick="closeReward()" style="background:var(--nurse-blue); color:white; border:none; padding:15px 30px; border-radius:15px; font-weight:900; width:100%; margin-top:10px; cursor:pointer;">DEVAM ET</button>
+    <div id="reward-ui">
+        <div id="rew-icon" style="font-size:70px;">🎁</div>
+        <h2 id="rew-title" style="margin:10px 0; color:#1e293b;">TEBRİKLER!</h2>
+        <p id="rew-desc" style="color:#64748b; font-weight:500; line-height:1.4;"></p>
+        <button onclick="closeReward()" style="background:var(--nurse-blue); color:white; border:none; padding:18px; border-radius:20px; font-weight:900; width:100%; margin-top:20px; cursor:pointer;">PORTALA DÖN</button>
     </div>
 
 <script>
-    const DATA = [
-        { de: "Blutdruckmessung", art: "die", tr: "Tansiyon ölçümü", vaka: "Hastanın tansiyonu 160/100 mmHg." },
-        { de: "Verbandwechsel", art: "der", tr: "Pansuman değişimi", vaka: "Ameliyat yarasının temizlenmesi gerekiyor." },
-        { de: "Sauerstoffsättigung", art: "die", tr: "Oksijen satürasyonu", vaka: "SpO2 değeri %88'e düştü." },
-        { de: "Lungenentzündung", art: "die", tr: "Zatürre", vaka: "Hastada öksürük ve yüksek ateş var." },
-        { de: "Oberschenkelhalsbruch", art: "der", tr: "Kalça kırığı", vaka: "Düşme sonrası hasta yürüyemiyor." },
-        { de: "Infusion", art: "die", tr: "Serum", vaka: "Damar yoluyla sıvı verilmesi gerekiyor." }
+    const VOCAB = [
+        { de: "Blutdruckmessung", art: "die", tr: "Tansiyon ölçümü", vaka: "Der Patient hat Kopfschmerzen. Der Wert ist 170/95 mmHg." },
+        { de: "Verbandwechsel", art: "der", tr: "Pansuman değişimi", vaka: "Die Wunde am Fuß muss gereinigt und neu verbunden werden." },
+        { de: "Dekubitusprophylaxe", art: "die", tr: "Yatak yarası önleme", vaka: "Um Hautschäden zu vermeiden, lagern wir den Patienten um." },
+        { de: "Insulinspritze", art: "die", tr: "İnsülin iğnesi", vaka: "Der Blutzuckerspiegel des Patienten ist sehr hoch (250 mg/dl)." },
+        { de: "Aspirationsgefahr", art: "die", tr: "Aspirasyon riski", vaka: "Der Patient hat Schluckbeschwerden beim Essen." },
+        { de: "Händedesinfektion", art: "die", tr: "El dezenfeksiyonu", vaka: "Vor jedem Patientenkontakt ist dies zwingend erforderlich." }
     ];
 
-    let state = { xp: 0, lives: 5, current: null, isWheelBusy: false };
+    let state = { xp: 0, lives: 5, current: null, streak: 0, busy: false };
 
     function startApp() {
         const n = document.getElementById('user-name').value || "Hemşire";
@@ -137,19 +158,14 @@
     }
 
     function next() {
-        // Çark ihtimali %10 (Düşürüldü)
-        if(Math.random() < 0.1 && state.xp > 40) {
-            document.getElementById('gift-btn').classList.remove('hidden');
-        }
-
-        state.current = DATA[Math.floor(Math.random() * DATA.length)];
+        state.current = VOCAB[Math.floor(Math.random() * VOCAB.length)];
         document.getElementById('vaka-text').innerText = state.current.vaka;
         document.getElementById('q-word').innerText = state.current.de;
         document.getElementById('art-badge').innerText = state.current.art.toUpperCase();
         
         let opts = [state.current.tr];
         while(opts.length < 4) {
-            let r = DATA[Math.floor(Math.random() * DATA.length)].tr;
+            let r = VOCAB[Math.floor(Math.random() * VOCAB.length)].tr;
             if(!opts.includes(r)) opts.push(r);
         }
         opts.sort(() => Math.random() - 0.5);
@@ -166,71 +182,89 @@
     }
 
     function check(isOk, btn) {
+        const all = document.querySelectorAll('.opt-btn');
+        all.forEach(b => b.style.pointerEvents = 'none');
+
         if(isOk) {
             state.xp += 20;
+            state.streak++;
             btn.classList.add('correct');
-            confetti({ particleCount: 30, origin: { y: 0.8 } });
-            setTimeout(next, 600);
+            updateStreakUI();
+            confetti({ particleCount: 40, spread: 70, origin: { y: 0.8 } });
+
+            if(state.streak >= 4) {
+                document.getElementById('gift-btn').classList.remove('hidden');
+            }
+            setTimeout(next, 700);
         } else {
             state.lives--;
+            state.streak = 0;
             btn.classList.add('wrong');
-            if(state.lives <= 0) location.reload();
-            setTimeout(next, 800);
+            updateStreakUI();
+            if(state.lives <= 0) setTimeout(() => location.reload(), 1500);
+            else setTimeout(next, 900);
         }
         updateUI();
+    }
+
+    function updateStreakUI() {
+        const dots = document.querySelectorAll('.dot');
+        dots.forEach((d, i) => {
+            d.classList.toggle('active', i < state.streak);
+        });
     }
 
     function openWheel() {
         document.getElementById('gift-btn').classList.add('hidden');
         document.getElementById('wheel-modal').classList.remove('hidden');
+        state.streak = 0;
+        updateStreakUI();
     }
 
     function spinWheel() {
-        if(state.isWheelBusy) return;
-        state.isWheelBusy = true;
+        if(state.busy) return;
+        state.busy = true;
         const wheel = document.getElementById('wheel');
-        const spinDeg = Math.floor(Math.random() * 360) + 3600; 
-        wheel.style.transform = `rotate(${spinDeg}deg)`;
+        const deg = Math.floor(Math.random() * 360) + 3600;
+        wheel.style.transform = `rotate(${deg}deg)`;
 
         setTimeout(() => {
-            const actualDeg = 360 - (spinDeg % 360);
-            let prize = {};
-
-            if(actualDeg >= 0 && actualDeg < 60) prize = { t: "BEDAVA CAN", d: "Sağlık durumun iyileşti! +1 Can kazandın.", i: "💉", fn: () => state.lives++ };
-            else if(actualDeg >= 60 && actualDeg < 120) prize = { t: "EYVAH! -50 XP", d: "Hatalı doz! 50 tecrübe puanı kaybettin.", i: "⚠️", fn: () => state.xp = Math.max(0, state.xp - 50) };
-            else if(actualDeg >= 120 && actualDeg < 180) prize = { t: "100 XP BONUS", d: "Harika bir gözlem! 100 XP kazandın.", i: "💰", fn: () => state.xp += 100 };
-            else if(actualDeg >= 180 && actualDeg < 240) prize = { t: "ÜCRETSİZ İPUCU", d: "Zorlandığın bir soruda ipucu kazandın.", i: "💡", fn: () => state.xp += 25 };
-            else if(actualDeg >= 240 && actualDeg < 300) prize = { t: "150 XP SÜPER!", d: "Başhemşireden övgü aldın! +150 XP.", i: "🌟", fn: () => state.xp += 150 };
-            else prize = { t: "KÖTÜ ŞANS", d: "Nöbetin biraz zorlaşacak gibi...", i: "💀", fn: () => {} };
-
-            showReward(prize);
+            const actual = 360 - (deg % 360);
+            let p = {};
+            if(actual < 60) p = { t: "+1 CAN", d: "Ekstra nöbet gücü! Canın yenilendi.", i: "💉", fn: () => state.lives++ };
+            else if(actual < 120) p = { t: "-50 XP", d: "Tıbbi hata! Puanlarından bir kısmı silindi.", i: "⚠️", fn: () => state.xp = Math.max(0, state.xp-50) };
+            else if(actual < 180) p = { t: "100 XP", d: "Başarılı operasyon! Hesabına 100 XP eklendi.", i: "💰", fn: () => state.xp += 100 };
+            else if(actual < 240) p = { t: "İPUCU", d: "Bir sonraki zor soruda kullanman için ipucu kredisi.", i: "💡", fn: () => state.xp += 25 };
+            else if(actual < 300) p = { t: "150 XP", d: "Haftanın personeli seçildin! Büyük ödül.", i: "⭐", fn: () => state.xp += 150 };
+            else p = { t: "KAYIP", d: "Şans bu sefer senden yana değildi...", i: "📉", fn: () => {} };
+            
+            p.fn();
+            updateUI();
+            showReward(p);
         }, 4000);
     }
 
     function showReward(p) {
-        p.fn();
-        updateUI();
-        document.getElementById('reward-icon').innerText = p.i;
-        document.getElementById('reward-title').innerText = p.t;
-        document.getElementById('reward-desc').innerText = p.d;
-        document.getElementById('reward-card').classList.add('active');
-        if(p.t.includes("XP") || p.t.includes("CAN")) confetti({ particleCount: 150, spread: 70 });
+        document.getElementById('rew-icon').innerText = p.i;
+        document.getElementById('rew-title').innerText = p.t;
+        document.getElementById('rew-desc').innerText = p.d;
+        document.getElementById('reward-ui').classList.add('show');
     }
 
     function closeReward() {
-        document.getElementById('reward-card').classList.remove('active');
+        document.getElementById('reward-ui').classList.remove('show');
         document.getElementById('wheel-modal').classList.add('hidden');
         document.getElementById('wheel').style.transform = "rotate(0deg)";
-        state.isWheelBusy = false;
+        state.busy = false;
         next();
     }
 
-    function buy(type, cost) {
-        if(state.xp >= cost) {
-            state.xp -= cost;
-            if(type === 'heart') state.lives++;
-            if(type === 'skip') next();
-            if(type === 'hint') {
+    function buy(t, c) {
+        if(state.xp >= c) {
+            state.xp -= c;
+            if(t === 'heart') state.lives++;
+            if(t === 'skip') next();
+            if(t === 'hint') {
                 const b = Array.from(document.querySelectorAll('.opt-btn'));
                 b.filter(x => x.innerText !== state.current.tr).slice(0,2).forEach(x => x.style.opacity = '0.3');
             }
@@ -241,7 +275,6 @@
     function updateUI() {
         document.getElementById('xp-val').innerText = state.xp;
         document.getElementById('life-val').innerText = state.lives;
-        document.getElementById('rank-tag').innerText = state.xp > 500 ? "HEMŞİRE" : "ÖĞRENCİ";
     }
 
     function speak() {
