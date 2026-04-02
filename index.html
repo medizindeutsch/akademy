@@ -1442,20 +1442,42 @@ function applyLang() {
 // ─────────────────────────────────────────────────
 // BRANCH
 // ─────────────────────────────────────────────────
-function enterBranch(branch) {
-  currentBranch = branch;
-  document.body.dataset.branch = branch;
-  document.getElementById('landing').style.display = 'none';
-  const app = document.getElementById('app');
-  app.classList.add('active');
+function showBranch(branchKey) {
+    currentBranch = branchKey;
+    const branchData = DATA[branchKey];
 
-  const meta = branchMeta[branch];
-  const langLabel = currentLang === 'tr' ? meta.label : currentLang === 'de' ? meta.de : meta.en;
-  document.getElementById('navBranchLabel').textContent = meta.icon + ' ' + langLabel;
+    // Üst başlık ve renk ayarlarını yap
+    document.getElementById('currentBranchTitle').innerText = branchData.title;
+    document.body.style.setProperty('--branch-primary', branchData.color);
+    document.body.style.setProperty('--branch-accent', branchData.color + '22');
 
-  switchTab('wortschatz', document.querySelector('[data-tab="wortschatz"]'));
+    // Ana sayfayı gizle, branş panelini göster
+    document.getElementById('home-screen').classList.remove('active');
+    document.getElementById('branch-panel').classList.add('active');
+
+    // --- ÖNEMLİ DEĞİŞİKLİK BURADA ---
+    // 1. Hiçbir içeriği otomatik açma (Hepsini gizle)
+    const panes = document.querySelectorAll('.tab-pane');
+    panes.forEach(p => p.classList.remove('active'));
+    
+    // 2. Üstteki butonların "seçili" (mavi) halini sıfırla
+    const tabs = document.querySelectorAll('.tab-btn');
+    tabs.forEach(t => t.classList.remove('active'));
+
+    // (İsteğe bağlı) Ortada boş durmasın diye küçük bir yönlendirme mesajı gösterelim
+    // Eğer bunu istemezsen alt taraftaki satırları silebilirsin.
+    const contentArea = document.getElementById('tab-wortschatz').parentElement;
+    if(!document.getElementById('welcome-msg')) {
+        contentArea.insertAdjacentHTML('afterbegin', `
+            <div id="welcome-msg" style="text-align:center; padding:40px 20px; color:var(--muted);">
+                <h3 style="color:var(--branch-primary); margin-bottom:10px;">Lütfen Bir Kategori Seçin</h3>
+                <p>Yukarıdaki menüden Kelimeler, Vakalar veya Dokümantasyon bölümüne tıklayarak çalışmaya başlayabilirsiniz.</p>
+            </div>
+        `);
+    } else {
+        document.getElementById('welcome-msg').style.display = 'block';
+    }
 }
-
 function goHome() {
   currentBranch = null;
   document.body.removeAttribute('data-branch');
