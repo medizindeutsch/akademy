@@ -789,12 +789,31 @@ function renderQuizTab() {
 }
 
 function startQuiz() {
-  const q = pickQuestion(gameState.selectedCat, gameState.selectedLevel);
-  if (!q) { showNotification('Bu filtre için yeterli kelime yok!', '#BA7517'); return; }
-  gameState.quiz = { question: q.correct, correct: q.correct, options: q.options, answered: false, correct: false, selectedId: null, xpGained: 0 };
-  renderApp();
-}
+  // Eğer kullanıcı kategori seçmediyse varsayılan olarak 'Genel' ata
+  const currentCat = gameState.selectedCategory || 'Genel';
+  
+  // Kelimeleri filtrele ve karıştır (shuffle)
+  const filtered = [...VOCAB, ...customWords]
+    .filter(w => w.cat === currentCat)
+    .sort(() => 0.5 - Math.random());
 
+  if (filtered.length < 4) {
+    showNotification("Bu kategoride test için en az 4 kelime olmalı!", "#E24B4A");
+    return;
+  }
+
+  // Quiz durumunu hazırla
+  gameState.quiz = {
+    allQuestions: filtered,
+    currentIndex: 0,
+    correctCount: 0,
+    wrongCount: 0,
+    history: []
+  };
+
+  // Sekmeyi değiştir ve ekranı yenile
+  switchTab('quiz'); 
+}
 function selectAnswer(id) {
   if (gameState.quiz.answered) return;
   const q = gameState.quiz;
