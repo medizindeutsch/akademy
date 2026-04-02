@@ -1,367 +1,1630 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Almanca Sağlık Portalı</title>
-    <style>
-        :root {
-            --primary: #00796b;
-            --nurse: #0288d1;
-            --doctor: #d32f2f;
-            --paramedic: #f57c00;
-            --anes: #7b1fa2;
-            --bg: #f0f4f3;
-            --white: #ffffff;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MedDeutsch Pro – Mesleki Almanca Portalı</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0e1a;
+  --surface: #111827;
+  --surface2: #1a2235;
+  --border: rgba(255,255,255,0.08);
+  --text: #e8eaf0;
+  --muted: #7a8499;
+  --accent: #3b82f6;
+  --accent2: #60a5fa;
 
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            background-color: var(--bg);
-            margin: 0; padding: 0;
-            display: flex; flex-direction: column; align-items: center;
-        }
+  /* Branch themes */
+  --nurse-primary: #10b981;
+  --nurse-bg: #0a1f18;
+  --nurse-surface: #0f2a20;
+  --nurse-accent: #34d399;
 
-        .hidden { display: none !important; }
+  --doctor-primary: #3b82f6;
+  --doctor-bg: #0a0f1f;
+  --doctor-surface: #0f1628;
+  --doctor-accent: #60a5fa;
 
-        /* ANA SAYFA HERO */
-        .hero {
-            width: 100%; height: 300px;
-            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), 
-                        url('https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&q=80&w=1200');
-            background-size: cover; background-position: center;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            color: white; text-align: center;
-        }
+  --para-primary: #f59e0b;
+  --para-bg: #1a1205;
+  --para-surface: #221808;
+  --para-accent: #fbbf24;
 
-        .container { width: 90%; max-width: 600px; margin: -50px auto 100px auto; }
+  --anest-primary: #8b5cf6;
+  --anest-bg: #120a1f;
+  --anest-surface: #1a1028;
+  --anest-accent: #a78bfa;
 
-        /* MESLEK KARTLARI */
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .profession-card {
-            background: white; padding: 20px; border-radius: 20px;
-            text-align: center; box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-            cursor: pointer; transition: 0.3s;
-        }
-        .profession-card:hover { transform: translateY(-5px); }
-        .p-nurse { border-bottom: 6px solid var(--nurse); }
-        .p-doctor { border-bottom: 6px solid var(--doctor); }
-        .p-para { border-bottom: 6px solid var(--paramedic); }
-        .p-anes { border-bottom: 6px solid var(--anes); }
+  --branch-primary: var(--accent);
+  --branch-bg: var(--bg);
+  --branch-surface: var(--surface2);
+  --branch-accent: var(--accent2);
+}
 
-        /* İÇERİK KARTI */
-        .main-card {
-            background: white; padding: 30px; border-radius: 25px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1); text-align: center;
-        }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-        .word-de { font-size: 2.2rem; color: var(--nurse); font-weight: bold; margin-bottom: 10px; }
-        .word-tr { 
-            font-size: 1.2rem; color: #666; cursor: pointer; 
-            filter: blur(8px); transition: 0.3s; margin-bottom: 25px; 
-        }
-        .word-tr.reveal { filter: blur(0); }
+body {
+  font-family: 'IBM Plex Sans', sans-serif;
+  background: var(--branch-bg, var(--bg));
+  color: var(--text);
+  min-height: 100vh;
+  transition: background 0.4s ease, color 0.3s;
+}
 
-        .info-box {
-            text-align: left; background: #f1f8f7; padding: 15px;
-            border-radius: 15px; border-left: 5px solid var(--nurse);
-            margin-bottom: 20px; line-height: 1.6;
-        }
+/* ─── LANDING ─────────────────────────────────────── */
+#landing {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  position: relative;
+  overflow: hidden;
+}
 
-        /* ALT NAVİGASYON */
-        .nav-bar {
-            position: fixed; bottom: 0; width: 100%; background: white;
-            display: flex; justify-content: space-around; padding: 12px 0;
-            box-shadow: 0 -5px 15px rgba(0,0,0,0.1); border-top: 1px solid #eee;
-        }
-        .nav-item {
-            border: none; background: none; color: #888; font-size: 0.75rem;
-            display: flex; flex-direction: column; align-items: center; cursor: pointer;
-        }
-        .nav-item.active { color: var(--nurse); font-weight: bold; }
-        .nav-icon { font-size: 1.4rem; }
+#landing::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(ellipse 80% 60% at 50% -10%, rgba(59,130,246,0.15) 0%, transparent 60%);
+  pointer-events: none;
+}
 
-        .btn-group { display: flex; gap: 10px; }
-        .btn {
-            flex: 1; padding: 15px; border: none; border-radius: 12px;
-            font-weight: bold; cursor: pointer; transition: 0.2s;
-        }
-        .btn-next { background: var(--nurse); color: white; }
-        .btn-prev { background: #eee; color: #555; }
+.landing-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 48px;
+  border-bottom: 1px solid var(--border);
+}
 
-        @media (max-width: 500px) { .grid { grid-template-columns: 1fr; } }
-    </style>
+.logo {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 1.1rem;
+  color: var(--accent2);
+  letter-spacing: -0.02em;
+}
+.logo span { color: var(--muted); }
+
+.lang-switcher {
+  display: flex;
+  gap: 6px;
+  background: var(--surface);
+  border-radius: 10px;
+  padding: 4px;
+  border: 1px solid var(--border);
+}
+.lang-btn {
+  padding: 6px 14px;
+  border-radius: 7px;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: 'IBM Plex Sans', sans-serif;
+}
+.lang-btn.active { background: var(--accent); color: #fff; }
+.lang-btn:hover:not(.active) { color: var(--text); background: var(--surface2); }
+
+.landing-hero {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 24px 60px;
+  text-align: center;
+  gap: 16px;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(59,130,246,0.1);
+  border: 1px solid rgba(59,130,246,0.3);
+  color: var(--accent2);
+  padding: 6px 16px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.hero-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.4rem, 6vw, 4rem);
+  line-height: 1.15;
+  color: #fff;
+  max-width: 720px;
+}
+.hero-title em { font-style: normal; color: var(--accent2); }
+
+.hero-sub {
+  font-size: 1.05rem;
+  color: var(--muted);
+  max-width: 520px;
+  line-height: 1.7;
+}
+
+.branch-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  max-width: 820px;
+  width: 100%;
+  margin-top: 32px;
+  padding: 0 20px;
+}
+@media (max-width: 600px) { .branch-grid { grid-template-columns: 1fr; } }
+
+.branch-card {
+  position: relative;
+  border-radius: 20px;
+  padding: 32px 28px;
+  cursor: pointer;
+  border: 1.5px solid var(--border);
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  overflow: hidden;
+  text-align: left;
+}
+.branch-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.branch-card:hover { transform: translateY(-6px) scale(1.01); border-color: var(--c); }
+.branch-card:hover::before { opacity: 1; }
+
+.branch-card[data-branch="nurse"] { --c: #10b981; background: linear-gradient(135deg, #0a1f18 0%, #0f2a20 100%); }
+.branch-card[data-branch="nurse"]::before { background: radial-gradient(circle at 70% 30%, rgba(16,185,129,0.12), transparent 70%); }
+.branch-card[data-branch="doctor"] { --c: #3b82f6; background: linear-gradient(135deg, #0a0f1f 0%, #0f1628 100%); }
+.branch-card[data-branch="doctor"]::before { background: radial-gradient(circle at 70% 30%, rgba(59,130,246,0.12), transparent 70%); }
+.branch-card[data-branch="para"] { --c: #f59e0b; background: linear-gradient(135deg, #1a1205 0%, #221808 100%); }
+.branch-card[data-branch="para"]::before { background: radial-gradient(circle at 70% 30%, rgba(245,158,11,0.12), transparent 70%); }
+.branch-card[data-branch="anest"] { --c: #8b5cf6; background: linear-gradient(135deg, #120a1f 0%, #1a1028 100%); }
+.branch-card[data-branch="anest"]::before { background: radial-gradient(circle at 70% 30%, rgba(139,92,246,0.12), transparent 70%); }
+
+.branch-icon { font-size: 2rem; margin-bottom: 12px; display: block; }
+.branch-name {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 4px;
+}
+.branch-de {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.78rem;
+  color: var(--c);
+  opacity: 0.85;
+  margin-bottom: 10px;
+}
+.branch-desc { font-size: 0.85rem; color: var(--muted); line-height: 1.6; }
+.branch-arr {
+  position: absolute;
+  right: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.2rem;
+  color: var(--c);
+  opacity: 0;
+  transition: all 0.3s;
+}
+.branch-card:hover .branch-arr { opacity: 1; transform: translateY(-50%) translateX(4px); }
+
+/* ─── MAIN APP ────────────────────────────────────── */
+#app { display: none; min-height: 100vh; flex-direction: column; }
+#app.active { display: flex; }
+
+.app-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  padding: 0 32px;
+  border-bottom: 1px solid var(--border);
+  background: rgba(10,14,26,0.85);
+  backdrop-filter: blur(16px);
+  height: 60px;
+  flex-wrap: wrap;
+}
+
+.nav-back {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--branch-primary);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 8px 0;
+  margin-right: 20px;
+  border: none;
+  background: none;
+  font-family: 'IBM Plex Sans', sans-serif;
+  transition: opacity 0.2s;
+  flex-shrink: 0;
+}
+.nav-back:hover { opacity: 0.7; }
+
+.nav-branch-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.8rem;
+  color: var(--branch-primary);
+  background: rgba(var(--rr),var(--gg),var(--bb),0.12);
+  padding: 4px 12px;
+  border-radius: 999px;
+  margin-right: 24px;
+  border: 1px solid rgba(var(--rr),var(--gg),var(--bb),0.25);
+  flex-shrink: 0;
+}
+
+.nav-tabs {
+  display: flex;
+  gap: 4px;
+  flex: 1;
+}
+
+.nav-tab {
+  padding: 8px 18px;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.2s;
+  font-family: 'IBM Plex Sans', sans-serif;
+  white-space: nowrap;
+}
+.nav-tab:hover { color: var(--text); background: var(--surface2); }
+.nav-tab.active { color: var(--branch-primary); background: rgba(var(--rr),var(--gg),var(--bb),0.1); }
+
+.nav-lang {
+  display: flex;
+  gap: 4px;
+  margin-left: 16px;
+}
+.nav-lang .lang-btn { padding: 4px 10px; font-size: 0.75rem; }
+
+/* ─── CONTENT AREA ────────────────────────────────── */
+.app-content {
+  flex: 1;
+  padding: 40px 48px;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+@media (max-width: 768px) { .app-content { padding: 24px 16px; } }
+
+.section-header {
+  margin-bottom: 32px;
+}
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.8rem;
+  color: #fff;
+  margin-bottom: 6px;
+}
+.section-sub {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+/* ─── WORTSCHATZ ──────────────────────────────────── */
+.word-controls {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.search-box {
+  flex: 1;
+  min-width: 220px;
+  position: relative;
+}
+.search-box input {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 16px 10px 40px;
+  color: var(--text);
+  font-size: 0.9rem;
+  font-family: 'IBM Plex Sans', sans-serif;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.search-box input:focus { border-color: var(--branch-primary); }
+.search-icon {
+  position: absolute;
+  left: 13px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--muted);
+  pointer-events: none;
+}
+
+.filter-btns {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.filter-btn {
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'IBM Plex Sans', sans-serif;
+  transition: all 0.2s;
+}
+.filter-btn.active { border-color: var(--branch-primary); color: var(--branch-primary); background: rgba(var(--rr),var(--gg),var(--bb),0.08); }
+.filter-btn:hover:not(.active) { color: var(--text); }
+
+.word-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 14px;
+}
+
+.word-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 18px 20px;
+  transition: all 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+.word-card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--branch-primary);
+  border-radius: 3px 0 0 3px;
+}
+.word-card:hover { border-color: var(--branch-primary); transform: translateY(-2px); }
+
+.word-de {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--branch-accent);
+  margin-bottom: 4px;
+}
+.word-article {
+  font-size: 0.75rem;
+  color: var(--branch-primary);
+  background: rgba(var(--rr),var(--gg),var(--bb),0.1);
+  padding: 1px 7px;
+  border-radius: 4px;
+  display: inline-block;
+  margin-right: 6px;
+}
+.word-tr {
+  color: var(--text);
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+}
+.word-example {
+  background: rgba(255,255,255,0.03);
+  border-left: 2px solid rgba(var(--rr),var(--gg),var(--bb),0.3);
+  padding: 8px 12px;
+  border-radius: 0 6px 6px 0;
+  font-size: 0.82rem;
+  color: var(--muted);
+  line-height: 1.5;
+  margin-top: 8px;
+}
+.word-example em { color: var(--branch-accent); font-style: normal; }
+.word-category {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-size: 0.68rem;
+  color: var(--muted);
+  background: var(--surface2);
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+/* ─── FALLBEISPIELE ───────────────────────────────── */
+.case-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.case-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  overflow: hidden;
+  transition: all 0.2s;
+}
+.case-card:hover { border-color: rgba(var(--rr),var(--gg),var(--bb),0.3); }
+
+.case-header {
+  padding: 20px 24px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  user-select: none;
+}
+.case-meta {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 6px;
+  flex-wrap: wrap;
+}
+.case-badge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.badge-level { background: rgba(var(--rr),var(--gg),var(--bb),0.15); color: var(--branch-accent); }
+.badge-type { background: rgba(255,255,255,0.06); color: var(--muted); }
+.case-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 4px;
+}
+.case-teaser { font-size: 0.85rem; color: var(--muted); line-height: 1.5; }
+.case-toggle {
+  font-size: 1.2rem;
+  color: var(--muted);
+  transition: transform 0.3s;
+  flex-shrink: 0;
+  margin-top: 4px;
+}
+.case-card.open .case-toggle { transform: rotate(180deg); }
+
+.case-body {
+  display: none;
+  padding: 0 24px 24px;
+  border-top: 1px solid var(--border);
+  margin-top: 0;
+}
+.case-card.open .case-body { display: block; padding-top: 20px; }
+
+.case-section {
+  margin-bottom: 20px;
+}
+.case-section-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--branch-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.case-section-title::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+.case-text {
+  color: var(--text);
+  font-size: 0.9rem;
+  line-height: 1.75;
+}
+.case-text strong { color: var(--branch-accent); font-weight: 600; }
+.case-text em { color: var(--branch-primary); font-style: italic; }
+
+.dialog-box {
+  background: var(--surface2);
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+.dialog-line {
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.88rem;
+  line-height: 1.6;
+}
+.dialog-line:last-child { border-bottom: none; }
+.dialog-speaker {
+  font-weight: 700;
+  color: var(--branch-accent);
+  margin-right: 8px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.8rem;
+}
+.dialog-text { color: var(--text); }
+.dialog-translation {
+  display: block;
+  font-size: 0.78rem;
+  color: var(--muted);
+  margin-top: 2px;
+  padding-left: 4px;
+}
+
+.vocab-highlight {
+  display: inline;
+  background: rgba(var(--rr),var(--gg),var(--bb),0.12);
+  border-bottom: 1.5px solid var(--branch-primary);
+  padding: 0 2px;
+  border-radius: 3px;
+  cursor: help;
+  font-weight: 500;
+  color: var(--branch-accent);
+}
+
+/* ─── DOKUMENTATION ───────────────────────────────── */
+.doc-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 20px;
+}
+
+.doc-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+}
+.doc-card-header {
+  padding: 16px 20px;
+  background: rgba(var(--rr),var(--gg),var(--bb),0.06);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.doc-card-icon { font-size: 1.3rem; }
+.doc-card-title {
+  font-weight: 700;
+  color: var(--branch-accent);
+  font-size: 0.95rem;
+}
+.doc-card-subtitle {
+  font-size: 0.75rem;
+  color: var(--muted);
+  font-family: 'IBM Plex Mono', monospace;
+}
+.doc-card-body { padding: 20px; }
+
+.doc-field {
+  margin-bottom: 14px;
+}
+.doc-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--branch-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 4px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+.doc-value {
+  background: var(--surface2);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 0.87rem;
+  color: var(--text);
+  line-height: 1.6;
+  border: 1px solid var(--border);
+}
+.doc-value.highlight {
+  border-color: rgba(var(--rr),var(--gg),var(--bb),0.3);
+  background: rgba(var(--rr),var(--gg),var(--bb),0.05);
+}
+
+/* ─── MISC ────────────────────────────────────────── */
+.hidden { display: none !important; }
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--muted);
+}
+.empty-state .icon { font-size: 2.5rem; margin-bottom: 12px; }
+
+/* branch theming via CSS variable injection */
+body[data-branch="nurse"] { --branch-primary: var(--nurse-primary); --branch-bg: var(--nurse-bg); --branch-surface: var(--nurse-surface); --branch-accent: var(--nurse-accent); --rr: 16; --gg: 185; --bb: 129; }
+body[data-branch="doctor"] { --branch-primary: var(--doctor-primary); --branch-bg: var(--doctor-bg); --branch-surface: var(--doctor-surface); --branch-accent: var(--doctor-accent); --rr: 59; --gg: 130; --bb: 246; }
+body[data-branch="para"] { --branch-primary: var(--para-primary); --branch-bg: var(--para-bg); --branch-surface: var(--para-surface); --branch-accent: var(--para-accent); --rr: 245; --gg: 158; --bb: 11; }
+body[data-branch="anest"] { --branch-primary: var(--anest-primary); --branch-bg: var(--anest-bg); --branch-surface: var(--anest-surface); --branch-accent: var(--anest-accent); --rr: 139; --gg: 92; --bb: 246; }
+
+/* scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 3px; }
+
+.progress-bar {
+  height: 2px;
+  background: linear-gradient(90deg, var(--branch-primary), var(--branch-accent));
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0;
+  z-index: 999;
+  transition: width 0.3s;
+}
+
+.tab-pane { display: none; }
+.tab-pane.active { display: block; }
+
+.stats-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+}
+.stat-pill {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 18px;
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+.stat-pill strong { color: var(--branch-accent); font-size: 1.1rem; display: block; }
+
+/* tooltip */
+.tooltip {
+  position: fixed;
+  background: #1e293b;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-size: 0.82rem;
+  color: var(--text);
+  pointer-events: none;
+  z-index: 9999;
+  max-width: 260px;
+  line-height: 1.5;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.tooltip.visible { opacity: 1; }
+</style>
 </head>
 <body>
 
-    <div id="home-screen">
-        <div class="hero">
-            <h1>Medizin-Deutsch Portal</h1>
-            <p>Willkommen | Branşınızı Seçiniz</p>
+<div class="progress-bar" id="progressBar"></div>
+<div class="tooltip" id="tooltip"></div>
+
+<!-- ═══════════════ LANDING ═══════════════ -->
+<div id="landing">
+  <header class="landing-header">
+    <div class="logo">Med<span>Deutsch</span>Pro</div>
+    <div class="lang-switcher" id="landingLang">
+      <button class="lang-btn active" data-lang="tr">TR</button>
+      <button class="lang-btn" data-lang="de">DE</button>
+      <button class="lang-btn" data-lang="en">EN</button>
+    </div>
+  </header>
+
+  <div class="landing-hero">
+    <div class="hero-badge">🏥 Mesleki Eğitim Portalı</div>
+    <h1 class="hero-title">Almanya'da Çalışmak İçin <em>Doğru Almancayı</em> Öğren</h1>
+    <p class="hero-sub" id="heroSub">Branşına özel kelime listeleri, gerçekçi vaka simülasyonları ve Almanya standartlarına göre dokümantasyon örnekleri ile mesleki Almancanda uzman ol.</p>
+
+    <div class="branch-grid">
+      <div class="branch-card" data-branch="nurse" onclick="enterBranch('nurse')">
+        <span class="branch-icon">💚</span>
+        <div class="branch-name" id="nurse-name">Hemşire</div>
+        <div class="branch-de">Krankenpflege / Altenpflege</div>
+        <div class="branch-desc" id="nurse-desc">Hasta bakımı, sabah rutini, devir teslim ve bakım planlaması.</div>
+        <div class="branch-arr">→</div>
+      </div>
+      <div class="branch-card" data-branch="doctor" onclick="enterBranch('doctor')">
+        <span class="branch-icon">💙</span>
+        <div class="branch-name" id="doctor-name">Doktor</div>
+        <div class="branch-de">Arzt / Ärztin</div>
+        <div class="branch-desc" id="doctor-desc">Anamnez, teşhis süreci, ilaç yazma ve hasta görüşmeleri.</div>
+        <div class="branch-arr">→</div>
+      </div>
+      <div class="branch-card" data-branch="para" onclick="enterBranch('para')">
+        <span class="branch-icon">🟡</span>
+        <div class="branch-name" id="para-name">Paramedik</div>
+        <div class="branch-de">Rettungssanitäter / Notfallsanitäter</div>
+        <div class="branch-desc" id="para-desc">Acil müdahale, einsatz iletişimi ve hastane devri.</div>
+        <div class="branch-arr">→</div>
+      </div>
+      <div class="branch-card" data-branch="anest" onclick="enterBranch('anest')">
+        <span class="branch-icon">🟣</span>
+        <div class="branch-name" id="anest-name">Anestezi Teknikeri</div>
+        <div class="branch-de">Anästhesietechnischer Assistent (ATA)</div>
+        <div class="branch-desc" id="anest-desc">Premedikasyon, monitörizasyon, ilaç hazırlama ve uyandırma odası.</div>
+        <div class="branch-arr">→</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ APP ═══════════════ -->
+<div id="app">
+  <nav class="app-nav">
+    <button class="nav-back" onclick="goHome()">← <span id="homeLabel">Ana Sayfa</span></button>
+    <div class="nav-branch-label" id="navBranchLabel">–</div>
+    <div class="nav-tabs">
+      <button class="nav-tab active" data-tab="wortschatz" onclick="switchTab('wortschatz', this)">📚 Wortschatz</button>
+      <button class="nav-tab" data-tab="fallbeispiele" onclick="switchTab('fallbeispiele', this)">🩺 Fallbeispiele</button>
+      <button class="nav-tab" data-tab="dokumentation" onclick="switchTab('dokumentation', this)">📋 Dokumentation</button>
+    </div>
+    <div class="nav-lang" id="appLang">
+      <button class="lang-btn active" data-lang="tr">TR</button>
+      <button class="lang-btn" data-lang="de">DE</button>
+      <button class="lang-btn" data-lang="en">EN</button>
+    </div>
+  </nav>
+
+  <div class="app-content">
+    <!-- WORTSCHATZ -->
+    <div class="tab-pane active" id="tab-wortschatz">
+      <div class="section-header">
+        <h2 class="section-title" id="wortTitle">Wortschatz</h2>
+        <p class="section-sub" id="wortSub">Branşınıza özel teknik kelimeler ve örnek cümleler</p>
+      </div>
+      <div class="stats-row" id="wortStats"></div>
+      <div class="word-controls">
+        <div class="search-box">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="wordSearch" placeholder="Almanca veya Türkçe ara..." oninput="filterWords()">
         </div>
-        <div class="container">
-            <div class="grid">
-                <div class="profession-card p-nurse" onclick="startModule('nurse')">
-                    <span style="font-size:2.5rem;">🩺</span>
-                    <h3 style="margin:10px 0 5px 0;">Pflegekraft<br><small>Hemşire</small></h3>
-                </div>
-                <div class="profession-card p-doctor" onclick="startModule('doctor')">
-                    <span style="font-size:2.5rem;">👨‍⚕️</span>
-                    <h3 style="margin:10px 0 5px 0;">Arzt/Ärztin<br><small>Doktor</small></h3>
-                </div>
-                <div class="profession-card p-para" onclick="startModule('para')">
-                    <span style="font-size:2.5rem;">🚑</span>
-                    <h3 style="margin:10px 0 5px 0;">Notfall<br><small>Paramedik</small></h3>
-                </div>
-                <div class="profession-card p-anes" onclick="startModule('anes')">
-                    <span style="font-size:2.5rem;">😴</span>
-                    <h3 style="margin:10px 0 5px 0;">Anästhesie<br><small>Anestezi</small></h3>
-                </div>
-            </div>
-        </div>
+        <div class="filter-btns" id="categoryFilters"></div>
+      </div>
+      <div class="word-grid" id="wordGrid"></div>
     </div>
 
-    <div id="main-module" class="hidden" style="width:100%;">
-        <header id="moduleHeader" style="background:var(--nurse); color:white; width:100%; padding:15px; text-align:center; font-weight:bold; text-transform:uppercase;">
-            MODUL
-        </header>
-        
-        <div class="container" style="margin-top:20px;">
-            <div id="nurse-vocab" class="sub-module">
-                <div class="main-card">
-                    <div id="deWord" class="word-de">Laden...</div>
-                    <div id="trWord" class="word-tr" onclick="this.classList.toggle('reveal')">Dokun ve Gör</div>
-                    <div class="info-box" id="infoBox">
-                        <div id="exDe" style="font-weight:600;"></div>
-                        <div id="exTr" style="font-style:italic; color:#546e7a; font-size:0.9rem; margin-top:5px;"></div>
-                    </div>
-                    <div class="btn-group">
-                        <button class="btn btn-prev" onclick="changeWord(-1)">Zurück</button>
-                        <button class="btn btn-next" onclick="changeWord(1)">Weiter</button>
-                    </div>
-                </div>
-            </div>
-
-            <div id="nurse-vaka" class="sub-module hidden">
-                <div class="main-card" style="text-align:left;">
-                    <h2 id="vakaTitle" style="color:var(--nurse);">Fallbeispiel</h2>
-                    <div id="vakaContent" style="line-height:1.7; color:#333;"></div>
-                </div>
-            </div>
-
-            <div id="nurse-bakim" class="sub-module hidden">
-                <div class="main-card" style="text-align:left;">
-                    <h2 id="bakimTitle" style="color:var(--nurse);">Dokumentation</h2>
-                    <div id="bakimContent" style="line-height:1.7; color:#333;"></div>
-                </div>
-            </div>
-        </div>
-
-        <nav class="nav-bar">
-            <button class="nav-item active" onclick="switchTab('vocab', this)"><span class="nav-icon">📖</span>Kelime</button>
-            <button class="nav-item" onclick="switchTab('vaka', this)"><span class="nav-icon">🚑</span>Vaka</button>
-            <button class="nav-item" onclick="switchTab('bakim', this)"><span class="nav-icon">🩺</span>Uygulama</button>
-            <button class="nav-item" onclick="location.reload()"><span class="nav-icon">🏠</span>Menü</button>
-        </nav>
+    <!-- FALLBEISPIELE -->
+    <div class="tab-pane" id="tab-fallbeispiele">
+      <div class="section-header">
+        <h2 class="section-title">Fallbeispiele</h2>
+        <p class="section-sub">Gerçekçi vaka simülasyonları – B1/B2 Almanca</p>
+      </div>
+      <div class="case-list" id="caseList"></div>
     </div>
 
-    <script>
-        let currentRole = '';
-        let vIdx = 0;
+    <!-- DOKUMENTATION -->
+    <div class="tab-pane" id="tab-dokumentation">
+      <div class="section-header">
+        <h2 class="section-title">Dokumentation</h2>
+        <p class="section-sub">Almanya standartlarına göre dokümantasyon şablonları</p>
+      </div>
+      <div class="doc-cards" id="docCards"></div>
+    </div>
+  </div>
+</div>
 
-        const data = {
-            nurse: {
-                color: '#0288d1',
-                title: 'Hemşirelik Bölümü',
-               nurse: {
-                color: '#0288d1',
-                title: 'Hemşirelik Bölümü (Pflegekraft)',
-                vocab: [
-                    { de: "die Aufnahme", tr: "Hasta Kayıt / Kabul", ex: "Wir machen jetzt die Aufnahme.", et: "Şimdi hasta kaydını yapıyoruz." },
-                    { de: "die Station", tr: "Servis / Bölüm", ex: "Er liegt auf der inneren Station.", et: "Dahiliye servisinde yatıyor." },
-                    { de: "das Patientenzimmer", tr: "Hasta Odası", ex: "Zimmer 204 ist belegt.", et: "204 numaralı oda dolu." },
-                    { de: "das Pflegebett", tr: "Bakım Yatağı", ex: "Das Pflegebett ist höhenverstellbar.", et: "Bakım yatağının yüksekliği ayarlanabilir." },
-                    { de: "die Übergabe", tr: "Nöbet Devri / Teslimi", ex: "Die Übergabe beginnt um 14 Uhr.", et: "Nöbet devri saat 14'te başlıyor." },
-                    { de: "die Schicht", tr: "Vardiya", ex: "Ich habe heute Frühschicht.", et: "Bugün sabah vardiyam (sabahçıyım) var." },
-                    { de: "die Pflegedokumentation", tr: "Bakım Dokümantasyonu", ex: "Bitte füllen Sie die Dokumentation aus.", et: "Lütfen dokümantasyonu doldurun." },
-                    { de: "die Vitalzeichen", tr: "Yaşam Bulguları", ex: "Messen Sie bitte die Vitalzeichen.", et: "Lütfen yaşam bulgularını ölçün." },
-                    { de: "der Blutdruck (RR)", tr: "Tansiyon", ex: "Der Blutdruck ist zu hoch.", et: "Tansiyon çok yüksek." },
-                    { de: "der Puls", tr: "Nabız", ex: "Der Puls ist regelmäßig.", et: "Nabız düzenli." },
-                    { de: "das Fieber", tr: "Ateş", ex: "Haben Sie Fieber?", et: "Ateşiniz var mı?" },
-                    { de: "die Atemfrequenz", tr: "Solunum Sıklığı", ex: "Die Atemfrequenz ist erhöht.", et: "Solunum hızı artmış." },
-                    { de: "das Körpergewicht", tr: "Vücut Ağırlığı", ex: "Wir müssen das Gewicht kontrollieren.", et: "Kiloyu kontrol etmeliyiz." },
-                    { de: "die Körpergröße", tr: "Boy Uzunluğu", ex: "Wie groß sind Sie?", et: "Boyunuz kaç?" },
-                    { de: "die Grundpflege", tr: "Temel Bakım", ex: "Brauchen Sie Hilfe bei der Grundpflege?", et: "Temel bakımda yardıma ihtiyacınız var mı?" },
-                    { de: "die Körperpflege", tr: "Vücut Bakımı / Temizliği", ex: "Wir machen jetzt die Körperpflege.", et: "Şimdi vücut temizliğini yapıyoruz." },
-                    { de: "das Waschen", tr: "Yıkama", ex: "Ich helfe Ihnen beim Waschen.", et: "Yıkanmanıza yardım edeceğim." },
-                    { de: "das Duschen", tr: "Duş Alma", ex: "Möchten Sie heute duschen?", et: "Bugün duş almak ister misiniz?" },
-                    { de: "die Mundpflege", tr: "Ağız Bakımı", ex: "Die Mundpflege ist wichtig.", et: "Ağız bakımı önemlidir." },
-                    { de: "die Intimpflege", tr: "Genital Bölge Bakımı", ex: "Wir führen die Intimpflege durch.", et: "Genital bakımı yapıyoruz." },
-                    { de: "die Rasur", tr: "Tıraş", ex: "Brauchen Sie eine Rasur?", et: "Tıraşa ihtiyacınız var mı?" },
-                    { de: "die Nagelpflege", tr: "Tırnak Bakımı", ex: "Wir machen heute Nagelpflege.", et: "Bugün tırnak bakımı yapıyoruz." },
-                    { de: "das Ankleiden", tr: "Giyinme", ex: "Ich helfe beim Ankleiden.", et: "Giyinmeye yardım ediyorum." },
-                    { de: "das Auskleiden", tr: "Soyunma", ex: "Bitte kleiden Sie sich aus.", et: "Lütfen soyunun." },
-                    { de: "die Mobilisation", tr: "Mobilizasyon / Hareket", ex: "Mobilisation ist nach der OP wichtig.", et: "Ameliyat sonrası hareket önemlidir." },
-                    { de: "die Gehstützen", tr: "Koltuk Değneği", ex: "Er läuft mit Gehstützen.", et: "Koltuk değneğiyle yürüyor." },
-                    { de: "der Rollstuhl", tr: "Tekerlekli Sandalye", ex: "Holen Sie bitte den Rollstuhl.", et: "Lütfen tekerlekli sandalyeyi getirin." },
-                    { de: "der Rollator", tr: "Yürüteç", ex: "Sie nutzt einen Rollator.", et: "Bir yürüteç kullanıyor." },
-                    { de: "das Lagerungskissen", tr: "Destek Yastığı", ex: "Wir brauchen ein Lagerungskissen.", et: "Bir destek yastığına ihtiyacımız var." },
-                    { de: "die Dekubitusprophylaxe", tr: "Yatak Yarası Önleme", ex: "Wir machen Dekubitusprophylaxe.", et: "Yatak yarası önlemesi yapıyoruz." },
-                    { de: "die Thromboseprophylaxe", tr: "Pıhtı Önleme", ex: "Tragen Sie die Kompressionsstrümpfe?", et: "Varis çoraplarını giyiyor musunuz?" },
-                    { de: "die Sturzprophylaxe", tr: "Düşmeyi Önleme", ex: "Die Sturzprophylaxe ist aktiv.", et: "Düşme önlemi aktif." },
-                    { de: "die Medikamente", tr: "İlaçlar", ex: "Nehmen Sie Ihre Medikamente.", et: "İlaçlarınızı alın." },
-                    { de: "die Tablette", tr: "Tablet / Hap", ex: "Eine Tablette vor dem Essen.", et: "Yemekten önce bir tablet." },
-                    { de: "die Kapsel", tr: "Kapsül", ex: "Schlucken Sie die Kapsel ganz.", et: "Kapsülü bütün yutun." },
-                    { de: "die Infusion", tr: "Serum / İnfüzyon", ex: "Die Infusion läuft langsam.", et: "Serum yavaş akıyor." },
-                    { de: "die Injektion", tr: "Enjeksiyon / İğne", ex: "Ich gebe Ihnen eine Injektion.", et: "Size bir iğne yapacağım." },
-                    { de: "die Spritze", tr: "Şırınga / İğne", ex: "Keine Angst vor der Spritze.", et: "İğneden korkmayın." },
-                    { de: "die Kanüle", tr: "Kanül", ex: "Die Kanüle muss gewechselt werden.", et: "Kanül değiştirilmeli." },
-                    { de: "der Verband", tr: "Sargı / Pansuman", ex: "Wir wechseln den Verband.", et: "Pansumanı değiştiriyoruz." },
-                    { de: "das Pflaster", tr: "Yara Bandı", ex: "Soll ich ein Pflaster draufkleben?", et: "Üzerine yara bandı yapıştırayım mı?" },
-                    { de: "die Wunde", tr: "Yara", ex: "Die Wunde heilt gut.", et: "Yara iyi iyileşiyor." },
-                    { de: "die Entzündung", tr: "İltihap / Enfeksiyon", ex: "Die Stelle ist entzündet.", et: "Burası iltihaplanmış." },
-                    { de: "die Schmerzen", tr: "Ağrılar", ex: "Haben Sie Schmerzen?", et: "Ağrınız var mı?" },
-                    { de: "die Skala (1-10)", tr: "Ağrı Skalası", ex: "Wie stark sind die Schmerzen (1-10)?", et: "Ağrınız ne kadar şiddetli (1-10)?" },
-                    { de: "das Schmerzmittel", tr: "Ağrı Kesici", ex: "Ich bringe Ihnen ein Schmerzmittel.", et: "Size bir ağrı kesici getiriyorum." },
-                    { de: "die Übelkeit", tr: "Mide Bulantısı", ex: "Ist Ihnen übel?", et: "Mideniz bulanıyor mu?" },
-                    { de: "das Erbrechen", tr: "Kusma", ex: "Der Patient musste erbrechen.", et: "Hastanın kusması gerekti." },
-                    { de: "der Schwindel", tr: "Baş Dönmesi", ex: "Haben Sie Schwindelgefühle?", et: "Başınız dönüyor mu?" },
-                    { de: "die Atemnot", tr: "Nefes Darlığı", ex: "Er leidet unter Atemnot.", et: "Nefes darlığı çekiyor." },
-                    { de: "der Sauerstoff", tr: "Oksijen", ex: "Geben Sie ihm Sauerstoff.", et: "Ona oksijen verin." },
-                    { de: "die Nasensonde", tr: "Nazal Kanül / Sonda", ex: "Die Nasensonde sitzt gut.", et: "Nazal sonda iyi oturmuş." },
-                    { de: "die Blase", tr: "Mesane", ex: "Die Blase ist voll.", et: "Mesane dolu." },
-                    { de: "der Urin", tr: "İdrar", ex: "Der Urin ist dunkel.", et: "İdrar koyu renkli." },
-                    { de: "der Katheter", tr: "Sonda / Kateter", ex: "Der Katheter wird geleert.", et: "Sonda boşaltılıyor." },
-                    { de: "der Stuhlgang", tr: "Dışkılama", ex: "Hatten Sie heute Stuhlgang?", et: "Bugün dışkılamanız oldu mu?" },
-                    { de: "die Verstopfung", tr: "Kabızlık", ex: "Haben Sie Verstopfung?", et: "Kabızlığınız var mı?" },
-                    { de: "der Durchfall", tr: "İshal", ex: "Der Patient hat Durchfall.", et: "Hastanın ishali var." },
-                    { de: "das Erbrechen", tr: "Kusma", ex: "Mir ist schlecht.", et: "Kendimi kötü hissediyorum." },
-                    { de: "die Ernährung", tr: "Beslenme", ex: "Er braucht parenterale Ernährung.", et: "Onun paranteral beslenmeye ihtiyacı var." },
-                    { de: "das Trinken", tr: "İçmek", ex: "Trinken Sie genug Wasser.", et: "Yeterince su için." },
-                    { de: "die Flüssigkeitsbilanz", tr: "Sıvı Dengesi / Takibi", ex: "Wir führen eine Bilanz durch.", et: "Sıvı takibi yapıyoruz." },
-                    { de: "nüchtern sein", tr: "Aç olmak (Tıbbi)", ex: "Sie müssen morgen nüchtern sein.", et: "Yarın aç olmalısınız." },
-                    { de: "die Diät", tr: "Diyet", ex: "Er bekommt eine salzarme Diät.", et: "Ona tuzsuz diyet veriliyor." },
-                    { de: "die Unverträglichkeit", tr: "Alerji / Hassasiyet", ex: "Haben Sie Lebensmittelunverträglichkeiten?", et: "Besin alerjiniz var mı?" },
-                    { de: "die Allergie", tr: "Alerji", ex: "Sind Sie allergisch gegen Penicillin?", et: "Penisiline alerjiniz var mı?" },
-                    { de: "der Blutzucker", tr: "Kan Şekeri", ex: "Wir messen den Blutzucker.", et: "Kan şekerini ölçüyoruz." },
-                    { de: "das Insulin", tr: "İnsülin", ex: "Wann haben Sie zuletzt Insulin gespritzt?", et: "En son ne zaman insülin vurdunuz?" },
-                    { de: "die Desinfektion", tr: "Dezenfeksiyon", ex: "Händedesinfektion ist Pflicht.", et: "El dezenfeksiyonu zorunludur." },
-                    { de: "die Hygiene", tr: "Hijyen", ex: "Hygiene schützt vor Infektionen.", et: "Hijyen enfeksiyonlardan korur." },
-                    { de: "die Handschuhe", tr: "Eldiven", ex: "Ich ziehe frische Handschuhe an.", et: "Yeni eldiven giyiyorum." },
-                    { de: "der Mundschutz", tr: "Maske", ex: "Tragen Sie bitte einen Mundschutz.", et: "Lütfen maske takın." },
-                    { de: "die Schutzkleidung", tr: "Koruyucu Kıyafet", ex: "Wir tragen Schutzkleidung.", et: "Koruyucu kıyafet giyiyoruz." },
-                    { de: "die Isolierung", tr: "İzolasyon / Karantina", ex: "Der Patient ist isoliert.", et: "Hasta izole edildi." },
-                    { de: "die Visite", tr: "Vizit", ex: "Die Visite kommt gleich.", et: "Vizit birazdan gelecek." },
-                    { de: "die Anordnung", tr: "Talimat / Emir", ex: "Das ist eine ärztliche Anordnung.", et: "bu bir doktor talimatıdır." },
-                    { de: "die Entlassung", tr: "Taburcu", ex: "Ihre Entlassung ist für morgen geplant.", et: "Taburcu olmanız yarın için planlandı." },
-                    { de: "das Krankenhaus", tr: "Hastane", ex: "Das Krankenhaus ist modern.", et: "Hastane modern." },
-                    { de: "die Notaufnahme", tr: "Acil Servis", ex: "Er wurde in die Notaufnahme gebracht.", et: "Acil servise getirildi." },
-                    { de: "die Intensivstation (ITS)", tr: "Yoğun Bakım", ex: "Er liegt auf der Intensivstation.", et: "Yoğun bakımda yatıyor." },
-                    { de: "die OP (Operation)", tr: "Ameliyat", ex: "Die OP ist gut verlaufen.", et: "Ameliyat iyi geçti." },
-                    { de: "die Narkose", tr: "Narkoz / Anestezi", ex: "Wie war die Narkose?", et: "Narkoz nasıldı?" },
-                    { de: "das EKG", tr: "EKG", ex: "Wir schreiben ein EKG.", et: "EKG çekiyoruz." },
-                    { de: "das Röntgen", tr: "Röntgen", ex: "Sie müssen zum Röntgen.", et: "Röntgene gitmelisiniz." },
-                    { de: "das Labor", tr: "Laboratuvar", ex: "Die Laborwerte sind da.", et: "Laboratuvar değerleri geldi." },
-                    { de: "die Blutabnahme", tr: "Kan Alma", ex: "Ich mache jetzt die Blutabnahme.", et: "Şimdi kan alıyorum." },
-                    { de: "die Probe", tr: "Örnek / Numune", ex: "Wir brauchen eine Urinprobe.", et: "İdrar numunesine ihtiyacımız var." },
-                    { de: "der Befund", tr: "Bulgu", ex: "Der Befund ist negativ.", et: "Bulgu negatif." },
-                    { de: "die Heilung", tr: "İyileşme", ex: "Gute Besserung und schnelle Heilung!", et: "Geçmiş olsun ve hızlı iyileşmeler!" },
-                    { de: "die Verschlechterung", tr: "Kötüleşme", ex: "Der Zustand hat sich verschlechtert.", et: "Durum kötüleşti." },
-                    { de: "die Besserung", tr: "İyileşme / Düzelme", ex: "Es ist eine Besserung zu sehen.", et: "Bir düzelme görülüyor." },
-                    { de: "das Wohlbefinden", tr: "Esenlik / İyi hissetme", ex: "Wie ist Ihr Wohlbefinden?", et: "Kendinizi nasıl hissediyorsunuz?" },
-                    { de: "der Notruf", tr: "Acil Çağrı", ex: "Betätigen Sie den Notruf bei Hilfe.", et: "Yardım gerekirse acil çağrı düğmesine basın." },
-                    { de: "die Klingel", tr: "Zil (Hasta zili)", ex: "Hier ist Ihre Klingel.", et: "İşte ziliniz (burada)." },
-                    { de: "die Bettruhe", tr: "Yatak İstirahati", ex: "Sie haben strikte Bettruhe.", et: "Kesin yatak istirahatiniz var." },
-                    { de: "die Begleitperson", tr: "Refakatçi", ex: "Haben Sie eine Begleitperson?", et: "Refakatçiniz var mı?" },
-                    { de: "die Versicherung", tr: "Sigorta", ex: "Haben Sie Ihre Versicherungskarte?", et: "Sigorta kartınız yanınızda mı?" },
-                    { de: "die Krankenkasse", tr: "Sağlık Sigortası Kurumu", ex: "Bei welcher Krankenkasse sind Sie?", et: "Hangi sağlık sigortasına bağlısınız?" },
-                    { de: "der Patientenbrief", tr: "Epikriz / Hasta çıkış belgesi", ex: "Hier ist Ihr Patientenbrief.", et: "İşte epikriz belgeniz." },
-                    { de: "die Pflegedienstleitung (PDL)", tr: "Hemşirelik Hizmetleri Müdürü", ex: "Die PDL kommt zur Kontrolle.", et: "PDL kontrole geliyor." }
-                ],
-                vaka: "<b>Hasta:</b> Frau Weber (84 Jahre)<br><b>Diagnose:</b> Dekubitus am Sakrum.<br><b>Übergabe:</b> Hasta ağrıdan şikayetçi. Pozisyon değişikliği her 2 saatte bir yapılmalı.",
-                bakim: "• <b>Mobilisation:</b> Hastanın mobilize edilmesi.<br>• <b>Dokumentation:</b> Bakım raporunun eksiksiz doldurulması.<br>• <b>Kommunikation:</b> Hasta yakınlarına bilgi verilmesi."
-            },
-            doctor: {
-                color: '#d32f2f',
-                title: 'Doktor Bölümü',
-                vocab: [
-                    { de: "die Anamnese", tr: "Anamnez (Öykü)", ex: "Wir müssen die Anamnese erheben.", et: "Hastanın öyküsünü almalıyız." },
-                    { de: "die Diagnose", tr: "Teşhis", ex: "Die Diagnose ist noch unklar.", et: "Teşhis henüz belirsiz." }
-                ],
-                vaka: "<b>Hasta:</b> Herr Schmidt<br><b>Bulgu:</b> Göğüs ağrısı (Thoraxschmerz). EKG çekilmeli.",
-                bakim: "• Lab sonuçlarının analizi<br>• Konsültasyon planı"
-            },
-            para: {
-                color: '#f57c00',
-                title: 'Paramedik Bölümü',
-                vocab: [
-                    { de: "der Notfall", tr: "Acil Durum", ex: "Es gibt einen medizinischen Notfall.", et: "Tıbbi bir acil durum var." },
-                    { de: "die Erstversorgung", tr: "İlk Müdahale", ex: "Wir leisten die Erstversorgung.", et: "İlk müdahaleyi gerçekleştiriyoruz." }
-                ],
-                vaka: "<b>Olay:</b> Trafik kazası (Verkehrsunfall).<br><b>Durum:</b> Bilinç kapalı, entübe edildi.",
-                bakim: "• Monitorizasyon<br>• Damar yolu açılması"
-            },
-            anes: {
-                color: '#7b1fa2',
-                title: 'Anestezi Bölümü',
-                vocab: [
-                    { de: "die Narkose", tr: "Narkoz", ex: "Die Narkose wird vorbereitet.", et: "Narkoz hazırlanıyor." },
-                    { de: "die Einleitung", tr: "Anestezi Başlatma", ex: "Wir beginnen mit der Narkoseeinleitung.", et: "Anesteziye başlıyoruz." }
-                ],
-                vaka: "<b>Operasyon:</b> Apendektomi.<br><b>Durum:</b> Hasta ASA 2. Hazırlık tamam.",
-                bakim: "• Pre-op değerlendirme<br>• İntravenöz indüksiyon"
-            }
-        };
+<script>
+// ═══════════════════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════════════════
+const DATA = {
 
-        function startModule(role) {
-            currentRole = role;
-            vIdx = 0;
-            const roleData = data[role];
-            
-            // UI Renklerini Ayarla
-            document.documentElement.style.setProperty('--nurse', roleData.color);
-            document.getElementById('moduleHeader').innerText = roleData.title;
-            document.getElementById('moduleHeader').style.background = roleData.color;
-            
-            document.getElementById('home-screen').classList.add('hidden');
-            document.getElementById('main-module').classList.remove('hidden');
-            renderWord();
+// ─────────────────── NURSE ───────────────────────
+nurse: {
+  wortschatz: [
+    // Vitales & Körper
+    { de: "der Blutdruck", article: "der", tr: "kan basıncı", en: "blood pressure", category: "Vitalzeichen", example: "Der <em>Blutdruck</em> des Patienten beträgt 140/90 mmHg – ich messe ihn erneut in einer Stunde.", ex_tr: "Hastanın kan basıncı 140/90 mmHg – bir saat içinde tekrar ölçeceğim." },
+    { de: "die Herzfrequenz", article: "die", tr: "kalp atım hızı", en: "heart rate", category: "Vitalzeichen", example: "Die <em>Herzfrequenz</em> liegt bei 98 Schlägen pro Minute und ist unregelmäßig.", ex_tr: "Kalp atım hızı dakikada 98 atım ve düzensiz." },
+    { de: "die Sauerstoffsättigung", article: "die", tr: "oksijen satürasyonu", en: "oxygen saturation", category: "Vitalzeichen", example: "Die <em>Sauerstoffsättigung</em> ist auf 89 % gesunken, ich verabreiche O₂.", ex_tr: "%89'a düşen oksijen satürasyonu için O₂ uyguluyorum." },
+    { de: "die Körpertemperatur", article: "die", tr: "vücut ısısı", en: "body temperature", category: "Vitalzeichen", example: "Die <em>Körpertemperatur</em> beträgt 38,7 °C – ich informiere die Ärztin.", ex_tr: "Vücut ısısı 38,7 °C – doktoru bilgilendiriyorum." },
+    { de: "die Atemfrequenz", article: "die", tr: "solunum sayısı", en: "respiratory rate", category: "Vitalzeichen", example: "Die <em>Atemfrequenz</em> hat sich auf 24 Züge pro Minute erhöht.", ex_tr: "Solunum sayısı dakikada 24'e yükseldi." },
+    // Pflege
+    { de: "die Körperpflege", article: "die", tr: "kişisel bakım", en: "personal care / hygiene", category: "Pflege", example: "Die <em>Körperpflege</em> beim bettlägerigen Patienten erfolgt morgens zwischen 7 und 9 Uhr.", ex_tr: "Yatağa bağlı hastanın kişisel bakımı sabah 7-9 arasında yapılır." },
+    { de: "die Lagerung", article: "die", tr: "pozisyon verme", en: "positioning", category: "Pflege", example: "Zur Dekubitusprophylaxe wird die <em>Lagerung</em> alle zwei Stunden gewechselt.", ex_tr: "Bası yarası önleme için pozisyon verme her iki saatte bir değiştirilir." },
+    { de: "die Mobilisation", article: "die", tr: "mobilizasyon / hareket ettirme", en: "mobilisation", category: "Pflege", example: "Der Arzt hat die schrittweise <em>Mobilisation</em> ab heute genehmigt.", ex_tr: "Doktor bugünden itibaren kademeli mobilizasyona onay verdi." },
+    { de: "die Wundversorgung", article: "die", tr: "yara bakımı", en: "wound care", category: "Pflege", example: "Die <em>Wundversorgung</em> am linken Unterschenkel wurde mit sterilem Material durchgeführt.", ex_tr: "Sol alt bacaktaki yara bakımı steril malzeme ile yapıldı." },
+    { de: "das Dekubitus", article: "das", tr: "bası yarası", en: "pressure sore / bedsore", category: "Pflege", example: "Am Steißbein hat sich ein <em>Dekubitus</em> Grad II entwickelt – Wundmanagement wurde eingeleitet.", ex_tr: "Kuyruk sokumunda II. derece bası yarası oluştu – yara yönetimi başlatıldı." },
+    // Medikamente
+    { de: "die Schmerzskala", article: "die", tr: "ağrı skalası", en: "pain scale", category: "Medikamente", example: "Auf der <em>Schmerzskala</em> von 0 bis 10 gibt der Patient einen Wert von 7 an.", ex_tr: "0-10 ağrı skalasında hasta 7 değeri veriyor." },
+    { de: "die Bedarfsmedikation", article: "die", tr: "gerektiğinde ilaç", en: "as-needed medication / PRN", category: "Medikamente", example: "Die <em>Bedarfsmedikation</em> mit 500 mg Paracetamol wurde um 14:30 Uhr verabreicht.", ex_tr: "500 mg Parasetamol ile gerektiğinde ilaç saat 14:30'da verildi." },
+    { de: "die Infusion", article: "die", tr: "infüzyon / serum", en: "infusion / drip", category: "Medikamente", example: "Die <em>Infusion</em> läuft mit 100 ml/h – die Laufrate wurde vom Arzt angeordnet.", ex_tr: "İnfüzyon saatte 100 ml hızında akıyor – hız doktor tarafından emredildi." },
+    { de: "subkutan", article: "–", tr: "deri altı (s.c.)", en: "subcutaneous", category: "Medikamente", example: "Das Insulin wird <em>subkutan</em> in den Bauch injiziert.", ex_tr: "İnsülin karın bölgesine deri altı enjeksiyonu olarak yapılır." },
+    { de: "intravenös", article: "–", tr: "damar içi (i.v.)", en: "intravenous", category: "Medikamente", example: "Das Antibiotikum wird zweimal täglich <em>intravenös</em> über 30 Minuten verabreicht.", ex_tr: "Antibiyotik günde iki kez 30 dakikalık damar içi infüzyon olarak verilir." },
+    // Kommunikation
+    { de: "die Übergabe", article: "die", tr: "hasta devri / teslim-devir", en: "patient handover", category: "Kommunikation", example: "Bei der <em>Übergabe</em> berichtet die Frühschicht: 'Herr Müller hat heute Nacht dreimal geklingelt.'", ex_tr: "Teslim-devirde sabah vardiyası raporluyor: 'Bay Müller bu gece üç kez zil çaldı.'" },
+    { de: "die Pflegeplanung", article: "die", tr: "bakım planlaması", en: "care planning", category: "Kommunikation", example: "Die <em>Pflegeplanung</em> wird täglich aktualisiert und im System dokumentiert.", ex_tr: "Bakım planlaması her gün güncellenir ve sisteme kaydedilir." },
+    { de: "das Pflegeprotokoll", article: "das", tr: "bakım protokolü", en: "care protocol / nursing notes", category: "Kommunikation", example: "Alle Maßnahmen wurden im <em>Pflegeprotokoll</em> lückenlos eingetragen.", ex_tr: "Tüm uygulamalar bakım protokolüne eksiksiz kaydedildi." },
+    { de: "der Pflegebericht", article: "der", tr: "bakım raporu", en: "nursing report", category: "Kommunikation", example: "Im <em>Pflegebericht</em> steht: 'Patient äußerte Schmerzen beim Umlagern.'", ex_tr: "Bakım raporunda şu yazıyor: 'Hasta pozisyon değiştirirken ağrı ifade etti.'" },
+    { de: "die Einwilligung", article: "die", tr: "onam / rıza", en: "consent / agreement", category: "Kommunikation", example: "Vor dem Eingriff muss die schriftliche <em>Einwilligung</em> des Patienten vorliegen.", ex_tr: "İşlem öncesinde hastanın yazılı rızası alınmış olmalıdır." },
+    // Diagnose & Erkrankungen
+    { de: "die Herzinsuffizienz", article: "die", tr: "kalp yetmezliği", en: "heart failure / cardiac insufficiency", category: "Diagnosen", example: "Der Patient mit <em>Herzinsuffizienz</em> zeigt heute stärker ausgeprägte Ödeme an den Beinen.", ex_tr: "Kalp yetmezliği olan hastada bugün bacaklarda daha belirgin ödem görülüyor." },
+    { de: "das Ödem", article: "das", tr: "ödem", en: "edema / oedema", category: "Diagnosen", example: "Das <em>Ödem</em> am linken Fußknöchel hat zugenommen – ich berichte dem Arzt.", ex_tr: "Sol ayak bileğindeki ödem artmış – doktora bildiriyorum." },
+    { de: "der Diabetes mellitus", article: "der", tr: "şeker hastalığı", en: "diabetes mellitus", category: "Diagnosen", example: "Wegen <em>Diabetes mellitus</em> messen wir den Blutzucker viermal täglich.", ex_tr: "Şeker hastalığı nedeniyle kan şekerini günde dört kez ölçüyoruz." },
+    { de: "die Dyspnoe", article: "die", tr: "nefes darlığı", en: "dyspnea / breathlessness", category: "Diagnosen", example: "Der Patient klagt über <em>Dyspnoe</em> bei leichter Belastung – SpO₂ kontrollieren.", ex_tr: "Hasta hafif eforla bile nefes darlığından şikâyetçi – SpO₂ kontrol et." },
+    { de: "die Kachexie", article: "die", tr: "kaşeksi / aşırı zayıflık", en: "cachexia / wasting", category: "Diagnosen", example: "Durch die <em>Kachexie</em> ist das Dekubitusrisiko stark erhöht.", ex_tr: "Kaşeksi nedeniyle bası yarası riski büyük ölçüde artmıştır." },
+    // Sicherheit
+    { de: "die Sturzprophylaxe", article: "die", tr: "düşme önleme", en: "fall prevention", category: "Sicherheit", example: "Aufgrund des Sturzrisikos wurden Bettgitter und die <em>Sturzprophylaxe</em> dokumentiert.", ex_tr: "Düşme riski nedeniyle yatak koruyucuları takıldı ve düşme önleme protokolü kayıt altına alındı." },
+    { de: "das Bettgitter", article: "das", tr: "yatak koruyucusu / yatak kafesi", en: "bed rail / cot side", category: "Sicherheit", example: "Das <em>Bettgitter</em> bleibt nachts hochgestellt – Patient ist desorientiiert.", ex_tr: "Yatak koruyucusu geceleri yukarıda kalıyor – hasta desoriyante." },
+    { de: "der Notruf", article: "der", tr: "acil çağrı", en: "emergency call", category: "Sicherheit", example: "Bei einem <em>Notruf</em> immer ruhig bleiben und den Standort klar ansagen.", ex_tr: "Acil çağrıda her zaman sakin kal ve konumu açıkça söyle." },
+    { de: "die Isolation", article: "die", tr: "izolasyon / tecrit", en: "isolation", category: "Sicherheit", example: "Der MRSA-positive Patient befindet sich in <em>Isolation</em> – Schutzkittel anziehen!", ex_tr: "MRSA pozitif hasta izolasyonda – koruyucu önlük giy!" },
+    { de: "die Reanimation", article: "die", tr: "resüsitasyon / CPR", en: "resuscitation / CPR", category: "Sicherheit", example: "Die <em>Reanimation</em> wurde um 03:12 Uhr begonnen und nach 25 Minuten erfolgreich beendet.", ex_tr: "Resüsitasyon saat 03:12'de başlatıldı ve 25 dakika sonra başarıyla sonlandırıldı." },
+    { de: "die Patientenverfügung", article: "die", tr: "hasta vasiyeti / önceden hazırlanmış direktifler", en: "advance directive / living will", category: "Sicherheit", example: "In der <em>Patientenverfügung</em> hat der Patient festgelegt, dass er keine Reanimation wünscht.", ex_tr: "Hasta vasiyetinde hasta, resüsitasyon istemediğini belirtmiş." },
+  ],
+  fallbeispiele: [
+    {
+      title: "Sabah Bakımı – Kalp Yetmezliği Olan Hasta",
+      de_title: "Morgenpflege bei herzinsuffizienter Patientin",
+      level: "B1",
+      type: "Grundpflege",
+      teaser_tr: "Bay Müller, 74 yaşında ve kalp yetmezliği tanısı var. Sabah bakımında dikkat edilmesi gereken noktalar.",
+      teaser_de: "Herr Müller, 74 Jahre, mit Herzinsuffizienz. Morgenroutine mit wichtigen Beobachtungspunkten.",
+      sections: [
+        {
+          title_tr: "Klinik Tablo", title_de: "Klinisches Bild",
+          text_tr: "Bay Müller (74), şiddetli kalp yetmezliği (<strong>schwere Herzinsuffizienz</strong>) NYHA III tanısıyla kardiyoloji servisinde yatmaktadır. Bu sabah hemşire günaydın diyerek odaya giriyor ve vitallerini ölçüyor.",
+          text_de: "Herr Müller (74 Jahre) liegt auf der kardiologischen Station mit der Diagnose <strong>schwere Herzinsuffizienz</strong> NYHA III. Die Pflegerin betritt das Zimmer, begrüßt ihn freundlich und misst zunächst die <strong>Vitalzeichen</strong>."
+        },
+        {
+          title_tr: "Diyalog", title_de: "Dialog",
+          dialog: [
+            { speaker: "Pflegerin", de: "Guten Morgen, Herr Müller! Wie haben Sie geschlafen?", tr: "Günaydın Bay Müller! Nasıl uyudunuz?" },
+            { speaker: "Patient", de: "Nicht so gut. Ich hatte wieder Luftnot, besonders wenn ich mich flach hinlege.", tr: "Pek iyi değil. Düz uzanınca yine nefes darlığım oldu." },
+            { speaker: "Pflegerin", de: "Das ist wichtig. Ich erhöhe den Kopfteil des Bettes – das macht die Atmung leichter. Haben Sie auch Schmerzen in der Brust?", tr: "Bu önemli. Yatağın baş kısmını kaldırıyorum – nefes almayı kolaylaştırır. Göğüs ağrınız da var mı?" },
+            { speaker: "Patient", de: "Nein, Schmerzen nicht. Aber meine Beine sind heute Morgen wieder sehr dick.", tr: "Hayır, ağrı yok. Ama bacaklarım bu sabah yine çok şişmiş." },
+            { speaker: "Pflegerin", de: "Ich werde die Ödeme genau dokumentieren und den Arzt informieren. Ich messe jetzt Ihren Blutdruck und die Sauerstoffsättigung.", tr: "Ödemleri detaylı belgeleyeceğim ve doktoru haberdar edeceğim. Şimdi kan basıncınızı ve oksijen satürasyonunuzu ölçüyorum." }
+          ]
+        },
+        {
+          title_tr: "Bulgular ve Planlama", title_de: "Befunde und Planung",
+          text_de: "Die Messung ergibt: <strong>Blutdruck 148/92 mmHg</strong>, <strong>Herzfrequenz 96/min</strong>, <strong>Sauerstoffsättigung 91 %</strong>. Die Pflegerin dokumentiert dies im <strong>Pflegeprotokoll</strong> und benachrichtigt die Ärztin. Aufgrund der reduzierten Belastbarkeit wird die <strong>Mobilisation</strong> nur mit Begleitung durchgeführt. Das <strong>Gewicht</strong> wird täglich kontrolliert, da eine Gewichtszunahme von mehr als 1 kg in 24 Stunden auf eine Flüssigkeitsretention hinweist.",
+          text_tr: "Ölçüm sonuçları: <strong>Kan basıncı 148/92 mmHg</strong>, <strong>kalp atım hızı 96/dk</strong>, <strong>oksijen satürasyonu %91</strong>. Hemşire bunu bakım protokolüne kaydeder ve doktoru bilgilendirir. Azalmış tolerans nedeniyle <strong>mobilizasyon</strong> yalnızca eşlik eşliğinde yapılır. <strong>Ağırlık</strong> her gün kontrol edilir; 24 saat içinde 1 kg'dan fazla artış sıvı retansiyonuna işaret eder."
         }
-
-        function renderWord() {
-            const w = data[currentRole].vocab[vIdx];
-            document.getElementById('deWord').innerText = w.de;
-            document.getElementById('trWord').innerText = w.tr;
-            document.getElementById('trWord').classList.remove('reveal');
-            document.getElementById('exDe').innerText = w.ex;
-            document.getElementById('exTr').innerText = w.et;
-            document.getElementById('deWord').style.color = data[currentRole].color;
-            document.getElementById('infoBox').style.borderColor = data[currentRole].color;
+      ]
+    },
+    {
+      title: "Übergabe – Nachtschicht",
+      de_title: "Übergabe von der Nacht- zur Frühschicht",
+      level: "B2",
+      type: "Kommunikation",
+      teaser_tr: "Gece vardiyasından sabah vardiyasına SBAR yöntemiyle hasta devri.",
+      teaser_de: "Strukturierte Übergabe mit SBAR-Methode von der Nacht- zur Frühschicht.",
+      sections: [
+        {
+          title_tr: "SBAR Yöntemi", title_de: "SBAR-Methode",
+          text_de: "Die <strong>SBAR-Methode</strong> (Situation – Background – Assessment – Recommendation) ist der Standard für eine sichere und vollständige <strong>Übergabe</strong> in deutschen Krankenhäusern.",
+          text_tr: "Alman hastanelerinde güvenli ve eksiksiz <strong>hasta devri</strong> için standart: <strong>SBAR yöntemi</strong> (Durum – Arka plan – Değerlendirme – Öneri)."
+        },
+        {
+          title_tr: "Diyalog – Hasta Devri", title_de: "Dialog – Übergabe",
+          dialog: [
+            { speaker: "Nachtpfleger", de: "Situation: Herr Bauer, Zimmer 12, 68 Jahre, post-OP Tag 2 nach Hüft-TEP. In der Nacht hat er dreimal geklingelt wegen Schmerzen.", tr: "Durum: Bay Bauer, oda 12, 68 yaşında, kalça protezi ameliyatının 2. günü. Gece üç kez ağrı nedeniyle zil çaldı." },
+            { speaker: "Frühpfleger", de: "Hat er seine Bedarfsmedikation bekommen?", tr: "Gerektiğinde ilaç aldı mı?" },
+            { speaker: "Nachtpfleger", de: "Background: Ja, um 01:30 und 04:00 Uhr habe ich je 500 mg Paracetamol i.v. verabreicht. Diclofenac ist kontraindiziert wegen der Niereninsuffizienz.", tr: "Arka plan: Evet, 01:30 ve 04:00'de ikişer kez 500 mg Parasetamol i.v. verdim. Böbrek yetmezliği nedeniyle Diklofenak kontrendike." },
+            { speaker: "Nachtpfleger", de: "Assessment: Ich vermute, dass die Schmerzeinstellung noch nicht optimal ist – NRS lag konstant bei 6.", tr: "Değerlendirme: Ağrı kontrolünün henüz yeterli olmadığını düşünüyorum – NRS sürekli 6'da kaldı." },
+            { speaker: "Nachtpfleger", de: "Recommendation: Bitte sprich heute Morgen mit der Ärztin über eine Anpassung des Schmerzschemas.", tr: "Öneri: Lütfen bu sabah doktorla ağrı protokolünün düzenlenmesi hakkında konuş." }
+          ]
         }
-
-        function changeWord(s) {
-            vIdx = (vIdx + s + data[currentRole].vocab.length) % data[currentRole].vocab.length;
-            renderWord();
+      ]
+    },
+    {
+      title: "Dekubitusprophylaxe",
+      de_title: "Pflegemaßnahmen zur Dekubitusprophylaxe",
+      level: "B1",
+      type: "Prophylaxe",
+      teaser_tr: "Yatağa bağlı hastalarda bası yarası oluşumunu önlemek için uygulanan bakım adımları.",
+      teaser_de: "Systematische Pflegemaßnahmen zur Vermeidung von Druckgeschwüren bei bettlägerigen Patienten.",
+      sections: [
+        {
+          title_tr: "Risk Değerlendirmesi", title_de: "Risikoeinschätzung",
+          text_de: "Die <strong>Braden-Skala</strong> oder der <strong>Norton-Score</strong> werden verwendet, um das Dekubitusrisiko einzuschätzen. Frau Schmidt (82 Jahre) hat einen Norton-Score von 14 – sie gilt als <strong>gefährdet</strong>. Die wichtigsten Risikofaktoren: <strong>Immobilität</strong>, schlechter Ernährungszustand (<strong>Kachexie</strong>), eingeschränkte Wahrnehmung und <strong>Inkontinenz</strong>.",
+          text_tr: "<strong>Braden Skalası</strong> veya <strong>Norton Skoru</strong>, bası yarası riskini değerlendirmek için kullanılır. Bayan Schmidt (82) Norton Skoru 14 – <strong>risk altında</strong> sayılır. En önemli risk faktörleri: <strong>immobilite</strong>, kötü beslenme durumu (<strong>kaşeksi</strong>), sınırlı algı ve <strong>inkontinans</strong>."
+        },
+        {
+          title_tr: "Planlanan Önlemler", title_de: "Geplante Maßnahmen",
+          text_de: "Folgende Pflegemaßnahmen werden geplant und im <strong>Pflegeplan</strong> dokumentiert: <strong>Umlagerung</strong> alle 2 Stunden nach dem <strong>30°-Schema</strong>, Einsatz einer <strong>Wechseldruckmatratze</strong>, tägliche <strong>Hautinspektion</strong> aller gefährdeten Körperstellen (Fersen, Steißbein, Schulterblätter) sowie <strong>Hautpflege</strong> mit feuchtigkeitserhaltenden Cremes.",
+          text_tr: "Aşağıdaki bakım önlemleri planlanır ve <strong>bakım planına</strong> kaydedilir: <strong>30° şemasına</strong> göre her 2 saatte bir <strong>pozisyon değiştirme</strong>, <strong>değişen basınçlı şilte</strong> kullanımı, tüm risk bölgelerinin (topuklar, kuyruk sokumu, kürek kemikleri) günlük <strong>cilt muayenesi</strong> ve nemlendirici kremlerle <strong>cilt bakımı</strong>."
         }
+      ]
+    }
+  ],
+  dokumentation: [
+    {
+      icon: "📋",
+      title: "Pflegebericht – Übergabe",
+      subtitle: "Bakım Raporu / Hasta Devri",
+      fields: [
+        { label: "Datum / Uhrzeit", value: "15.01.2025 – 06:00 Uhr", highlight: false },
+        { label: "Patient", value: "Müller, Hans, geb. 12.03.1950 | Zimmer 204A", highlight: false },
+        { label: "Diagnose (Hauptdiagnose)", value: "Dekompensierte Herzinsuffizienz NYHA III, art. Hypertonie, Typ-2-Diabetes", highlight: true },
+        { label: "Nacht-Verlauf (Situation)", value: "Patient war unruhig, klingelte 3x. Schlafqualität schlecht. Sauerstoffsättigung um 03:00 Uhr auf 89 % gesunken → O₂ 2l/min via Nasenbrille verabreicht. SpO₂ danach 94 %.", highlight: true },
+        { label: "Vitalzeichen (06:00 Uhr)", value: "BD: 152/94 | HF: 98/min | SpO₂: 93% | Temp: 37,1°C | AF: 20/min", highlight: false },
+        { label: "Empfehlung (Recommendation)", value: "Arztvisite heute Morgen dringend. Diuretika-Dosis überprüfen. Flüssigkeitsbilanz engmaschig führen.", highlight: true }
+      ]
+    },
+    {
+      icon: "💉",
+      title: "Medikamentendokumentation",
+      subtitle: "İlaç Uygulama Kaydı",
+      fields: [
+        { label: "Medikament", value: "Furosemid 40 mg i.v.", highlight: false },
+        { label: "Verabreichungszeit", value: "06:30 Uhr (wie angeordnet)", highlight: false },
+        { label: "Applikationsweg", value: "Intravenös (i.v.) über peripheren Venenkatheter rechter Arm", highlight: true },
+        { label: "Wirkung / Kontrolle", value: "Urinmenge bis 08:30 Uhr: 450 ml → Wirksamkeit dokumentiert", highlight: true },
+        { label: "Nebenwirkungen", value: "Keine beobachtet. Kaliumwert aus Morgenblut abwarten.", highlight: false },
+        { label: "Handzeichen Pflegekraft", value: "S. Yılmaz, examinierte Pflegefachkraft", highlight: false }
+      ]
+    },
+    {
+      icon: "🩹",
+      title: "Wundbeurteilung – Dekubitus",
+      subtitle: "Yara Değerlendirme Formu",
+      fields: [
+        { label: "Lokalisation", value: "Sakrum (Steißbein), dorsal", highlight: false },
+        { label: "Wundgröße", value: "3,5 cm × 2,0 cm | Tiefe: oberflächlich", highlight: false },
+        { label: "Wundstadium (EPUAP)", value: "Grad II – Teilverlust der Haut, Dermis sichtbar, rötlich", highlight: true },
+        { label: "Wundgrund", value: "Feucht, rosafarbenes Granulationsgewebe, kein Fibrinbelag", highlight: false },
+        { label: "Wundrandzone", value: "Leichte Mazerierung am linken Rand, Rötung 0,5 cm Umgebung", highlight: true },
+        { label: "Maßnahme / Verband", value: "Wundreinigung mit NaCl 0,9 %, Hydrokolloidverband gelegt. Lagerungswechsel 2h-Schema. Ernährungsberatung angefordert.", highlight: true }
+      ]
+    }
+  ]
+},
 
-        function switchTab(type, btn) {
-            document.querySelectorAll('.sub-module').forEach(m => m.classList.add('hidden'));
-            document.getElementById('nurse-' + type).classList.remove('hidden');
-            
-            const roleData = data[currentRole];
-            if(type === 'vaka') {
-                document.getElementById('vakaContent').innerHTML = roleData.vaka;
-                document.getElementById('vakaTitle').style.color = roleData.color;
-            }
-            if(type === 'bakim') {
-                document.getElementById('bakimContent').innerHTML = roleData.bakim;
-                document.getElementById('bakimTitle').style.color = roleData.color;
-            }
-
-            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-            btn.classList.add('active');
-            btn.style.color = roleData.color;
+// ─────────────────── DOCTOR ───────────────────────
+doctor: {
+  wortschatz: [
+    { de: "die Anamnese", article: "die", tr: "anamnez / öykü alma", en: "anamnesis / patient history", category: "Diagnostik", example: "Bei der <em>Anamnese</em> fragt der Arzt systematisch nach Vorerkrankungen, Medikamenten und Allergien.", ex_tr: "Anamnezde doktor sistematik olarak geçmiş hastalıklar, ilaçlar ve alerjileri sorar." },
+    { de: "die Differenzialdiagnose", article: "die", tr: "ayırıcı tanı", en: "differential diagnosis", category: "Diagnostik", example: "Als <em>Differenzialdiagnose</em> kommen Appendizitis, Ovarialzyste und Urolithiasis in Betracht.", ex_tr: "Ayırıcı tanıda apandisit, over kisti ve ürolitiyazis düşünülmelidir." },
+    { de: "die Indikation", article: "die", tr: "endikasyon", en: "indication", category: "Diagnostik", example: "Es besteht eine klare <em>Indikation</em> zur operativen Versorgung.", ex_tr: "Cerrahi tedavi için net bir endikasyon mevcuttur." },
+    { de: "die Kontraindikation", article: "die", tr: "kontrendikasyon", en: "contraindication", category: "Diagnostik", example: "Wegen der schweren Niereninsuffizienz besteht eine <em>Kontraindikation</em> für Metformin.", ex_tr: "Şiddetli böbrek yetmezliği nedeniyle Metformin için kontrendikasyon vardır." },
+    { de: "der Befund", article: "der", tr: "bulgu / muayene sonucu", en: "finding / result", category: "Diagnostik", example: "Der radiologische <em>Befund</em> zeigt eine Konsolidierung im rechten Unterlappen.", ex_tr: "Radyolojik bulgu, sağ alt lobda konsolidasyon gösteriyor." },
+    { de: "die Perkussion", article: "die", tr: "perkusyon / vurma muayenesi", en: "percussion", category: "Untersuchung", example: "Bei der <em>Perkussion</em> des Abdomens findet sich ein gedämpfter Klopfschall im rechten Unterbauch.", ex_tr: "Karın perkusyonunda sağ alt kadranda matite saptanıyor." },
+    { de: "die Auskultation", article: "die", tr: "oskültasyon / dinleme", en: "auscultation", category: "Untersuchung", example: "Die <em>Auskultation</em> ergibt ein systolisches Herzgeräusch Grad III/VI.", ex_tr: "Oskültasyon III/VI dereceli sistolik kalp üfürümü ortaya koyuyor." },
+    { de: "die Palpation", article: "die", tr: "palpasyon / elle muayene", en: "palpation", category: "Untersuchung", example: "Bei der <em>Palpation</em> ist der Bauch druckschmerzhaft im rechten Unterbauch.", ex_tr: "Palpasyonda karın sağ alt kadranda hassas." },
+    { de: "das Rebound-Phänomen", article: "das", tr: "geri tepme ağrısı / Blumberg belirtisi", en: "rebound tenderness / Blumberg's sign", category: "Untersuchung", example: "Das positive <em>Rebound-Phänomen</em> (Blumberg-Zeichen) deutet auf eine Peritonitis hin.", ex_tr: "Pozitif geri tepme ağrısı (Blumberg belirtisi) peritoniti düşündürüyor." },
+    { de: "der Trokar-Schmerz", article: "der", tr: "McBurney noktası ağrısı", en: "McBurney's point tenderness", category: "Untersuchung", example: "Der maximale <em>Druckschmerz</em> liegt am McBurney-Punkt – Appendizitis wahrscheinlich.", ex_tr: "Maksimum hassasiyet McBurney noktasında – apandisit muhtemel." },
+    { de: "die Laborwerte", article: "die", tr: "laboratuvar değerleri", en: "lab values / laboratory results", category: "Diagnostik", example: "Die <em>Laborwerte</em> zeigen eine Leukozytose von 18.000/µl und ein CRP von 180 mg/l.", ex_tr: "Laboratuvar değerleri 18.000/µl lökositoz ve 180 mg/l CRP gösteriyor." },
+    { de: "die Entzündungsparameter", article: "die", tr: "enflamasyon parametreleri", en: "inflammatory markers", category: "Diagnostik", example: "Die erhöhten <em>Entzündungsparameter</em> bestätigen den klinischen Verdacht einer bakteriellen Infektion.", ex_tr: "Yüksek enflamasyon parametreleri bakteriyel enfeksiyon klinik şüphesini doğruluyor." },
+    { de: "das Elektrokardiogramm (EKG)", article: "das", tr: "elektrokardiyogram / EKG", en: "electrocardiogram / ECG", category: "Diagnostik", example: "Das <em>EKG</em> zeigt einen Sinusrhythmus mit ST-Strecken-Hebungen in V2–V4.", ex_tr: "EKG, V2–V4'te ST elevasyonuyla birlikte sinüs ritmi gösteriyor." },
+    { de: "die Echokardiographie", article: "die", tr: "ekokardiyografi / EKO", en: "echocardiography", category: "Diagnostik", example: "Die <em>Echokardiographie</em> ergibt eine Ejektionsfraktion von 35 % – schwere systolische Dysfunktion.", ex_tr: "Ekokardiyografi ejeksiyon fraksiyonu %35 – ciddi sistolik disfonksiyon." },
+    { de: "die Prognose", article: "die", tr: "prognoz", en: "prognosis", category: "Kommunikation", example: "Die <em>Prognose</em> ist günstig, wenn die Therapie konsequent durchgeführt wird.", ex_tr: "Tedavi düzenli sürdürüldüğünde prognoz olumludur." },
+    { de: "die Aufklärung", article: "die", tr: "bilgilendirme / aydınlatılmış onam", en: "informed consent discussion", category: "Kommunikation", example: "Die <em>Aufklärung</em> über Risiken und Alternativen ist vor jedem Eingriff Pflicht.", ex_tr: "Her işlem öncesinde riskler ve alternatifler hakkında bilgilendirme zorunludur." },
+    { de: "die Überweisung", article: "die", tr: "sevk / konsültasyon", en: "referral", category: "Kommunikation", example: "Ich stelle eine <em>Überweisung</em> zum Kardiologen aus.", ex_tr: "Kardiyoloji için sevk yazıyorum." },
+    { de: "die Epikrise", article: "die", tr: "epikriz / taburculuk özeti", en: "discharge summary / epicrisis", category: "Dokumentation", example: "Die <em>Epikrise</em> wird innerhalb von 24 Stunden nach Entlassung erstellt und dem Hausarzt zugesandt.", ex_tr: "Epikriz taburculuktan sonra 24 saat içinde düzenlenir ve aile hekimine gönderilir." },
+    { de: "die Einweisung", article: "die", tr: "yatış kararı / sevk belgesi", en: "hospital admission / referral letter", category: "Dokumentation", example: "Ich schreibe eine <em>Einweisung</em> wegen des Verdachts auf Lungenembolie.", ex_tr: "Pulmoner emboli şüphesiyle hastane yatış belgesi düzenliyorum." },
+    { de: "die Therapieeskalation", article: "die", tr: "tedavi yoğunlaştırma", en: "treatment escalation", category: "Therapeutik", example: "Nach ausbleibender Besserung entscheiden wir uns zur <em>Therapieeskalation</em>.", ex_tr: "İyileşme olmayınca tedavi yoğunlaştırma kararı alıyoruz." },
+    { de: "die Evidenz", article: "die", tr: "kanıt / delil", en: "evidence", category: "Wissenschaft", example: "Die aktuelle <em>Evidenz</em> unterstützt den Einsatz von ACE-Hemmern bei Herzinsuffizienz.", ex_tr: "Güncel kanıtlar kalp yetmezliğinde ACE inhibitörü kullanımını destekliyor." },
+    { de: "multimorbide", article: "–", tr: "çok hastalıklı / çoklu tanılı", en: "multimorbid", category: "Diagnostik", example: "Bei <em>multimorbiden</em> Patienten ist eine interdisziplinäre Zusammenarbeit unerlässlich.", ex_tr: "Çok hastalıklı hastalarda disiplinlerarası iş birliği zorunludur." },
+    { de: "die Analgosedierung", article: "die", tr: "analjosedasyonu", en: "analgosedation", category: "Therapeutik", example: "Auf der Intensivstation wird eine kontrollierte <em>Analgosedierung</em> durchgeführt.", ex_tr: "Yoğun bakım ünitesinde kontrollü analjosedasyon uygulanır." },
+    { de: "das Monitoring", article: "das", tr: "monitörizasyon / takip", en: "monitoring", category: "Diagnostik", example: "Ein kontinuierliches <em>Monitoring</em> von Herzrhythmus und Blutdruck ist indiziert.", ex_tr: "Kalp ritmi ve kan basıncının sürekli monitörizasyonu endikedir." },
+    { de: "die Hämodynamik", article: "die", tr: "hemodinami", en: "hemodynamics", category: "Diagnostik", example: "Die <em>Hämodynamik</em> ist instabil – wir starten einen Noradrenalin-Perfusor.", ex_tr: "Hemodinami instabil – noradrenalin perfüzörü başlatıyoruz." },
+    { de: "die Katamnese", article: "die", tr: "katamnez / tedavi sonrası izlem", en: "follow-up history", category: "Diagnostik", example: "In der <em>Katamnese</em> nach 6 Wochen berichtet der Patient von deutlicher Beschwerdebesserung.", ex_tr: "6 haftalık katamnezde hasta belirgin şikâyet azalması bildiriyor." },
+    { de: "die Multidisziplinäre Konferenz", article: "die", tr: "multidisipliner konferans / tümör konseyi", en: "multidisciplinary team meeting", category: "Kommunikation", example: "Der Befund wird morgen in der <em>multidisziplinären Konferenz</em> besprochen.", ex_tr: "Bulgu yarın multidisipliner konferansta tartışılacak." },
+    { de: "das Konsil", article: "das", tr: "konsültasyon / istişare", en: "consultation", category: "Kommunikation", example: "Ich stelle ein <em>Konsil</em> an die Neurologie wegen des unklaren Bewusstseinsverlustes.", ex_tr: "Belirsiz bilinç kaybı nedeniyle Nöroloji'ye konsültasyon istiyorum." },
+    { de: "die Pharmakodynamik", article: "die", tr: "farmakodinamik", en: "pharmacodynamics", category: "Wissenschaft", example: "Die <em>Pharmakodynamik</em> von Betablockern erklärt deren Wirkung auf die Herzfrequenz.", ex_tr: "Beta blokörlerin farmakodinamiği, kalp atım hızı üzerindeki etkilerini açıklar." },
+    { de: "der Stationsarzt", article: "der", tr: "servis doktoru", en: "ward doctor / resident physician", category: "Kommunikation", example: "Der <em>Stationsarzt</em> macht täglich um 9 Uhr die Visite.", ex_tr: "Servis doktoru her gün saat 9'da vizite yapar." },
+    { de: "der leitende Oberarzt", article: "der", tr: "başasistan / kıdemli uzman", en: "senior registrar / consultant", category: "Kommunikation", example: "Der komplizierte Fall wird dem <em>leitenden Oberarzt</em> vorgestellt.", ex_tr: "Karmaşık vaka kıdemli uzmana sunulur." },
+  ],
+  fallbeispiele: [
+    {
+      title: "Akut Karın – Anamnez ve Tanı",
+      de_title: "Akutes Abdomen – Anamnese und Diagnosestellung",
+      level: "B2",
+      type: "Notfall",
+      teaser_tr: "25 yaşında erkek hasta, sağ alt kadran ağrısı ile acil servise başvuruyor. Sistematik anamnez ve tanı süreci.",
+      teaser_de: "25-jähriger Mann stellt sich mit rechtsseitigem Unterbauchschmerz in der Notaufnahme vor.",
+      sections: [
+        {
+          title_tr: "Başvuru", title_de: "Vorstellung",
+          text_de: "Ein 25-jähriger Patient stellt sich um 22:45 Uhr in der Notaufnahme vor. Er berichtet über seit 8 Stunden zunehmende Schmerzen im rechten Unterbauch mit Übelkeit und einem Erbrechen. Kein Fieber bisher.",
+          text_tr: "25 yaşında bir erkek hasta saat 22:45'te acil servise başvuruyor. 8 saattir artan sağ alt karın ağrısı, bulantı ve bir kez kusma bildiriyor. Şimdiye kadar ateş yok."
+        },
+        {
+          title_tr: "Anamnez Diyaloğu", title_de: "Anamnesegespräch",
+          dialog: [
+            { speaker: "Arzt", de: "Guten Abend. Ich bin Dr. Kaya, der diensthabende Arzt. Beschreiben Sie mir Ihre Schmerzen – wo genau und wie schlimm auf einer Skala von 0 bis 10?", tr: "İyi akşamlar. Ben nöbetçi doktor Dr. Kaya. Ağrınızı anlatın – tam olarak nerede ve 0'dan 10'a kadar skalada nasıl?" },
+            { speaker: "Patient", de: "Zuerst waren die Schmerzen um den Bauchnabel, jetzt sind sie rechts unten. Ich würde sagen 8 von 10.", tr: "Önce ağrı göbeğin etrafındaydı, şimdi sağ alt tarafta. 10 üzerinden 8 derim." },
+            { speaker: "Arzt", de: "Haben Sie Fieber, Durchfall oder Schmerzen beim Wasserlassen? Sind solche Beschwerden schon früher aufgetreten?", tr: "Ateş, ishal ya da idrar yaparken ağrı var mı? Daha önce böyle şikâyet oldu mu?" },
+            { speaker: "Patient", de: "Kein Fieber, kein Durchfall. Beim Wasserlassen keine Probleme. Das hatte ich noch nie.", tr: "Ateş yok, ishal yok. İdrar yaparken sorun yok. Bunu hiç yaşamamıştım." },
+            { speaker: "Arzt", de: "Ich werde jetzt Ihren Bauch untersuchen. Sagen Sie mir sofort, wenn es wehtut.", tr: "Şimdi karnınızı muayene edeceğim. Ağrıyı hemen söyleyin." }
+          ]
+        },
+        {
+          title_tr: "Fizik Muayene & Bulgular", title_de: "Körperliche Untersuchung & Befunde",
+          text_de: "Die körperliche Untersuchung ergibt: <strong>Druckschmerz am McBurney-Punkt</strong>, positives <strong>Loslassschmerz (Blumberg-Zeichen)</strong>, <strong>Psoaszeichen</strong> positiv. Die Laborwerte zeigen <strong>Leukozyten 16.800/µl</strong>, <strong>CRP 68 mg/l</strong>. Die <strong>Sonographie</strong> des Abdomens ergibt einen nicht komprimierbaren Appendix von 9 mm Durchmesser. Diagnose: <strong>Akute Appendizitis</strong> mit Perforationsverdacht.",
+          text_tr: "Fizik muayene: <strong>McBurney noktasında hassasiyet</strong>, pozitif <strong>geri tepme ağrısı (Blumberg belirtisi)</strong>, pozitif <strong>psoas işareti</strong>. Laboratuvar: <strong>Lökosit 16.800/µl</strong>, <strong>CRP 68 mg/l</strong>. Abdominal <strong>ultrasonografide</strong> 9 mm çaplı kompresyon olmayan apendiks görülüyor. Tanı: Perforasyon şüphesiyle <strong>akut apandisit</strong>."
         }
-    </script>
+      ]
+    },
+    {
+      title: "Patientengespräch – Schlechte Nachrichten",
+      de_title: "Schlechte Nachricht übermitteln – SPIKES-Schema",
+      level: "B2",
+      type: "Kommunikation",
+      teaser_tr: "SPIKES protokolüne göre hasta ile kötü haber konuşması.",
+      teaser_de: "Krebsdiagnose mitteilen – strukturiertes Gespräch nach dem SPIKES-Schema.",
+      sections: [
+        {
+          title_tr: "SPIKES Protokolü", title_de: "SPIKES-Schema",
+          text_de: "Das <strong>SPIKES-Schema</strong> (Setting – Perception – Invitation – Knowledge – Emotion – Summary) ist das Standard-Kommunikationsmodell für schwierige Patientengespräche in deutschen Krankenhäusern.",
+          text_tr: "<strong>SPIKES Şeması</strong> (Ortam – Algı – Davet – Bilgi – Duygu – Özet), Alman hastanelerinde zor hasta görüşmeleri için standart iletişim modelidir."
+        },
+        {
+          title_tr: "Diyalog", title_de: "Dialog",
+          dialog: [
+            { speaker: "Arzt", de: "Frau Fischer, ich habe heute die Ergebnisse Ihrer Biopsie erhalten. Darf ich fragen, was Sie sich selbst denken, was diese Untersuchung gezeigt haben könnte?", tr: "Bayan Fischer, bugün biyopsi sonuçlarınızı aldım. Sizce bu tetkik ne göstermiş olabilir, sormam uygun olur mu?" },
+            { speaker: "Patientin", de: "Ich bin nervös... Ich glaube, es könnte etwas Ernstes sein.", tr: "Gerginim... Ciddi bir şey olabilir diye düşünüyorum." },
+            { speaker: "Arzt", de: "Ich muss Ihnen leider mitteilen, dass der Befund tatsächlich ernst ist. Es handelt sich um ein Mammakarzinom – Brustkrebs. Das ist eine schwere Diagnose und ich verstehe, dass Sie jetzt viele Gefühle haben.", tr: "Maalesef sonucun gerçekten ciddi olduğunu bildirmem gerekiyor. Meme kanseri söz konusu. Bu ağır bir tanı ve şu an birçok duygu yaşadığınızı anlıyorum." },
+            { speaker: "Patientin", de: "Krebs... Das kann nicht sein...", tr: "Kanser... Bu olamaz..." },
+            { speaker: "Arzt", de: "Es ist verständlich, dass Sie das gerade nicht glauben können. Nehmen Sie sich Zeit. Ich bin hier und werde Ihnen alles erklären, sobald Sie bereit sind. Wir haben Behandlungsmöglichkeiten, und ich werde Sie bei jedem Schritt begleiten.", tr: "Bunu şu an inanamadığınız çok anlaşılır. Zaman alın. Hazır olduğunuzda her şeyi açıklayacağım. Tedavi seçeneklerimiz var ve her adımda yanınızda olacağım." }
+          ]
+        }
+      ]
+    }
+  ],
+  dokumentation: [
+    {
+      icon: "📝",
+      title: "Aufnahmebefund / Anamnese",
+      subtitle: "Yatış Muayenesi ve Anamnez",
+      fields: [
+        { label: "Patient", value: "Fischer, Anna | *12.05.1978 | weibl. | Vers.-Nr.: A123456789", highlight: false },
+        { label: "Aufnahmedatum / -uhrzeit", value: "16.01.2025 | 14:30 Uhr | Notaufnahme", highlight: false },
+        { label: "Aufnahmegrund / Diagnose", value: "Akutes Abdomen, V.a. Appendizitis. Rechtsseitiger Unterbauchschmerz seit 6 h, NRS 7/10, Übelkeit, 1x Erbrechen.", highlight: true },
+        { label: "Vorerkrankungen", value: "Arterielle Hypertonie (seit 2015), Hashimoto-Thyreoiditis, kein Diabetes", highlight: false },
+        { label: "Medikamente", value: "Ramipril 5 mg 1-0-0 | L-Thyroxin 75 µg 1-0-0", highlight: false },
+        { label: "Allergien", value: "Penicillin – anaphylaktische Reaktion. Dokumentiert + Patientenarmband angelegt.", highlight: true }
+      ]
+    },
+    {
+      icon: "🔬",
+      title: "Arztbrief (Epikrise) – Vorlage",
+      subtitle: "Taburculuk Özeti Şablonu",
+      fields: [
+        { label: "Diagnosen (ICD-10)", value: "K35.2 – Akute Appendizitis mit generalisierter Peritonitis | Z96.89 – Zustand nach Appendektomie", highlight: true },
+        { label: "Therapie", value: "Laparoskopische Appendektomie am 16.01.2025 unter ITN. Intraop. unkomplizierter Verlauf.", highlight: false },
+        { label: "Stationärer Verlauf", value: "Postoperativer Verlauf komplikationslos. Kostaufbau ab Tag 1. Mobilisation ab Tag 1. Schmerztherapie: Metamizol + Ibuprofen", highlight: false },
+        { label: "Entlassung", value: "18.01.2025 in gutem Allgemeinzustand, afebrile", highlight: false },
+        { label: "Empfehlungen", value: "Wundkontrolle beim Hausarzt in 3 Tagen. Fadenzug nach 10 Tagen. AU bis 23.01.2025. Kein Sport für 4 Wochen.", highlight: true }
+      ]
+    }
+  ]
+},
+
+// ─────────────────── PARA ───────────────────────
+para: {
+  wortschatz: [
+    { de: "der Rettungseinsatz", article: "der", tr: "kurtarma operasyonu / ambulans müdahalesi", en: "rescue operation / emergency response", category: "Einsatz", example: "Der <em>Rettungseinsatz</em> wird über die Leitstelle koordiniert.", ex_tr: "Kurtarma operasyonu merkez üzerinden koordine edilir." },
+    { de: "die Leitstelle", article: "die", tr: "acil koordinasyon merkezi", en: "dispatch center / control center", category: "Einsatz", example: "Die <em>Leitstelle</em> schickt den nächsten Rettungswagen zum Einsatzort.", ex_tr: "Koordinasyon merkezi en yakın ambulansı olay yerine yönlendiriyor." },
+    { de: "der Notarzt", article: "der", tr: "acil tıp doktoru / acil tabip", en: "emergency physician", category: "Einsatz", example: "Der <em>Notarzt</em> trifft 4 Minuten nach dem RTW am Einsatzort ein.", ex_tr: "Acil tabip, ambulanstan 4 dakika sonra olay yerine ulaşıyor." },
+    { de: "die Bewusstlosigkeit", article: "die", tr: "bilinç kaybı", en: "unconsciousness / loss of consciousness", category: "Notfall", example: "Herr Maier liegt in <em>Bewusstlosigkeit</em> auf dem Boden – sofort ABCDE-Schema beginnen!", ex_tr: "Bay Maier yerde bilinçsiz yatıyor – hemen ABCDE şemasını uygula!" },
+    { de: "das ABCDE-Schema", article: "das", tr: "ABCDE şeması (Airway-Breathing-Circulation-Disability-Exposure)", en: "ABCDE approach", category: "Notfall", example: "Beim Traumapatienten wird das <em>ABCDE-Schema</em> systematisch abgearbeitet.", ex_tr: "Travma hastasında ABCDE şeması sistematik olarak uygulanır." },
+    { de: "der Kreislaufstillstand", article: "der", tr: "dolaşım durması / kardiyak arrest", en: "cardiac arrest / circulatory arrest", category: "Notfall", example: "Bei <em>Kreislaufstillstand</em> sofort Reanimation beginnen – 30:2-Schema.", ex_tr: "Dolaşım durmasında hemen resüsitasyona başla – 30:2 şeması." },
+    { de: "die Intubation", article: "die", tr: "entübasyon", en: "intubation / endotracheal intubation", category: "Notfall", example: "Der Notarzt führt die <em>Intubation</em> mit einem 8,0-Tubus durch.", ex_tr: "Acil tabip 8,0'lık tüp ile entübasyonu gerçekleştiriyor." },
+    { de: "der Venenzugang", article: "der", tr: "damar yolu / periferik IV kateter", en: "venous access / IV access", category: "Notfall", example: "Ich lege einen <em>Venenzugang</em> am Unterarm – 18G-Kanüle.", ex_tr: "Ön kola damar yolu açıyorum – 18G kanül." },
+    { de: "der Sauerstoff", article: "der", tr: "oksijen", en: "oxygen", category: "Notfall", example: "<em>Sauerstoff</em> 15 l/min über Nicht-Rückatmungsmaske – Ziel SpO₂ > 94 %.", ex_tr: "Geri solumasız maske ile 15 l/dk oksijen – hedef SpO₂ > %94." },
+    { de: "die Schockbehandlung", article: "die", tr: "şok tedavisi", en: "shock management / treatment", category: "Notfall", example: "Die <em>Schockbehandlung</em> umfasst Lagerung, Sauerstoff, schneller Volumenersatz.", ex_tr: "Şok tedavisi; pozisyon, oksijen ve hızlı volüm replasmanını kapsar." },
+    { de: "der Schockindex", article: "der", tr: "şok indeksi", en: "shock index", category: "Diagnostik", example: "Der <em>Schockindex</em> (HF/RR-syst) beträgt 1,2 – kritisch!", ex_tr: "Şok indeksi (KAH/sistolik KB) 1,2 – kritik!" },
+    { de: "die Immobilisation", article: "die", tr: "hareketsizleştirme / sabitleme", en: "immobilisation / stabilisation", category: "Trauma", example: "Die <em>Immobilisation</em> der Halswirbelsäule erfolgt mit einer Halskrause.", ex_tr: "Servikal omurganın hareketsizleştirilmesi boyun tasması ile yapılır." },
+    { de: "das Trauma", article: "das", tr: "travma / yaralanma", en: "trauma", category: "Trauma", example: "Bei diesem <em>Trauma</em> mit Hochrasanzmechanismus wird der Traumaplan aktiviert.", ex_tr: "Yüksek hız mekanizmalı bu travmada travma planı devreye alınıyor." },
+    { de: "die Übergabe an die Klinik", article: "die", tr: "hastaneye devir", en: "handover to hospital", category: "Kommunikation", example: "Bei der <em>Übergabe</em> gebe ich: Name, Alter, Vorgeschichte, Verlauf und Vitalzeichen.", ex_tr: "Hastane devrinde şunları bildiriyorum: isim, yaş, ön hikâye, süreç ve vitaller." },
+    { de: "das MIST-Schema", article: "das", tr: "MIST şeması (Mekanizma-İnjury-Symptoms-Treatment)", en: "MIST handover schema", category: "Kommunikation", example: "Das <em>MIST-Schema</em> strukturiert die Übergabe beim Schockraum.", ex_tr: "MIST şeması, şok odası devrini yapılandırır." },
+    { de: "der Glasgow Coma Scale (GCS)", article: "der", tr: "Glasgow Koma Skalası", en: "Glasgow Coma Scale (GCS)", category: "Diagnostik", example: "Der <em>GCS</em> beträgt 9 (E2V3M4) – schweres Schädel-Hirn-Trauma.", ex_tr: "GCS 9 (E2V3M4) – ağır kafa travması." },
+    { de: "der Notfallsanitäter", article: "der", tr: "acil sağlık teknikeri (Almanya'ya özgü 3 yıllık)", en: "emergency paramedic (German 3-year qualification)", category: "Beruf", example: "Der <em>Notfallsanitäter</em> darf in Deutschland eigenständig invasive Maßnahmen durchführen.", ex_tr: "Almanya'daki acil sağlık teknikeri bağımsız olarak invaziv uygulamalar yapabilir." },
+    { de: "die Reanimation", article: "die", tr: "canlandırma / CPR", en: "resuscitation / CPR", category: "Notfall", example: "Die <em>Reanimation</em> läuft seit 8 Minuten – weiter CPR, Adrenalin 1 mg i.v.", ex_tr: "Resüsitasyon 8 dakikadır devam ediyor – CPR'a devam, Adrenalin 1 mg i.v." },
+    { de: "der Defibrillator", article: "der", tr: "defibrilatör", en: "defibrillator / AED", category: "Notfall", example: "Der <em>Defibrillator</em> analysiert – alle zurücktreten! Schock abgeben!", ex_tr: "Defibrilatör analiz ediyor – hepiniz geri çekilin! Şok ver!" },
+    { de: "die Ersthelfer", article: "die", tr: "ilk yardım görevlileri", en: "first aiders / bystanders providing CPR", category: "Einsatz", example: "Die <em>Ersthelfer</em> haben bereits CPR begonnen – sehr gut, bitte weiter!", ex_tr: "İlk yardım görevlileri zaten CPR'a başlamış – çok iyi, lütfen devam edin!" },
+    { de: "der Zielklinik-Alarm", article: "der", tr: "hedef hastane alarmı / ön bildirim", en: "pre-alert to receiving hospital", category: "Kommunikation", example: "Ich gebe sofort einen <em>Zielklinik-Alarm</em> durch – Schockraumaktivierung notwendig.", ex_tr: "Derhal hedef hastane alarmı veriyorum – şok odası aktivasyonu gerekli." },
+    { de: "der Ertrinkungsunfall", article: "der", tr: "boğulma kazası", en: "drowning incident", category: "Notfall", example: "Beim <em>Ertrinkungsunfall</em> gilt: frühzeitige Reanimation und aktive Wiedererwärmung.", ex_tr: "Boğulma kazasında: erken resüsitasyon ve aktif ısıtma önemlidir." },
+    { de: "der anaphylaktische Schock", article: "der", tr: "anafilaktik şok", en: "anaphylactic shock", category: "Notfall", example: "Beim <em>anaphylaktischen Schock</em>: Adrenalin 0,5 mg i.m. in den Oberschenkel.", ex_tr: "Anafilaktik şokta: Adrenalin 0,5 mg i.m. uyluk kasına." },
+    { de: "die Hypo-/Hyperglykämie", article: "die", tr: "hipoglisemi / hiperglisemi", en: "hypo-/hyperglycemia", category: "Notfall", example: "Bei <em>Hypoglykämie</em> mit Bewusstlosigkeit: 40 ml Glukose 40 % i.v. langsam verabreichen.", ex_tr: "Bilinç kaybı olan hipoglisemide: 40 ml %40 Glukoz i.v. yavaşça ver." },
+    { de: "der Wirkungsort", article: "der", tr: "olay yeri", en: "scene / incident location", category: "Einsatz", example: "Am <em>Wirkungsort</em> – zuerst Eigensicherung, dann Patient ansprechen.", ex_tr: "Olay yerinde – önce kişisel güvenlik, sonra hastaya seslen." },
+    { de: "die Eigenschutz", article: "die", tr: "kişisel koruma / öz güvenlik", en: "personal safety / scene safety", category: "Einsatz", example: "Ohne <em>Eigenschutz</em> wird der Einsatz nicht begonnen!", ex_tr: "Kişisel koruma olmadan müdahaleye başlanmaz!" },
+    { de: "die Basismaßnahme", article: "die", tr: "temel uygulama / ilk müdahale adımı", en: "basic life support measure", category: "Notfall", example: "Die wichtigste <em>Basismaßnahme</em> beim bewusstlosen Patienten: stabile Seitenlage oder CPR.", ex_tr: "Bilinçsiz hastada en önemli temel uygulama: koma pozisyonu veya CPR." },
+    { de: "das Protokoll", article: "das", tr: "tutanak / müdahale formu", en: "emergency record / run report", category: "Dokumentation", example: "Das <em>Einsatzprotokoll</em> wird lückenlos noch am Einsatzort ausgefüllt.", ex_tr: "Müdahale tutanağı olay yerinde eksiksiz doldurulur." },
+    { de: "die Versorgungszeit", article: "die", tr: "müdahale süresi", en: "time at scene / on-scene time", category: "Einsatz", example: "Wir versuchen, die <em>Versorgungszeit</em> beim Herzinfarkt unter 15 Minuten zu halten.", ex_tr: "Kalp krizinde müdahale süresini 15 dakikanın altında tutmaya çalışıyoruz." },
+    { de: "der Schmerzmittelgabe", article: "die", tr: "ağrı kesici uygulama", en: "analgesic administration", category: "Notfall", example: "Zur <em>Schmerzmittelgabe</em> verwende ich Esketamin i.v. nach Arztanordnung.", ex_tr: "Ağrı kesici uygulamasında doktor emriyle i.v. Esketamin kullanıyorum." },
+  ],
+  fallbeispiele: [
+    {
+      title: "Kardiyak Arrest – Olay Yerinde Müdahale",
+      de_title: "Reanimation am Einsatzort – Plötzlicher Herztod",
+      level: "B1",
+      type: "Reanimation",
+      teaser_tr: "55 yaşında erkek, iş yerinde aniden yere yığılıyor. Olay yerindeki müdahale ve hastane öncesi iletişim.",
+      teaser_de: "55-jähriger Mann bricht am Arbeitsplatz zusammen. Präklinische Versorgung und Übergabe.",
+      sections: [
+        {
+          title_tr: "İlk Değerlendirme", title_de: "Erstbeurteilung",
+          text_de: "Um 10:23 Uhr werden wir von der <strong>Leitstelle</strong> zu einem bewusstlosen Mann an einem Arbeitsplatz alarmiert. Stichwort: <strong>'Person bewusstlos, keine Atmung'</strong>. Anfahrtszeit: 6 Minuten. Bei Ankunft finden wir Herrn Weber (55 Jahre) auf dem Boden liegend. Ein Kollege hat bereits mit <strong>Laien-Reanimation</strong> begonnen.",
+          text_tr: "Saat 10:23'te <strong>koordinasyon merkezi</strong> bizi bir iş yerine bilinçsiz erkek ihbarıyla yönlendiriyor. Çağrı kodu: <strong>'Bilinçsiz, nefes almıyor'</strong>. Gidiş süresi: 6 dakika. Varışta Bay Weber'i (55 yaş) yerde yatarken buluyoruz. Bir meslektaşı <strong>halk CPR</strong>'ına başlamış."
+        },
+        {
+          title_tr: "Müdahale Diyaloğu", title_de: "Einsatzkommunikation",
+          dialog: [
+            { speaker: "RS/NFS", de: "Sehr gut! Bitte weiter CPR machen – ich übernehme jetzt. Mein Kollege legt einen Venenzugang.", tr: "Çok iyi! Lütfen CPR'a devam et – şimdi ben devralıyorum. Meslektaşım damar yolu açıyor." },
+            { speaker: "RS/NFS", de: "EKG angeschlossen – Kammerflimmern! Alle zurück! Defibrillation 200 Joule – Schock abgegeben!", tr: "EKG takıldı – ventriküler fibrilasyon! Herkes geri! 200 Joule defibrilasyon – şok verildi!" },
+            { speaker: "Notarzt", de: "Ich übernehme die Atemwegssicherung. Bereite mir bitte den Laryngoskop und Tubus 8,0 vor.", tr: "Hava yolu güvenliğini ben alıyorum. Lütfen laringoskop ve 8,0 tüpü hazırla." },
+            { speaker: "RS/NFS", de: "Alles bereit! Venenzugang liegt – NaCl läuft, Adrenalin 1 mg i.v. vorbereitet.", tr: "Her şey hazır! Damar yolu açık – NaCl akıyor, Adrenalin 1 mg i.v. hazırlandı." }
+          ]
+        },
+        {
+          title_tr: "Hastane Devri (MIST)", title_de: "Übergabe an Schockraum (MIST)",
+          text_de: "<strong>M</strong>echanismus: Plötzlicher Herztod am Arbeitsplatz, V.a. akuter Myokardinfarkt. <strong>I</strong>njuries: keine sichtbaren Traumata. <strong>S</strong>ymptome: bewusstlos, initial Kammerflimmern. <strong>T</strong>reatment: 3x Defibrillation, Adrenalin 3 mg i.v., Intubation, Amiodaroninfusion. ROSC nach 18 Minuten. Jetzt: Sinusrhythmus, BD 100/60, GCS 3, Pupillen weit, isocor.",
+          text_tr: "<strong>M</strong>ekanizma: İş yerinde ani kardiyak ölüm, akut miyokard enfarktüsü şüphesi. <strong>I</strong>njüri: Görünür travma yok. <strong>S</strong>emptomlar: bilinçsiz, başlangıçta ventriküler fibrilasyon. <strong>T</strong>edavi: 3x defibrilasyon, 3 mg Adrenalin i.v., entübasyon, Amiodaron infüzyonu. 18 dakika sonra ROSC. Şu an: sinüs ritmi, KB 100/60, GCS 3, pupil geniş ve eşit."
+        }
+      ]
+    }
+  ],
+  dokumentation: [
+    {
+      icon: "🚑",
+      title: "Einsatzprotokoll – Rettungsdienst",
+      subtitle: "Acil Servis Müdahale Tutanağı",
+      fields: [
+        { label: "Einsatznummer / Datum", value: "2025-0116-447 | 16.01.2025 | 10:23 Uhr", highlight: false },
+        { label: "Einsatzort", value: "Musterstraße 7, 80333 München – Bürogebäude, EG", highlight: false },
+        { label: "Patient", value: "Weber, Klaus | *14.08.1969 | männl. | 88 kg | 178 cm", highlight: false },
+        { label: "Stichwort / Diagnose", value: "Reanimation – plötzlicher Herztod | VF → nach 3x DC-Schock ROSC | V.a. STEMI", highlight: true },
+        { label: "Ersthelfer vor Ort", value: "Laienreanimation durch Kollegen (begonnen ~2 min vor RTW)", highlight: false },
+        { label: "Maßnahmen (NFS)", value: "Basismonitoring, IV-Zugang 18G li. EF, NaCl 500ml, Adrenalin 3x1mg i.v., Amiodarone 300mg i.v., AED→ 3x 200J, Larynxtubus, SpO₂-Kontrolle, Blutzucker: 178 mg/dl", highlight: true },
+        { label: "Übergabe", value: "Klinikum Mitte, Schockraum. Übergabe an Dr. Müller 10:58 Uhr. MIST-Übergabe dokumentiert.", highlight: true }
+      ]
+    }
+  ]
+},
+
+// ─────────────────── ANEST ───────────────────────
+anest: {
+  wortschatz: [
+    { de: "die Narkose", article: "die", tr: "anestezi / narkoz", en: "general anesthesia / narcosis", category: "Anästhesie", example: "Die <em>Narkose</em> wird mit Propofol eingeleitet und mit Sevofluran aufrechterhalten.", ex_tr: "Narkoz Propofol ile indükte edilir ve Sevofluran ile sürdürülür." },
+    { de: "die Intubationsnarkose (ITN)", article: "die", tr: "endotrakeal entübasyon anestezisi", en: "general anesthesia with endotracheal intubation", category: "Anästhesie", example: "Bei diesem Eingriff ist eine <em>Intubationsnarkose</em> geplant.", ex_tr: "Bu operasyonda endotrakeal entübasyon anestezisi planlanıyor." },
+    { de: "das Propofol", article: "das", tr: "Propofol (uyutucu ilaç)", en: "propofol (induction agent)", category: "Medikamente", example: "<em>Propofol</em> 2 mg/kg i.v. zur Einleitung – bitte beginnen!", ex_tr: "İndüksiyon için Propofol 2 mg/kg i.v. – başlıyoruz!" },
+    { de: "das Succinylcholin", article: "das", tr: "Süksinilkolin (kas gevşetici)", en: "succinylcholine (depolarizing NMB)", category: "Medikamente", example: "<em>Succinylcholin</em> 1 mg/kg – schnelle Sequenz-Intubation (RSI).", ex_tr: "Süksinilkolin 1 mg/kg – hızlı ardışık entübasyon (RSI)." },
+    { de: "das Rocuronium", article: "das", tr: "Rokuronyum (kas gevşetici)", en: "rocuronium (non-depolarizing NMB)", category: "Medikamente", example: "<em>Rocuronium</em> 0,6 mg/kg i.v. als nicht-depolarisierendes Relaxans.", ex_tr: "Rokuronyum 0,6 mg/kg i.v. – non-depolarizan kas gevşetici." },
+    { de: "das Sufentanil", article: "das", tr: "Sufentanil (opioid)", en: "sufentanil (opioid analgesic)", category: "Medikamente", example: "<em>Sufentanil</em> 0,2 µg/kg i.v. zur intraoperativen Analgesie.", ex_tr: "İntraoperatif analjezi için Sufentanil 0,2 µg/kg i.v." },
+    { de: "der Atemweg", article: "der", tr: "hava yolu", en: "airway", category: "Anästhesie", example: "Der <em>Atemweg</em> ist frei – Tubus sitzt korrekt, CO₂-Kurve vorhanden.", ex_tr: "Hava yolu açık – tüp doğru konumda, CO₂ eğrisi mevcut." },
+    { de: "die Laryngoskopie", article: "die", tr: "laringoskopi", en: "laryngoscopy", category: "Anästhesie", example: "Bei der <em>Laryngoskopie</em> Cormack-Lehane Grad II – Intubation gut möglich.", ex_tr: "Laringoskopide Cormack-Lehane II – entübasyon mümkün." },
+    { de: "der endexspiratorische CO₂ (etCO₂)", article: "der", tr: "son ekspiratuar CO₂ (kapnografi)", en: "end-tidal CO₂ (capnography)", category: "Monitoring", example: "Der <em>etCO₂</em> beträgt 38 mmHg – Tubuslage bestätigt.", ex_tr: "etCO₂ 38 mmHg – tüp konumu doğrulandı." },
+    { de: "die Relaxometrie", article: "die", tr: "relaksometri / nöromüsküler monitörizasyon", en: "neuromuscular monitoring / train of four (TOF)", category: "Monitoring", example: "Die <em>Relaxometrie</em> zeigt TOF 0/4 – Patient ist vollständig relaxiert.", ex_tr: "Relaksometri TOF 0/4 gösteriyor – hasta tam olarak gevşemiş." },
+    { de: "die Maskenbeatmung", article: "die", tr: "maske ventilasyonu", en: "mask ventilation / bag-mask ventilation", category: "Anästhesie", example: "Vor der Intubation wird 3 Minuten lang mit reinem O₂ präoxygeniert – <em>Maskenbeatmung</em>.", ex_tr: "Entübasyondan önce 3 dakika saf O₂ ile präoksijenasyon – maske ventilasyonu." },
+    { de: "die Spinalanästhesie", article: "die", tr: "spinal anestezi / omurga anestezisi", en: "spinal anaesthesia", category: "Regionalanästhesie", example: "Für die Knie-TEP empfehle ich eine <em>Spinalanästhesie</em> statt Vollnarkose.", ex_tr: "Diz protezi için genel anestezi yerine spinal anestezi öneriyorum." },
+    { de: "die Periduralanästhesie (PDA)", article: "die", tr: "epidural anestezi (PDA)", en: "epidural anaesthesia", category: "Regionalanästhesie", example: "Die <em>Periduralanästhesie</em> ermöglicht eine langfristige postoperative Schmerztherapie.", ex_tr: "Epidural anestezi uzun süreli postoperatif ağrı tedavisini mümkün kılar." },
+    { de: "das Aufwachzimmer", article: "das", tr: "uyandırma odası", en: "recovery room / post-anaesthesia care unit (PACU)", category: "Postoperativ", example: "Der Patient wird in das <em>Aufwachzimmer</em> verlegt – Monitoring wird fortgeführt.", ex_tr: "Hasta uyandırma odasına naklediliyor – monitörizasyon devam ediyor." },
+    { de: "die Extubation", article: "die", tr: "ekstübasyon", en: "extubation / tube removal", category: "Postoperativ", example: "Die <em>Extubation</em> erfolgt, wenn der Patient selbstständig atmet und Schutzreflexe vorhanden sind.", ex_tr: "Ekstübasyon, hasta bağımsız soluyabildiğinde ve koruyucu refleksler geri döndüğünde yapılır." },
+    { de: "die Prämedikation", article: "die", tr: "premedikasyon", en: "premedication", category: "Präoperativ", example: "Die <em>Prämedikation</em> mit Midazolam 7,5 mg p.o. beruhigt den Patienten vor der Operation.", ex_tr: "Midazolam 7,5 mg p.o. ile premedikasyon operasyon öncesi hastayı sakinleştirir." },
+    { de: "die Nüchternheit", article: "die", tr: "açlık durumu / aç olma", en: "fasting status / nil by mouth", category: "Präoperativ", example: "Die <em>Nüchternheit</em> muss mindestens 6 Stunden für feste Nahrung betragen.", ex_tr: "Katı gıdalar için açlık süresi en az 6 saat olmalıdır." },
+    { de: "der Anästhesieprotokoll", article: "der", tr: "anestezi protokolü", en: "anaesthesia record / chart", category: "Dokumentation", example: "Im <em>Anästhesieprotokoll</em> werden alle Medikamente, Vitalzeichen und Ereignisse dokumentiert.", ex_tr: "Anestezi protokolüne tüm ilaçlar, vitaller ve olaylar kaydedilir." },
+    { de: "der schwierige Atemweg", article: "der", tr: "zor hava yolu", en: "difficult airway", category: "Anästhesie", example: "LEMON-Score 3 – <em>schwieriger Atemweg</em> erwartet, Videolaryngoskop bereitstellen!", ex_tr: "LEMON Skoru 3 – zor hava yolu bekleniyor, videolaringoskop hazırla!" },
+    { de: "die tiefe Venenthrombose (TVT)", article: "die", tr: "derin ven trombozu (DVT)", en: "deep vein thrombosis (DVT)", category: "Komplikationen", example: "Zur Prophylaxe der <em>tiefen Venenthrombose</em> werden Heparin und Kompressionsstrümpfe eingesetzt.", ex_tr: "Derin ven trombozu profilaksisi için heparin ve kompresyon çorabı kullanılır." },
+    { de: "die postoperative Übelkeit (PONV)", article: "die", tr: "ameliyat sonrası bulantı kusma (PONV)", en: "postoperative nausea and vomiting (PONV)", category: "Komplikationen", example: "Bei hohem PONV-Risiko geben wir prophylaktisch Ondansetron 4 mg i.v.", ex_tr: "Yüksek PONV riskinde profilaktik olarak 4 mg i.v. Ondansetron veriyoruz." },
+    { de: "das Anästhesiegespräch", article: "das", tr: "anestezi görüşmesi", en: "pre-anaesthetic assessment / consent discussion", category: "Präoperativ", example: "Das <em>Anästhesiegespräch</em> findet am Vorabend der Operation statt.", ex_tr: "Anestezi görüşmesi ameliyat gecesi öncesinde yapılır." },
+    { de: "der Perfusor", article: "der", tr: "enjektör pompası / perfüzör", en: "syringe pump / infusion pump", category: "Geräte", example: "Der Propofol-<em>Perfusor</em> läuft mit 5 ml/h zur totalen intravenösen Anästhesie (TIVA).", ex_tr: "Propofol perfüzörü total intravenöz anestezi (TIVA) için 5 ml/sa çalışıyor." },
+    { de: "die Narkosetiefe", article: "die", tr: "anestezi derinliği", en: "depth of anaesthesia", category: "Monitoring", example: "Zur Messung der <em>Narkosetiefe</em> verwenden wir den BIS-Monitor (Bispektralindex).", ex_tr: "Anestezi derinliğini ölçmek için BIS monitörü (bispektral indeks) kullanıyoruz." },
+    { de: "der Beatmungsdruck", article: "der", tr: "ventilasyon basıncı", en: "ventilation pressure / airway pressure", category: "Geräte", example: "Der <em>Beatmungsdruck</em> ist gestiegen – mögliche Tubusdislokation prüfen!", ex_tr: "Ventilasyon basıncı yükseldi – olası tüp kaymasını kontrol et!" },
+    { de: "der Atemwegswiderstand", article: "der", tr: "hava yolu direnci", en: "airway resistance", category: "Monitoring", example: "Erhöhter <em>Atemwegswiderstand</em> kann auf einen Bronchospasmus hinweisen.", ex_tr: "Artmış hava yolu direnci bronkospazma işaret edebilir." },
+    { de: "die Antagonisierung", article: "die", tr: "antagonizasyon / geri döndürme", en: "reversal / antagonisation", category: "Postoperativ", example: "Zur <em>Antagonisierung</em> der Muskelrelaxation verwenden wir Sugammadex 200 mg i.v.", ex_tr: "Kas gevşemesinin antagonizasyonu için Sugammadex 200 mg i.v. kullanıyoruz." },
+    { de: "der Blutdruckabfall", article: "der", tr: "kan basıncı düşmesi / hipotansiyon", en: "blood pressure drop / hypotension", category: "Komplikationen", example: "Bei dem <em>Blutdruckabfall</em> auf 70/40 mmHg starten wir Noradrenalin.", ex_tr: "Kan basıncının 70/40 mmHg'ye düşmesi üzerine Noradrenalin başlatıyoruz." },
+    { de: "die Larynxmaske", article: "die", tr: "laringeal maske (LMA)", en: "laryngeal mask airway (LMA)", category: "Anästhesie", example: "Für die kurze Operation verwenden wir eine <em>Larynxmaske</em> Größe 4.", ex_tr: "Kısa operasyon için 4 numaralı laringeal maske kullanıyoruz." },
+    { de: "die Narkoseeinleitung", article: "die", tr: "anestezi indüksiyonu", en: "anaesthesia induction", category: "Anästhesie", example: "Die <em>Narkoseeinleitung</em> erfolgt in der Reihenfolge: Propofol → Fentanyl → Rocuronium.", ex_tr: "Anestezi indüksiyonu sıralaması: Propofol → Fentanil → Rokuronyum." },
+    { de: "der Aldrete-Score", article: "der", tr: "Aldrete Skoru (uyandırma odası taburculuk)", en: "Aldrete score (PACU discharge)", category: "Postoperativ", example: "Mit einem <em>Aldrete-Score</em> von 9/10 kann der Patient in die Normalstation verlegt werden.", ex_tr: "Aldrete Skoru 9/10 olan hasta normal servise nakledilebilir." },
+  ],
+  fallbeispiele: [
+    {
+      title: "Anestezi İndüksiyonu – RSI Uygulaması",
+      de_title: "Narkoseeinleitung – Rapid Sequence Induction (RSI)",
+      level: "B2",
+      type: "Notfall-Anästhesie",
+      teaser_tr: "Acil apandektomi için açık mide ile hızlı ardışık entübasyon (RSI) uygulaması.",
+      teaser_de: "Notfall-Appendektomie bei nicht nüchternem Patienten – RSI-Vorgehen.",
+      sections: [
+        {
+          title_tr: "Preoperatif Değerlendirme", title_de: "Präoperative Einschätzung",
+          text_de: "Der Patient (25 Jahre, 80 kg) hat zuletzt vor 4 Stunden gegessen – er gilt als <strong>nicht nüchtern</strong>. Geplant ist eine notfallmäßige Appendektomie. Aufgrund des Aspirationsrisikos entscheiden wir uns für eine <strong>Rapid Sequence Induction (RSI)</strong> mit <strong>Cricoiddruck</strong> (Sellick-Manöver). Airway-Assessment: Mallampati I, Mund öffnet gut, LEMON-Score 1 – kein schwieriger Atemweg erwartet.",
+          text_tr: "Hasta (25 yaş, 80 kg) son 4 saat önce yedi – <strong>aç sayılmıyor</strong>. Acil apandektomi planlanıyor. Aspirasyon riski nedeniyle <strong>Hızlı Ardışık Entübasyon (RSI)</strong> ve <strong>Krikoid basısı</strong> (Sellick manevrası) kararlaştırıldı. Hava yolu değerlendirmesi: Mallampati I, ağız iyi açılıyor, LEMON Skoru 1 – zor hava yolu beklenmiyor."
+        },
+        {
+          title_tr: "İndüksiyon Diyaloğu", title_de: "Einleitungsgespräch im OP",
+          dialog: [
+            { speaker: "ATA", de: "Alles vorbereitet: Thiopental 500 mg, Succinylcholin 100 mg, Tubus 8,0 und 7,5 aufgezogen. Videolaryngoskop als Backup bereit.", tr: "Her şey hazır: Tiyopental 500 mg, Süksinilkolin 100 mg, 8,0 ve 7,5 tüp hazırlandı. Videolaringoskop yedek olarak hazır." },
+            { speaker: "Anästhesist", de: "Gut. Präoxygenierung beginnen – 3 Minuten 100 % O₂ über dicht sitzende Maske.", tr: "Tamam. Preoksijenasyon başlasın – sıkı oturan maske ile 3 dakika %100 O₂." },
+            { speaker: "ATA", de: "SpO₂ 100 %, EKG angehängt, Blutdruck 125/80 mmHg. Bereit zur Einleitung.", tr: "SpO₂ %100, EKG takıldı, Kan basıncı 125/80 mmHg. İndüksiyona hazır." },
+            { speaker: "Anästhesist", de: "Cricoiddruck vorbereiten! Ich gebe jetzt Thiopental und Succinylcholin – du hältst den Druck bis zur Cuffblockung!", tr: "Krikoid baskısı hazırla! Tiyopental ve Süksinilkolin veriyorum – kafı şişene kadar basıyı tut!" },
+            { speaker: "ATA", de: "Cricoiddruck gehalten! Patient relaxiert – Lider geschlossen, keine Spontanatmung mehr.", tr: "Krikoid basısı uygulandı! Hasta gevşedi – gözler kapandı, kendiliğinden solunum yok." },
+            { speaker: "Anästhesist", de: "Tubus eingeführt – ich höre und sehe gleichmäßige Thoraxhebung beidseits. CO₂-Kurve vorhanden – Lage gesichert! Cuff auf 25 cmH₂O.", tr: "Tüp yerleştirildi – iki taraflı eşit toraks hareketi görüyor ve duyuyorum. CO₂ eğrisi var – konum güvende! Kaf 25 cmH₂O." }
+          ]
+        },
+        {
+          title_tr: "İntraoperatif Monitörizasyon", title_de: "Intraoperatives Monitoring",
+          text_de: "Folgende Parameter werden kontinuierlich überwacht: <strong>EKG</strong>, <strong>nichtinvasiver Blutdruck</strong> (alle 5 Min.), <strong>SpO₂</strong>, <strong>etCO₂</strong> (Ziel: 35–45 mmHg), <strong>BIS</strong> (Ziel: 40–60), <strong>Relaxometrie</strong> (TOF). Beatmungsparameter: FiO₂ 0,5, Tidalvolumen 480 ml (6 ml/kg), PEEP 5 cmH₂O. Aufrechterhaltung mit <strong>Sevofluran 1,5 Vol%</strong>.",
+          text_tr: "Şu parametreler sürekli izleniyor: <strong>EKG</strong>, <strong>noninvazif kan basıncı</strong> (5 dakikada bir), <strong>SpO₂</strong>, <strong>etCO₂</strong> (hedef: 35–45 mmHg), <strong>BIS</strong> (hedef: 40–60), <strong>relaksometri</strong> (TOF). Ventilasyon parametreleri: FiO₂ 0,5, tidal volüm 480 ml (6 ml/kg), PEEP 5 cmH₂O. Sürdürme: <strong>Sevofluran %1,5</strong>."
+        }
+      ]
+    },
+    {
+      title: "Aufwachzimmer – Postoperative Komplikasyon",
+      de_title: "Aufwachzimmer – postoperative PONV und Agitation",
+      level: "B1",
+      type: "Postoperativ",
+      teaser_tr: "Uyandırma odasında bulantı-kusma ve ajitasyon yönetimi.",
+      teaser_de: "Management von PONV und Erwachungsagitation im Aufwachzimmer.",
+      sections: [
+        {
+          title_tr: "Tablo", title_de: "Klinisches Bild",
+          text_de: "Frau Hoffmann (42 J.) wird nach einer laparoskopischen Cholezystektomie in das <strong>Aufwachzimmer</strong> verlegt. <strong>Aldrete-Score</strong> bei Eingang: 7/10 (Punkte-Abzug: Vigilanz und Motorik). Nach 10 Minuten beginnt die Patientin mit Übelkeit und starkem Erbrechen – Diagnose: <strong>PONV</strong> (postoperative Nausea und Vomiting).",
+          text_tr: "Bayan Hoffmann (42 yaş) laparoskopik kolesistektomi sonrası <strong>uyandırma odasına</strong> naklediliyor. Kabuldeki <strong>Aldrete Skoru</strong>: 7/10 (bilinç ve motor puanlardan eksik). 10 dakika sonra hasta bulantı ve şiddetli kusma başlıyor – Tanı: <strong>PONV</strong>."
+        },
+        {
+          title_tr: "Diyalog", title_de: "Dialog im Aufwachzimmer",
+          dialog: [
+            { speaker: "ATA/Pflegerin", de: "Frau Hoffmann, können Sie mich hören? Drehen Sie Ihren Kopf zur Seite – ich halte eine Nierenschale!", tr: "Bayan Hoffmann, beni duyabiliyor musunuz? Başınızı yana çevirin – böbrek tası tutuyorum!" },
+            { speaker: "Patientin", de: "Mir ist so schlecht... alles dreht sich...", tr: "Çok midem bulanıyor... her şey dönüyor..." },
+            { speaker: "ATA/Pflegerin", de: "Ich verstehe. Ich gebe Ihnen jetzt ein Mittel gegen die Übelkeit. Das hilft schnell.", tr: "Anlıyorum. Şimdi size bulantı karşıtı ilaç veriyorum. Hızlı etki eder." },
+            { speaker: "ATA/Pflegerin", de: "Ondansetron 4 mg i.v. verabreicht. Patientin leicht hochgelagert, Sauerstoff über Nasenbrille 2 l/min.", tr: "Ondansetron 4 mg i.v. verildi. Hasta hafif yukarı konumlandırıldı, burun kaneülü ile 2 l/dk oksijen." }
+          ]
+        }
+      ]
+    }
+  ],
+  dokumentation: [
+    {
+      icon: "💊",
+      title: "Anästhesieprotokoll",
+      subtitle: "Anestezi Kayıt Formu",
+      fields: [
+        { label: "Patient / Eingriff", value: "Weber, Klaus | *14.08.1969 | Appendektomie laparoskopisch | 16.01.2025", highlight: false },
+        { label: "ASA-Klassifikation", value: "ASA II (leichte Systemerkrankung: art. Hypertonie)", highlight: false },
+        { label: "Anästhesieverfahren", value: "ITN (Intubationsnarkose) – RSI wegen Aspirationsrisiko", highlight: true },
+        { label: "Einleitung", value: "Thiopental 500 mg i.v. + Succinylcholin 100 mg i.v. | Tubus 8,0 oral, Tiefe 22 cm", highlight: false },
+        { label: "Aufrechterhaltung", value: "Sevofluran 1,5–2 Vol% in O₂/Luft 50:50 | Fentanyl 0,1 mg Bolusgaben", highlight: false },
+        { label: "Besonderheiten / Probleme", value: "Narkosebeginn 11:10 Uhr, OP-Ende 12:40 Uhr. Intraop. einmalig RR-Abfall auf 85/55 → Akrinor 0,5 ml i.v. → RR normalisiert.", highlight: true },
+        { label: "Extubation / Aufwachzimmer", value: "Extubation 12:45 Uhr, wach und kooperativ. Aldrete 9/10 bei Verlegung.", highlight: false }
+      ]
+    },
+    {
+      icon: "🩺",
+      title: "Prämedikationsprotokoll",
+      subtitle: "Premedikasyon Formu",
+      fields: [
+        { label: "Datum / Aufklärungsgespräch", value: "15.01.2025 – 16:00 Uhr. Aufklärung durch Dr. Schäfer (Anästhesie)", highlight: false },
+        { label: "Vormedikation", value: "Ramipril 5 mg (Heute Morgen pausiert), L-Thyroxin 75 µg (eingenommen)", highlight: true },
+        { label: "Allergien / Unverträglichkeiten", value: "Penicillin! Dokumentiert im Armband. Keine bekannte Latex-Allergie.", highlight: true },
+        { label: "Nüchternheit", value: "Feste Nahrung: letzte Einnahme 06:00 Uhr (>6h ✓) | Klare Flüssigkeit: 07:30 Uhr (>2h ✓)", highlight: false },
+        { label: "Prämedikation", value: "Midazolam 7,5 mg p.o. um 10:00 Uhr (60 Min. präoperativ) verabreicht", highlight: false },
+        { label: "Einwilligung", value: "Patient hat schriftlich eingewilligt. ITN + Spinal als Alternative erklärt. Kopie im Patientenakte.", highlight: false }
+      ]
+    }
+  ]
+}
+};
+
+// ─────────────────────────────────────────────────
+// UI STATE
+// ─────────────────────────────────────────────────
+let currentBranch = null;
+let currentLang = 'tr';
+let currentTab = 'wortschatz';
+let activeCategories = new Set(['ALL']);
+
+const branchMeta = {
+  nurse: { label: 'Hemşire', de: 'Krankenpflege', en: 'Nursing', icon: '💚' },
+  doctor: { label: 'Doktor', de: 'Ärztlicher Dienst', en: 'Medicine', icon: '💙' },
+  para: { label: 'Paramedik', de: 'Rettungsdienst', en: 'Paramedic', icon: '🟡' },
+  anest: { label: 'Anestezi Teknikeri', de: 'Anästhesie (ATA)', en: 'Anaesthesia Tech.', icon: '🟣' }
+};
+
+const translations = {
+  tr: {
+    heroSub: 'Branşına özel kelime listeleri, gerçekçi vaka simülasyonları ve Almanya standartlarına göre dokümantasyon örnekleri.',
+    homeLabel: 'Ana Sayfa',
+    wortTitle: 'Kelime Listesi (Wortschatz)',
+    wortSub: 'Branşınıza özel teknik kelimeler ve örnek cümleler',
+    searchPlaceholder: 'Almanca veya Türkçe ara...',
+    'nurse-name': 'Hemşire', 'nurse-desc': 'Hasta bakımı, sabah rutini, devir teslim ve bakım planlaması.',
+    'doctor-name': 'Doktor', 'doctor-desc': 'Anamnez, teşhis süreci, ilaç yazma ve hasta görüşmeleri.',
+    'para-name': 'Paramedik', 'para-desc': 'Acil müdahale, einsatz iletişimi ve hastane devri.',
+    'anest-name': 'Anestezi Teknikeri', 'anest-desc': 'Premedikasyon, monitörizasyon, ilaç hazırlama ve uyandırma odası.',
+  },
+  de: {
+    heroSub: 'Fachspezifischer Wortschatz, realistische Fallbeispiele und Dokumentationsvorlagen nach deutschen Standards.',
+    homeLabel: 'Startseite',
+    wortTitle: 'Wortschatz',
+    wortSub: 'Fachspezifische Begriffe mit Beispielsätzen',
+    searchPlaceholder: 'Auf Deutsch suchen...',
+    'nurse-name': 'Pflegefachkraft', 'nurse-desc': 'Körperpflege, Übergabe, Pflegeplanung und Dokumentation.',
+    'doctor-name': 'Arzt / Ärztin', 'doctor-desc': 'Anamnese, Diagnosestellung, Medikamentenverordnung.',
+    'para-name': 'Rettungsfachkraft', 'para-desc': 'Notfalleinsatz, Kommunikation mit Leitstelle, Klinikubergabe.',
+    'anest-name': 'Anästhesietechnischer Assistent', 'anest-desc': 'Prämedikation, Monitoring, Medikamentenvorbereitung und AWR.',
+  },
+  en: {
+    heroSub: 'Branch-specific vocabulary, realistic case simulations, and documentation templates according to German standards.',
+    homeLabel: 'Home',
+    wortTitle: 'Vocabulary (Wortschatz)',
+    wortSub: 'Branch-specific technical terms with example sentences',
+    searchPlaceholder: 'Search in English...',
+    'nurse-name': 'Nurse', 'nurse-desc': 'Patient care, morning routine, handover, and care planning.',
+    'doctor-name': 'Physician', 'doctor-desc': 'Anamnesis, diagnosis, prescribing, and patient communication.',
+    'para-name': 'Paramedic', 'para-desc': 'Emergency response, dispatch communication, hospital handover.',
+    'anest-name': 'Anaesthesia Technician', 'anest-desc': 'Premedication, monitoring, drug preparation, and recovery room.',
+  }
+};
+
+// ─────────────────────────────────────────────────
+// LANG
+// ─────────────────────────────────────────────────
+function setLang(lang) {
+  currentLang = lang;
+  document.querySelectorAll('.lang-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.lang === lang);
+  });
+  applyLang();
+  if (currentBranch) renderWords();
+}
+
+function applyLang() {
+  const t = translations[currentLang];
+  Object.keys(t).forEach(k => {
+    const el = document.getElementById(k);
+    if (el) el.textContent = t[k];
+  });
+  if (document.getElementById('wordSearch')) {
+    document.getElementById('wordSearch').placeholder = t.searchPlaceholder;
+  }
+}
+
+// ─────────────────────────────────────────────────
+// BRANCH
+// ─────────────────────────────────────────────────
+function enterBranch(branch) {
+  currentBranch = branch;
+  document.body.dataset.branch = branch;
+  document.getElementById('landing').style.display = 'none';
+  const app = document.getElementById('app');
+  app.classList.add('active');
+
+  const meta = branchMeta[branch];
+  const langLabel = currentLang === 'tr' ? meta.label : currentLang === 'de' ? meta.de : meta.en;
+  document.getElementById('navBranchLabel').textContent = meta.icon + ' ' + langLabel;
+
+  switchTab('wortschatz', document.querySelector('[data-tab="wortschatz"]'));
+}
+
+function goHome() {
+  currentBranch = null;
+  document.body.removeAttribute('data-branch');
+  document.getElementById('landing').style.display = '';
+  document.getElementById('app').classList.remove('active');
+  applyLang();
+}
+
+// ─────────────────────────────────────────────────
+// TABS
+// ─────────────────────────────────────────────────
+function switchTab(tab, el) {
+  currentTab = tab;
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+  if (el) el.classList.add('active');
+  document.getElementById('tab-' + tab).classList.add('active');
+
+  if (tab === 'wortschatz') renderWords();
+  if (tab === 'fallbeispiele') renderCases();
+  if (tab === 'dokumentation') renderDocs();
+}
+
+// ─────────────────────────────────────────────────
+// WORDS
+// ─────────────────────────────────────────────────
+function renderWords() {
+  const words = DATA[currentBranch].wortschatz;
+  const categories = ['ALL', ...new Set(words.map(w => w.category))];
+
+  // Stats
+  const statsEl = document.getElementById('wortStats');
+  statsEl.innerHTML = `
+    <div class="stat-pill"><strong>${words.length}</strong>Kelime</div>
+    <div class="stat-pill"><strong>${categories.length - 1}</strong>Kategori</div>
+    <div class="stat-pill"><strong>B1/B2</strong>Seviye</div>
+  `;
+
+  // Filters
+  const filtersEl = document.getElementById('categoryFilters');
+  filtersEl.innerHTML = categories.map(c =>
+    `<button class="filter-btn ${c === 'ALL' ? 'active' : ''}" onclick="toggleCategory('${c}', this)">${c === 'ALL' ? '✦ Tümü' : c}</button>`
+  ).join('');
+
+  filterWords();
+}
+
+function toggleCategory(cat, el) {
+  if (cat === 'ALL') {
+    activeCategories = new Set(['ALL']);
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    el.classList.add('active');
+  } else {
+    activeCategories.delete('ALL');
+    document.querySelector('.filter-btn:first-child').classList.remove('active');
+    if (activeCategories.has(cat)) {
+      activeCategories.delete(cat);
+      el.classList.remove('active');
+    } else {
+      activeCategories.add(cat);
+      el.classList.add('active');
+    }
+    if (activeCategories.size === 0) {
+      activeCategories.add('ALL');
+      document.querySelector('.filter-btn:first-child').classList.add('active');
+    }
+  }
+  filterWords();
+}
+
+function filterWords() {
+  const q = (document.getElementById('wordSearch')?.value || '').toLowerCase();
+  const words = DATA[currentBranch].wortschatz;
+  const grid = document.getElementById('wordGrid');
+
+  const filtered = words.filter(w => {
+    const catOk = activeCategories.has('ALL') || activeCategories.has(w.category);
+    const qOk = !q || w.de.toLowerCase().includes(q) || w.tr.toLowerCase().includes(q) || w.en.toLowerCase().includes(q);
+    return catOk && qOk;
+  });
+
+  if (filtered.length === 0) {
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><div class="icon">🔍</div><p>Sonuç bulunamadı.</p></div>`;
+    return;
+  }
+
+  grid.innerHTML = filtered.map(w => {
+    const translation = currentLang === 'tr' ? w.tr : currentLang === 'en' ? w.en : '–';
+    const example = w.example;
+    const exTrans = currentLang === 'tr' ? w.ex_tr : currentLang === 'en' ? '' : '';
+    return `
+      <div class="word-card">
+        <div class="word-de">
+          ${w.article !== '–' ? `<span class="word-article">${w.article}</span>` : ''}
+          ${w.de}
+        </div>
+        ${currentLang !== 'de' ? `<div class="word-tr">${translation}</div>` : ''}
+        <div class="word-example">${example}${exTrans ? `<br><span style="color:var(--muted);font-size:0.75rem">${exTrans}</span>` : ''}</div>
+        <span class="word-category">${w.category}</span>
+      </div>
+    `;
+  }).join('');
+}
+
+// ─────────────────────────────────────────────────
+// CASES
+// ─────────────────────────────────────────────────
+function renderCases() {
+  const cases = DATA[currentBranch].fallbeispiele;
+  const list = document.getElementById('caseList');
+
+  list.innerHTML = cases.map((c, i) => {
+    const titleText = currentLang === 'de' ? c.de_title : c.title;
+    const teaserText = currentLang === 'de' ? (c.teaser_de || c.teaser_tr) : currentLang === 'en' ? (c.teaser_en || c.teaser_tr) : c.teaser_tr;
+    return `
+      <div class="case-card" id="case-${i}">
+        <div class="case-header" onclick="toggleCase(${i})">
+          <div>
+            <div class="case-meta">
+              <span class="case-badge badge-level">Level ${c.level}</span>
+              <span class="case-badge badge-type">${c.type}</span>
+            </div>
+            <div class="case-title">${titleText}</div>
+            <div class="case-teaser">${teaserText}</div>
+          </div>
+          <div class="case-toggle">▾</div>
+        </div>
+        <div class="case-body" id="case-body-${i}">
+          ${renderCaseSections(c)}
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function renderCaseSections(c) {
+  return c.sections.map(s => {
+    const title = currentLang === 'de' ? (s.title_de || s.title_tr) : currentLang === 'en' ? (s.title_en || s.title_tr) : s.title_tr;
+    let body = '';
+
+    if (s.dialog) {
+      body = `<div class="dialog-box">` + s.dialog.map(line => {
+        const dialogText = line.de;
+        const trans = currentLang === 'tr' ? line.tr : currentLang === 'en' ? (line.en || line.tr) : '';
+        return `
+          <div class="dialog-line">
+            <span class="dialog-speaker">${line.speaker}:</span>
+            <span class="dialog-text">${dialogText}</span>
+            ${trans && currentLang !== 'de' ? `<span class="dialog-translation">→ ${trans}</span>` : ''}
+          </div>
+        `;
+      }).join('') + `</div>`;
+    } else {
+      const text = currentLang === 'de' ? (s.text_de || s.text_tr) : currentLang === 'en' ? (s.text_en || s.text_de || s.text_tr) : s.text_tr;
+      body = `<div class="case-text">${text}</div>`;
+      if (currentLang === 'tr' && s.text_de) {
+        body += `<details style="margin-top:10px"><summary style="font-size:0.78rem;color:var(--muted);cursor:pointer">🇩🇪 Almanca metni göster</summary><div class="case-text" style="margin-top:8px;padding:12px;background:rgba(255,255,255,0.03);border-radius:8px">${s.text_de}</div></details>`;
+      }
+    }
+
+    return `
+      <div class="case-section">
+        <div class="case-section-title">${title}</div>
+        ${body}
+      </div>
+    `;
+  }).join('');
+}
+
+function toggleCase(i) {
+  const card = document.getElementById('case-' + i);
+  card.classList.toggle('open');
+}
+
+// ─────────────────────────────────────────────────
+// DOCS
+// ─────────────────────────────────────────────────
+function renderDocs() {
+  const docs = DATA[currentBranch].dokumentation;
+  const container = document.getElementById('docCards');
+
+  container.innerHTML = docs.map(doc => `
+    <div class="doc-card">
+      <div class="doc-card-header">
+        <span class="doc-card-icon">${doc.icon}</span>
+        <div>
+          <div class="doc-card-title">${doc.title}</div>
+          <div class="doc-card-subtitle">${doc.subtitle}</div>
+        </div>
+      </div>
+      <div class="doc-card-body">
+        ${doc.fields.map(f => `
+          <div class="doc-field">
+            <div class="doc-label">${f.label}</div>
+            <div class="doc-value ${f.highlight ? 'highlight' : ''}">${f.value}</div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+
+// ─────────────────────────────────────────────────
+// INIT
+// ─────────────────────────────────────────────────
+document.querySelectorAll('#landingLang .lang-btn').forEach(b => {
+  b.addEventListener('click', () => setLang(b.dataset.lang));
+});
+document.querySelectorAll('#appLang .lang-btn').forEach(b => {
+  b.addEventListener('click', () => setLang(b.dataset.lang));
+});
+
+// Scroll progress
+window.addEventListener('scroll', () => {
+  const p = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+  document.getElementById('progressBar').style.width = p + '%';
+});
+
+applyLang();
+</script>
 </body>
 </html>
