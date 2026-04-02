@@ -1432,25 +1432,46 @@ function switchTab(tab, el) {
 // ─────────────────────────────────────────────────
 // WORDS
 // ─────────────────────────────────────────────────
+// ─────────────────────────────────────────────────
+// WORDS (YENİ QUİZ MODU EKLENTİLİ)
+// ─────────────────────────────────────────────────
+let isQuizMode = false;
+let currentQuizIndex = 0;
+let currentFilteredWords = [];
+
 function renderWords() {
   const words = DATA[currentBranch].wortschatz;
   const categories = ['ALL', ...new Set(words.map(w => w.category))];
 
-  // Stats
+  // Stats ve Quiz Toggle Butonu
   const statsEl = document.getElementById('wortStats');
   statsEl.innerHTML = `
     <div class="stat-pill"><strong>${words.length}</strong>Kelime</div>
     <div class="stat-pill"><strong>${categories.length - 1}</strong>Kategori</div>
     <div class="stat-pill"><strong>B1/B2</strong>Seviye</div>
+    <button onclick="toggleQuizMode()" style="margin-left:auto; padding:10px 20px; background:var(--branch-primary); color:var(--bg); border:none; border-radius:10px; cursor:pointer; font-weight:bold; box-shadow:0 4px 10px rgba(0,0,0,0.2); transition:0.3s;">
+      ${isQuizMode ? '📝 Liste Modu' : '🎓 Quiz Modu'}
+    </button>
   `;
 
   // Filters
   const filtersEl = document.getElementById('categoryFilters');
   filtersEl.innerHTML = categories.map(c =>
-    `<button class="filter-btn ${c === 'ALL' ? 'active' : ''}" onclick="toggleCategory('${c}', this)">${c === 'ALL' ? '✦ Tümü' : c}</button>`
+    `<button class="filter-btn ${activeCategories.has(c) || (c === 'ALL' && activeCategories.has('ALL')) ? 'active' : ''}" onclick="toggleCategory('${c}', this)">${c === 'ALL' ? '✦ Tümü' : c}</button>`
   ).join('');
 
   filterWords();
+}
+
+function toggleQuizMode() {
+  isQuizMode = !isQuizMode;
+  currentQuizIndex = 0;
+  renderWords(); // Buton metninin değişmesi için sayfayı yeniler
+}
+
+function changeQuizCard(step) {
+  currentQuizIndex = (currentQuizIndex + step + currentFilteredWords.length) % currentFilteredWords.length;
+  renderQuizCard();
 }
 
 function toggleCategory(cat, el) {
@@ -1473,6 +1494,7 @@ function toggleCategory(cat, el) {
       document.querySelector('.filter-btn:first-child').classList.add('active');
     }
   }
+  currentQuizIndex = 0; // Kategori değiştiğinde quiz 1. karta döner
   filterWords();
 }
 
@@ -1481,33 +1503,79 @@ function filterWords() {
   const words = DATA[currentBranch].wortschatz;
   const grid = document.getElementById('wordGrid');
 
-  const filtered = words.filter(w => {
+  currentFilteredWords = words.filter(w => {
     const catOk = activeCategories.has('ALL') || activeCategories.has(w.category);
     const qOk = !q || w.de.toLowerCase().includes(q) || w.tr.toLowerCase().includes(q) || w.en.toLowerCase().includes(q);
     return catOk && qOk;
   });
 
-  if (filtered.length === 0) {
+  if (currentFilteredWords.length === 0) {
+    grid.style.display = 'block';
     grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><div class="icon">🔍</div><p>Sonuç bulunamadı.</p></div>`;
     return;
   }
 
-  grid.innerHTML = filtered.map(w => {
-    const translation = currentLang === 'tr' ? w.tr : currentLang === 'en' ? w.en : '–';
-    const example = w.example;
-    const exTrans = currentLang === 'tr' ? w.ex_tr : currentLang === 'en' ? '' : '';
-    return `
-      <div class="word-card">
-        <div class="word-de">
-          ${w.article !== '–' ? `<span class="word-article">${w.article}</span>` : ''}
-          ${w.de}
+  // Quiz modundaysak kart render et, değilse eski listeyi render et
+  if (isQuizMode) {
+    grid.style.display = 'block'; 
+    renderQuizCard();
+  } else {
+    grid.style.display = 'grid'; 
+    grid.innerHTML = currentFilteredWords.map(w => {
+      const translation = currentLang === 'tr' ? w.tr : currentLang === 'en' ? w.en : '–';
+      const example = w.example;
+      const exTrans = currentLang === 'tr' ? w.ex_tr : currentLang === 'en' ? '' : '';
+      return `
+        <div class="word-card">
+          <div class="word-de">
+            ${w.article !== '–' ? `<span class="word-article">${w.article}</span>` : ''}
+            ${w.de}
+          </div>
+          ${currentLang !== 'de' ? `<div class="word-tr">${translation}</div>` : ''}
+          <div class="word-example">${example}${exTrans ? `<br><span style="color:var(--muted);font-size:0.75rem">${exTrans}</span>` : ''}</div>
+          <span class="word-category">${w.category}</span>
         </div>
-        ${currentLang !== 'de' ? `<div class="word-tr">${translation}</div>` : ''}
-        <div class="word-example">${example}${exTrans ? `<br><span style="color:var(--muted);font-size:0.75rem">${exTrans}</span>` : ''}</div>
-        <span class="word-category">${w.category}</span>
+      `;
+    }).join('');
+  }
+}
+
+function renderQuizCard() {
+  const grid = document.getElementById('wordGrid');
+  const w = currentFilteredWords[currentQuizIndex];
+  const translation = currentLang === 'tr' ? w.tr : currentLang === 'en' ? w.en : '–';
+  const example = w.example;
+  const exTrans = currentLang === 'tr' ? w.ex_tr : currentLang === 'en' ? '' : '';
+
+  grid.innerHTML = `
+    <div class="word-card" style="text-align:center; padding:50px 20px; max-width:600px; margin:0 auto; transform:none; border-color:var(--branch-primary);">
+      <div style="font-size:0.85rem; color:var(--muted); margin-bottom:15px; font-family:'IBM Plex Mono', monospace;">
+        KART ${currentQuizIndex + 1} / ${currentFilteredWords.length} <span style="margin:0 10px">•</span> ${w.category}
       </div>
-    `;
-  }).join('');
+      
+      <h2 style="font-size:2.5rem; color:var(--branch-accent); margin-bottom:20px;">
+        ${w.article !== '–' ? `<span class="word-article" style="font-size:1.2rem; vertical-align:middle;">${w.article}</span> ` : ''}${w.de}
+      </h2>
+
+      <div id="quizAnswer" style="display:none; margin-top:30px; padding-top:20px; border-top:1px solid var(--border);">
+        <div style="font-size:1.5rem; color:var(--text); margin-bottom:15px; font-weight:bold;">${translation}</div>
+        <div style="background:rgba(255,255,255,0.03); border-left:3px solid var(--branch-primary); padding:15px; text-align:left; border-radius:0 8px 8px 0;">
+          <div style="font-style:italic; color:var(--text); line-height:1.5;">${example}</div>
+          ${exTrans ? `<div style="font-size:0.85rem; color:var(--muted); margin-top:8px;">${exTrans}</div>` : ''}
+        </div>
+      </div>
+
+      <button id="showAnswerBtn" onclick="document.getElementById('quizAnswer').style.display='block'; this.style.display='none';" 
+        style="margin-top:20px; padding:12px 24px; background:var(--surface2); color:var(--text); border:1px solid var(--border); border-radius:8px; cursor:pointer; font-family:inherit; font-size:1rem; transition:0.2s;">
+        👀 Anlamını Göster
+      </button>
+
+      <div style="display:flex; justify-content:space-between; gap:15px; margin-top:40px;">
+        <button onclick="changeQuizCard(-1)" style="flex:1; padding:15px; background:var(--surface); border:1px solid var(--border); color:var(--text); border-radius:8px; cursor:pointer; font-weight:bold;">⬅ Önceki</button>
+        <button onclick="changeQuizCard(1)" style="flex:1; padding:15px; background:var(--branch-primary); border:none; color:var(--bg); border-radius:8px; font-weight:bold; cursor:pointer;">Sonraki ➡</button>
+      </div>
+    </div>
+  `;
 }
 
 // ─────────────────────────────────────────────────
