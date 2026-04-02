@@ -3,32 +3,786 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>PflegeAkademy: The Grand Master</title>
+<title>PflegeAkademy | Medizinisches Deutsch</title>
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800;900&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--n-blue:#0ea5e9;--m-green:#10b981;--w-gold:#f59e0b;--d-red:#ef4444;--dark:#0f172a}*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;outline:none}body{font-family:'Poppins',sans-serif;background:radial-gradient(circle at top,#1e293b,#0f172a 65%);margin:0;overflow:hidden;height:100vh;display:flex;justify-content:center}#app{width:100%;max-width:500px;height:100%;display:flex;flex-direction:column;padding:15px;position:relative;background:radial-gradient(circle at top,#fff 0%,#f8fafc 40%,#e2e8f0 100%);transition:.3s;overflow:hidden}#app:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 15% 20%,rgba(14,165,233,.18),transparent 30%),radial-gradient(circle at 85% 0%,rgba(236,72,153,.14),transparent 28%),radial-gradient(circle at 50% 100%,rgba(16,185,129,.12),transparent 24%);pointer-events:none}.top-panel{background:linear-gradient(135deg,#0f172a,#1e293b 65%,#0ea5e9 150%);color:#fff;padding:20px;border-radius:20px;margin-bottom:15px;box-shadow:0 8px 20px rgba(0,0,0,.15);border-bottom:4px solid var(--n-blue);position:relative;z-index:1}.xp-container{background:#334155;height:10px;border-radius:10px;margin:12px 0;overflow:hidden;border:1px solid #475569}#xp-bar{background:linear-gradient(90deg,#38bdf8,#818cf8);height:100%;width:0%;transition:width .5s ease}.stats-row{display:flex;justify-content:space-between;font-weight:700;font-size:13px;color:#cbd5e1}.mini-actions{display:flex;gap:8px;margin-top:12px}.mini-btn{flex:1;border:none;border-radius:12px;padding:10px 8px;font-family:'Poppins';font-weight:800;font-size:12px;cursor:pointer}.ach{background:linear-gradient(135deg,#f59e0b,#f97316);color:#fff}.daily{background:linear-gradient(135deg,#10b981,#14b8a6);color:#fff}.q-card{background:rgba(255,255,255,.9);backdrop-filter:blur(10px);border-radius:25px;padding:25px;box-shadow:0 10px 30px rgba(0,0,0,.05);text-align:center;border:1px solid #e2e8f0;flex:1;display:flex;flex-direction:column;justify-content:center;position:relative;z-index:1}.vaka{background:#f1f5f9;padding:15px;border-radius:15px;border-left:5px solid var(--n-blue);font-size:14px;text-align:left;margin-bottom:20px;color:#475569;font-style:italic;line-height:1.5}.opt{background:#fff;border:2px solid #e2e8f0;border-radius:15px;padding:16px;margin-bottom:10px;width:100%;font-weight:700;cursor:pointer;text-align:left;transition:.2s;font-family:'Poppins';font-size:15px;color:#1e293b}.opt:hover:not(:disabled){border-color:var(--n-blue);background:#f0f9ff;transform:translateY(-2px)}.opt.correct{background:var(--m-green);color:#fff;border-color:var(--m-green)}.opt.wrong{background:var(--d-red);color:#fff;border-color:var(--d-red)}.archive-folder{background:#cbd5e1;padding:10px;border-radius:15px 15px 10px 10px;width:100%;max-width:420px;box-shadow:0 20px 40px rgba(0,0,0,.4)}.archive-content{background:#fff;padding:15px;border-radius:5px;max-height:60vh;overflow-y:auto;border:1px solid #94a3b8}.file-item{display:flex;background:#fff;border:1px solid #e5e7eb;margin-bottom:10px;border-radius:8px;cursor:pointer;align-items:center;transition:.2s}.file-item:hover:not(.locked){transform:scale(1.02);border-color:var(--n-blue)}.file-item.locked{opacity:.5;filter:grayscale(1);cursor:not-allowed}.file-icon{width:50px;height:50px;background:#f8fafc;display:flex;align-items:center;justify-content:center;font-size:24px;border-right:1px dashed #cbd5e1}.file-info{padding:10px;flex:1}.file-info b{display:block;font-size:13px;color:var(--dark)}.file-info span{font-size:11px;color:#64748b}.price-tag{background:#fffbeb;color:#b45309;padding:5px 10px;font-weight:900;font-size:12px;border-radius:6px;margin:10px;border:1px solid #fde68a}#combo-text{position:absolute;top:25%;left:50%;transform:translate(-50%,-50%);font-family:'Montserrat';font-size:50px;color:var(--w-gold);opacity:0;pointer-events:none;z-index:1000;text-shadow:2px 2px 0 #000}.combo-anim{animation:comboPop .8s forwards}.gift-overlay,.overlay{position:fixed;inset:0;background:rgba(15,23,42,.95);display:flex;align-items:center;justify-content:center;padding:20px}.gift-overlay{z-index:10000;background:rgba(15,23,42,.98)}.gift-box{font-size:130px;cursor:pointer;transition:transform .1s;filter:drop-shadow(0 0 30px gold)}.overlay{z-index:9999}.modal-card,.panel-card{background:#fff;padding:24px;border-radius:24px;width:100%;box-shadow:0 20px 50px rgba(0,0,0,.5)}.modal-card{max-width:400px;text-align:center}.panel-card{max-width:430px}.hidden{display:none!important}.primary-btn,.secondary-btn{padding:15px;border-radius:15px;font-weight:800;font-family:'Poppins';cursor:pointer;width:100%;font-size:15px}.primary-btn{background:var(--n-blue);color:#fff;border:none;margin-top:15px}.secondary-btn{background:#fff;color:var(--dark);border:2px solid #cbd5e1;margin-top:10px}.gameover-card{max-width:440px;border:5px solid var(--d-red);background:linear-gradient(180deg,#fff,#fff5f5)}.gameover-badge{display:inline-block;padding:8px 14px;border-radius:999px;background:#fee2e2;color:#b91c1c;font-weight:800;font-size:12px;letter-spacing:.08em}.summary-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:18px 0;text-align:left}.summary-item{background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:14px}.summary-item span{display:block;color:#64748b;font-size:12px;margin-bottom:4px}.summary-item b{color:#0f172a;font-size:18px}.motivation-box{background:#0f172a;color:#fff;border-radius:18px;padding:16px;font-size:13px;line-height:1.6;text-align:left}.section-title{font-family:'Montserrat';margin:0 0 12px;color:var(--dark)}.achievement-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;max-height:50vh;overflow-y:auto}.achievement-item{border-radius:18px;padding:14px;border:1px solid #e2e8f0;background:#f8fafc}.achievement-item.locked{opacity:.55;filter:grayscale(1)}.achievement-item .icon{font-size:28px;margin-bottom:8px}.achievement-item b{display:block;color:#0f172a;font-size:13px}.achievement-item span{display:block;color:#64748b;font-size:11px;margin-top:4px}.daily-card{background:linear-gradient(135deg,#0f172a,#1d4ed8);color:#fff;border-radius:18px;padding:16px;margin-bottom:14px}.daily-list{display:flex;flex-direction:column;gap:10px;max-height:38vh;overflow-y:auto}.task-item{border:1px solid #dbeafe;background:#f8fbff;border-radius:16px;padding:14px}.task-item.done{background:#ecfdf5;border-color:#86efac}.task-head{display:flex;justify-content:space-between;align-items:center;gap:12px;color:#0f172a;font-weight:700;font-size:13px}.task-progress{margin-top:10px;height:8px;background:#dbeafe;border-radius:999px;overflow:hidden}.task-progress div{height:100%;background:linear-gradient(90deg,#10b981,#0ea5e9)}.toast-stack{position:fixed;right:16px;top:16px;z-index:12000;display:flex;flex-direction:column;gap:10px;width:min(320px,calc(100vw - 32px))}.toast{background:#0f172a;color:#fff;border-radius:18px;padding:14px 16px;box-shadow:0 16px 40px rgba(0,0,0,.25);animation:toastIn .35s ease}.toast b{display:block;margin-bottom:4px}.toast small{color:#cbd5e1}.shield-badge{background:var(--w-gold);color:#000;padding:2px 8px;border-radius:5px;font-size:11px;margin-left:5px;vertical-align:middle;box-shadow:0 0 10px rgba(245,158,11,.4)}.danger-vignette:after{content:"";position:absolute;inset:0;box-shadow:inset 0 0 90px rgba(239,68,68,.55);pointer-events:none;animation:pulseDanger .8s ease}.combo-fury{box-shadow:0 0 0 4px rgba(245,158,11,.2),0 0 35px rgba(245,158,11,.35) inset}.float-txt{position:absolute;font-family:'Montserrat';font-weight:900;font-size:24px;pointer-events:none;z-index:9999;animation:floatUp 1s forwards ease-out;text-shadow:2px 2px 0 #fff}@keyframes comboPop{0%{scale:.5;opacity:0}40%{scale:1.2;opacity:1}100%{scale:1;opacity:0;transform:translate(-50%,-100px)}}@keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-12px)}40%,80%{transform:translateX(12px)}}@keyframes pulseDanger{0%{opacity:.2}50%{opacity:1}100%{opacity:.25}}@keyframes floatUp{0%{opacity:1;transform:translateY(0) scale(.8)}100%{opacity:0;transform:translateY(-100px) scale(1.2)}}@keyframes toastIn{from{opacity:0;transform:translateY(-10px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
+:root{--blue:#0ea5e9;--cyan:#67e8f9;--teal:#14b8a6;--green:#10b981;--gold:#f59e0b;--red:#ef4444;--dark:#07111f;--ink:#163047;--paper:#f8fbff;--line:#d9e7f3}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;outline:none}body{margin:0;font-family:'Poppins',sans-serif;background:radial-gradient(circle at top,#1d4ed8 0%,#0f172a 45%,#020617 100%);height:100vh;overflow:hidden;display:flex;justify-content:center}button,input{font-family:inherit}#app-shell{width:100%;max-width:520px;height:100%;position:relative}#app{width:100%;height:100%;display:flex;flex-direction:column;padding:14px;position:relative;background:linear-gradient(180deg,#f6fbff 0%,#eaf6ff 42%,#dceffc 100%);overflow:hidden}#app:before,#app:after{content:"";position:absolute;border-radius:999px;filter:blur(8px);opacity:.45;pointer-events:none}#app:before{width:220px;height:220px;background:radial-gradient(circle,#67e8f9 0%,transparent 70%);top:-60px;right:-70px}#app:after{width:200px;height:200px;background:radial-gradient(circle,#f59e0b 0%,transparent 72%);bottom:-80px;left:-80px}.hidden{display:none!important}.overlay{position:fixed;inset:0;background:rgba(2,6,23,.86);display:flex;align-items:center;justify-content:center;padding:18px;z-index:50}.card,.panel{background:rgba(255,255,255,.95);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.35);box-shadow:0 24px 60px rgba(2,6,23,.35)}.card{width:100%;max-width:430px;border-radius:30px;padding:28px}.panel{width:100%;max-width:460px;border-radius:26px;padding:22px}.hero{position:relative;overflow:hidden;background:linear-gradient(135deg,#031527,#0f3d5d 58%,#10b981 140%);color:#fff}.hero:before{content:"";position:absolute;inset:-20% auto auto -10%;width:220px;height:220px;background:radial-gradient(circle,rgba(103,232,249,.35),transparent 70%);border-radius:50%}.hero h1{font-family:'Montserrat',sans-serif;font-size:31px;line-height:1.02;margin:8px 0 6px}.hero p{font-size:13px;line-height:1.6;color:#d5eef9}.capsule-row{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0 12px}.capsule{padding:8px 12px;border-radius:999px;background:rgba(255,255,255,.12);font-size:11px;font-weight:700;letter-spacing:.04em}.auth-switch{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:16px 0 12px}.field{width:100%;padding:15px 16px;border-radius:16px;border:2px solid #d9e7f3;background:#fff;color:#163047;font-size:14px;margin-top:10px}.field:focus{border-color:var(--blue);box-shadow:0 0 0 4px rgba(14,165,233,.15)}.btn{border:none;border-radius:16px;padding:15px 16px;font-weight:800;cursor:pointer;transition:.2s}.btn:hover{transform:translateY(-1px)}.btn-primary{background:linear-gradient(135deg,var(--blue),#2563eb);color:#fff;box-shadow:0 12px 24px rgba(37,99,235,.28)}.btn-secondary{background:#fff;color:#0f172a;border:2px solid #d5e3ee}.btn-dark{background:#0f172a;color:#fff}.top-bar{position:relative;z-index:1;padding:18px 18px 16px;border-radius:28px;background:linear-gradient(140deg,#031525,#0b2745 58%,#0ea5e9 160%);color:#fff;box-shadow:0 18px 40px rgba(2,6,23,.24)}.top-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}.top-head h2{margin:4px 0 0;font-size:18px}.rank{font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#67e8f9}.top-actions{display:flex;gap:8px}.action{border:none;border-radius:13px;padding:10px 12px;font-size:12px;font-weight:800;cursor:pointer}.market{background:linear-gradient(135deg,#f59e0b,#f97316);color:#fff}.logout{background:#fff;color:#0f172a}.xp-wrap{background:rgba(255,255,255,.12);height:12px;border-radius:999px;margin:14px 0 10px;overflow:hidden;border:1px solid rgba(255,255,255,.14)}#xp-bar{height:100%;width:0;background:linear-gradient(90deg,#67e8f9,#818cf8)}.stats{display:flex;justify-content:space-between;font-size:13px;color:#d7e7f4;font-weight:700;gap:8px}.mini-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}.mini-btn{border:none;border-radius:14px;padding:11px 10px;font-size:12px;font-weight:800;cursor:pointer;color:#fff}.ach-btn{background:linear-gradient(135deg,#f59e0b,#f97316)}.daily-btn{background:linear-gradient(135deg,#10b981,#14b8a6)}.question-card{flex:1;position:relative;z-index:1;margin-top:14px;background:rgba(255,255,255,.82);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.6);border-radius:30px;padding:22px;box-shadow:0 16px 44px rgba(15,23,42,.08);display:flex;flex-direction:column;justify-content:center}.label{display:inline-flex;align-self:center;padding:7px 12px;border-radius:999px;background:#dff4ff;color:#075985;font-size:11px;font-weight:800;letter-spacing:.05em;margin-bottom:14px}.scenario,.sample{padding:14px 16px;border-radius:18px;text-align:left;font-size:14px;line-height:1.6}.scenario{background:#eff8ff;border-left:5px solid var(--blue);color:#164e63}.sample{background:#f0fdf4;border-left:5px solid var(--green);color:#166534;margin:12px 0 18px}.question-word{font-family:'Montserrat',sans-serif;font-size:31px;text-align:center;color:#082f49;margin:0 0 18px}.options{display:grid;gap:10px}.opt{width:100%;padding:16px 14px;border-radius:18px;border:2px solid #dbe9f5;background:#fff;color:#163047;font-weight:700;text-align:left;cursor:pointer;transition:.2s}.opt:hover:not(:disabled){transform:translateY(-2px);border-color:var(--blue);background:#f0f9ff}.opt.correct{background:#10b981;color:#fff;border-color:#10b981}.opt.wrong{background:#ef4444;color:#fff;border-color:#ef4444}.archive{background:#cbd5e1;padding:10px;border-radius:18px 18px 12px 12px;max-width:430px;width:100%}.archive-body{background:#fff;border:1px solid #94a3b8;border-radius:8px;padding:14px;max-height:58vh;overflow:auto}.shop-item{display:flex;align-items:center;background:#fff;border:1px solid #e2e8f0;border-radius:12px;margin-bottom:10px;cursor:pointer;transition:.2s}.shop-item:hover:not(.locked){transform:scale(1.02);border-color:var(--blue)}.shop-item.locked{opacity:.5;filter:grayscale(1);cursor:not-allowed}.shop-icon{width:56px;height:56px;display:flex;align-items:center;justify-content:center;background:#f8fafc;border-right:1px dashed #cbd5e1;font-size:24px}.shop-info{padding:10px;flex:1}.shop-info b{display:block;color:#0f172a;font-size:13px}.shop-info span{font-size:11px;color:#64748b}.price{margin:10px;background:#fff7ed;color:#b45309;padding:6px 10px;border-radius:9px;font-size:12px;font-weight:900;border:1px solid #fed7aa}.summary-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:18px 0}.summary-item{background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:14px}.summary-item span{display:block;color:#64748b;font-size:12px;margin-bottom:5px}.summary-item b{font-size:18px;color:#0f172a}.motivation{background:#0f172a;color:#fff;border-radius:18px;padding:14px;font-size:13px;line-height:1.6;text-align:left}.achievement-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;max-height:52vh;overflow:auto}.achievement{border-radius:18px;padding:14px;background:#f8fafc;border:1px solid #e2e8f0}.achievement.locked{opacity:.48;filter:grayscale(1)}.achievement .icon{font-size:28px;margin-bottom:6px}.achievement b{display:block;font-size:13px;color:#0f172a}.achievement span{display:block;font-size:11px;color:#64748b;margin-top:4px}.daily-hero{background:linear-gradient(135deg,#0f172a,#1d4ed8);color:#fff;border-radius:18px;padding:16px;margin-bottom:12px}.task-list{display:flex;flex-direction:column;gap:10px;max-height:40vh;overflow:auto}.task{border:1px solid #dbeafe;background:#f8fbff;border-radius:16px;padding:14px}.task.done{background:#ecfdf5;border-color:#86efac}.task-head{display:flex;justify-content:space-between;gap:8px;font-size:13px;font-weight:700;color:#0f172a}.task-bar{height:8px;background:#dbeafe;border-radius:999px;overflow:hidden;margin-top:10px}.task-bar div{height:100%;background:linear-gradient(90deg,#10b981,#0ea5e9)}.toast-stack{position:fixed;top:16px;right:16px;display:flex;flex-direction:column;gap:10px;width:min(320px,calc(100vw - 32px));z-index:120}.toast{background:#0f172a;color:#fff;border-radius:18px;padding:14px 16px;box-shadow:0 16px 40px rgba(0,0,0,.22)}.toast b{display:block;margin-bottom:4px}.toast small{color:#cbd5e1}.nurse-wrap{display:flex;gap:16px;align-items:center}.nurse-figure{width:110px;min-width:110px;height:150px;position:relative}.nurse-head{width:58px;height:58px;border-radius:50%;background:#ffd7b5;position:absolute;left:26px;top:18px;box-shadow:0 6px 0 #4338ca inset}.nurse-hat{position:absolute;left:31px;top:6px;width:48px;height:24px;border-radius:12px 12px 6px 6px;background:#fff;border:3px solid #bfdbfe}.nurse-hat:after{content:'+';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#ef4444;font-weight:900}.nurse-body{position:absolute;left:18px;top:72px;width:74px;height:66px;border-radius:24px 24px 18px 18px;background:linear-gradient(180deg,#fff,#dbeafe);border:3px solid #bfdbfe}.nurse-body:before,.nurse-body:after{content:'';position:absolute;background:#dbeafe;border-radius:16px;width:18px;height:54px;top:8px}.nurse-body:before{left:-12px;transform:rotate(18deg)}.nurse-body:after{right:-12px;transform:rotate(-18deg)}.nurse-legs{position:absolute;left:34px;top:132px;width:42px;height:16px}.nurse-legs:before,.nurse-legs:after{content:'';position:absolute;width:10px;height:28px;background:#fff;border-radius:8px}.nurse-legs:before{left:4px}.nurse-legs:after{right:4px}.bubble{flex:1;background:#eff6ff;border:1px solid #bfdbfe;color:#163047;border-radius:22px;padding:16px;font-size:14px;line-height:1.7}.badge-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.speech-note{font-size:12px;color:#64748b;margin-top:8px}.float-txt{position:absolute;font-family:'Montserrat',sans-serif;font-size:24px;font-weight:900;pointer-events:none;z-index:999;animation:floatUp 1s forwards ease-out;text-shadow:2px 2px 0 #fff}.flash-green{background:#ecfdf5!important}.flash-red{background:#fef2f2!important}.shake{animation:shake .4s cubic-bezier(.36,.07,.19,.97) both}.combo-text{position:absolute;top:26%;left:50%;transform:translate(-50%,-50%);font-family:'Montserrat',sans-serif;font-size:48px;color:var(--gold);opacity:0;pointer-events:none;text-shadow:2px 2px 0 #0f172a;z-index:80}.combo-anim{animation:comboPop .8s forwards}.footer-note{font-size:11px;color:#93c5fd;margin-top:10px}@keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-12px)}40%,80%{transform:translateX(12px)}}@keyframes comboPop{0%{scale:.5;opacity:0}40%{scale:1.16;opacity:1}100%{scale:1;opacity:0;transform:translate(-50%,-100px)}}@keyframes floatUp{0%{opacity:1;transform:translateY(0) scale(.8)}100%{opacity:0;transform:translateY(-90px) scale(1.16)}}@media (max-width:560px){.question-word{font-size:28px}.nurse-wrap{flex-direction:column;text-align:center}.nurse-figure{height:142px}}
 </style>
 </head>
 <body>
-<div id="login-overlay" class="overlay"><div class="modal-card"><div style="font-size:70px;">🏥</div><h1 style="font-family:'Montserrat';margin:10px 0 0 0;">PflegeAkademy</h1><p id="auth-mode-label" style="color:#64748b;font-size:13px;margin-bottom:18px;">Yeni hesap oluştur ve vardiyanı başlat.</p><div style="display:flex;gap:8px;margin-bottom:12px;"><button onclick="setAuthMode('register')" id="register-tab" class="secondary-btn" style="margin-top:0;background:#0f172a;color:#fff;border-color:#0f172a;">KAYIT OL</button><button onclick="setAuthMode('login')" id="login-tab" class="secondary-btn" style="margin-top:0;">GİRİŞ YAP</button></div><input type="text" id="auth-fullname" placeholder="Ad Soyad" style="width:100%;padding:16px;border-radius:12px;border:2px solid #e2e8f0;margin-bottom:10px;text-align:center;font-family:'Poppins';"><input type="number" id="auth-age" placeholder="Yaş" min="1" style="width:100%;padding:16px;border-radius:12px;border:2px solid #e2e8f0;margin-bottom:10px;text-align:center;font-family:'Poppins';"><input type="text" id="auth-username" placeholder="Kullanıcı Adı" style="width:100%;padding:16px;border-radius:12px;border:2px solid #e2e8f0;margin-bottom:10px;text-align:center;font-family:'Poppins';"><input type="password" id="auth-password" placeholder="Şifre" style="width:100%;padding:16px;border-radius:12px;border:2px solid #e2e8f0;margin-bottom:10px;text-align:center;font-family:'Poppins';"><div id="auth-msg" style="min-height:18px;color:#ef4444;font-size:12px;"></div><button onclick="showNurse()" id="auth-submit" class="primary-btn">KAYIT OL VE DEVAM ET</button></div></div>
-<div id="nurse-overlay" class="overlay hidden"><div class="modal-card"><h2 style="color:var(--n-blue);font-family:'Montserrat';">Hoş Geldiniz!</h2><p style="font-size:14px;color:#475569;line-height:1.6;text-align:left;">Merhaba meslektaşım! Bu simülasyonda Almanca bilginle hastalarına yardımcı olacaksın.<br><br>🚀 <b>Kombo:</b> Üst üste 5 doğru cevap verirsen sürpriz bir hediye paketi kazanırsın.<br>🛡️ <b>Kalkan:</b> Marketten alacağın kalkanlar, bir hata yaptığında hem canını hem de kombonu korur.<br>📉 <b>Dikkat:</b> Canın biterse en yüksek skorun kayıt altına alınır. Başarımlar ve günlük görevler seni bekliyor.</p><button onclick="startApp()" class="primary-btn" style="background:var(--m-green);">HAZIRIM, BAŞLAYALIM</button></div></div>
-<div id="over-overlay" class="overlay hidden"><div class="modal-card gameover-card"><div class="gameover-badge">OYUN BİTTİ</div><div style="font-size:65px;margin-top:10px;">🚑</div><h2 style="font-family:'Montserrat';color:var(--d-red);margin:10px 0 6px 0;">GÖREV BAŞARISIZ</h2><p id="o-msg" style="color:#7f1d1d;font-size:14px;margin:0 0 10px 0;">Son canını da kaybettin. Nöbet burada bitti ama kariyerin bitmedi.</p><div class="summary-grid"><div class="summary-item"><span>En Yüksek Seviye</span><b id="o-best">0</b></div><div class="summary-item"><span>Mevcut Seviye</span><b id="o-lvl">0</b></div><div class="summary-item"><span>Toplanan Para</span><b id="o-coin">0</b></div><div class="summary-item"><span>Doğru Cevap</span><b id="o-correct">0</b></div></div><div class="motivation-box"><b id="o-rank">-</b> rütbesine kadar ulaştın. <span id="o-quote">Bir sonraki denemede daha uzun kombo kurup marketi daha verimli kullanabilirsin.</span></div><button onclick="restartGame()" class="primary-btn" style="background:var(--dark);">YENİDEN BAŞLAT</button><button onclick="backToMenu()" class="secondary-btn">ANA MENÜYE DÖN</button></div></div>
-<div id="gift-lock" class="gift-overlay hidden"><div onclick="clickGift()" style="text-align:center;user-select:none;"><div id="gift-emoji" class="gift-box">🎁</div><div style="color:white;font-family:'Montserrat';font-size:22px;margin-top:20px;">TIKLA VE PATLAT!</div></div></div>
-<div id="combo-text">KOMBO X2</div><div id="toast-stack" class="toast-stack"></div>
-<div id="app" class="hidden"><div class="top-panel"><div style="display:flex;justify-content:space-between;align-items:center;"><div><div id="rank-name" style="font-size:10px;font-weight:900;color:var(--n-blue);text-transform:uppercase;">STAJYER</div><div id="u-display" style="font-weight:700;">Hemşire</div></div><button onclick="openShop()" style="background:var(--w-gold);color:#1e293b;border:none;padding:10px 15px;border-radius:12px;font-weight:900;cursor:pointer;">🛒 MARKET</button></div><div class="xp-container"><div id="xp-bar"></div></div><div class="stats-row"><span>💰 <span id="c-val">0</span></span><span>LVL <span id="l-val">1</span></span><span>❤️ <span id="h-val">5</span><span id="shield-val" class="shield-badge hidden">🛡️ 0</span></span></div><div class="mini-actions"><button onclick="openAchievements()" class="mini-btn ach">BAŞARIMLAR</button><button onclick="openDailyPanel()" class="mini-btn daily">GÜNLÜKLER</button></div></div><div class="q-card"><div class="vaka" id="v-txt">Vaka yükleniyor...</div><h2 id="q-word" style="margin:0 0 25px 0;font-size:26px;color:var(--dark);">Kelime</h2><div id="opt-grid"></div></div></div>
-<div id="shop-overlay" class="overlay hidden" onclick="toggle('shop-overlay',false)"><div class="archive-folder" onclick="event.stopPropagation()"><div style="padding:5px;font-weight:800;font-size:12px;text-align:center;color:#1e293b;">📋 HASTANE ENVANTER DOSYASI</div><div class="archive-content" id="shop-list"></div><button onclick="toggle('shop-overlay',false)" class="primary-btn" style="background:#64748b;">KAPAT</button></div></div>
-<div id="res-overlay" class="overlay hidden"><div class="modal-card"><div id="res-ico" style="font-size:65px;margin-bottom:10px;">📊</div><h2 id="res-ttl" style="font-family:'Montserrat';">BİLGİ</h2><p id="res-dsc" style="color:#475569;font-size:14px;margin-bottom:20px;"></p><button id="res-btn" class="primary-btn">DEVAM ET</button></div></div>
-<div id="achievements-overlay" class="overlay hidden" onclick="toggle('achievements-overlay',false)"><div class="panel-card" onclick="event.stopPropagation()"><h2 class="section-title">Başarımlar</h2><div id="achievements-list" class="achievement-grid"></div><button onclick="toggle('achievements-overlay',false)" class="primary-btn" style="background:#64748b;">KAPAT</button></div></div>
-<div id="daily-overlay" class="overlay hidden" onclick="toggle('daily-overlay',false)"><div class="panel-card" onclick="event.stopPropagation()"><div class="daily-card"><div style="font-size:13px;opacity:.9;">Günlük kayıt</div><h2 id="daily-streak" style="font-family:'Montserrat';margin:6px 0;">1 Günlük Seri</h2><div id="daily-login-text" style="font-size:13px;color:#dbeafe;">Bugün giriş ödülün hazır.</div></div><h3 class="section-title" style="font-size:18px;">Bugünün Görevleri</h3><div id="daily-list" class="daily-list"></div><button onclick="toggle('daily-overlay',false)" class="primary-btn" style="background:#64748b;">KAPAT</button></div></div>
+<div id="app-shell">
+<div id="login-overlay" class="overlay">
+  <div class="card hero">
+    <div style="position:relative;z-index:1">
+      <div style="font-size:58px">🏥</div>
+      <h1>PflegeAkademy Medizinisches Deutsch</h1>
+      <p id="auth-subtitle">Almanca tibbi terimlerle dolu, gösterişli ve uzun soluklu bir eğitim oyunu.</p>
+      <div class="capsule-row">
+        <div class="capsule">500+ SORU</div>
+        <div class="capsule">TIBBI ALMANCA</div>
+        <div class="capsule">GUNLUK GOREVLER</div>
+      </div>
+      <div class="auth-switch">
+        <button id="register-tab" class="btn btn-secondary" onclick="setAuthMode('register')">KAYIT OL</button>
+        <button id="login-tab" class="btn btn-secondary" onclick="setAuthMode('login')">GIRIS YAP</button>
+      </div>
+      <input id="auth-fullname" class="field" type="text" placeholder="Ad Soyad">
+      <input id="auth-age" class="field" type="number" min="10" max="99" placeholder="Yas">
+      <input id="auth-username" class="field" type="text" placeholder="Kullanici adi">
+      <input id="auth-password" class="field" type="password" placeholder="Sifre">
+      <div id="auth-msg" style="min-height:18px;font-size:12px;margin-top:10px;color:#fecaca"></div>
+      <button id="auth-submit" class="btn btn-primary" onclick="handleAuth()">KAYIT OL VE DEVAM ET</button>
+      <div class="footer-note">Tip: Her kullanicinin ilerlemesi kendi hesabina kaydolur.</div>
+    </div>
+  </div>
+</div>
+<div id="intro-overlay" class="overlay hidden">
+  <div class="card">
+    <h2 style="font-family:'Montserrat',sans-serif;color:#0ea5e9;margin:0 0 10px">Willkommen!</h2>
+    <p style="font-size:14px;color:#475569;line-height:1.7;text-align:left;margin:0">Bu simülasyonda Almanca tibbi terimleri vaka cümleleri içinde görüp Türkçe anlamlarını seçeceksin. Kombolar seni hediye kutularına, görevler ise ekstra ödüllere götürecek.</p>
+    <button class="btn btn-primary" style="margin-top:16px" onclick="startGame()">HAZIRIM, BASLAYALIM</button>
+  </div>
+</div>
+<div id="modal-overlay" class="overlay hidden">
+  <div class="panel">
+    <div id="modal-body"></div>
+    <button id="modal-btn" class="btn btn-primary">DEVAM ET</button>
+  </div>
+</div>
+<div id="shop-overlay" class="overlay hidden" onclick="toggle('shop-overlay',false)">
+  <div class="archive" onclick="event.stopPropagation()">
+    <div style="padding:4px 8px 8px;text-align:center;font-size:12px;font-weight:800;color:#0f172a">HASTANE ENVANTER DOSYASI</div>
+    <div class="archive-body" id="shop-list"></div>
+    <button class="btn btn-secondary" style="margin-top:10px" onclick="toggle('shop-overlay',false)">KAPAT</button>
+  </div>
+</div>
+<div id="achievements-overlay" class="overlay hidden" onclick="toggle('achievements-overlay',false)">
+  <div class="panel" onclick="event.stopPropagation()">
+    <h2 class="section-title">Basarilarim</h2>
+    <div id="achievement-list" class="achievement-grid"></div>
+    <button class="btn btn-secondary" style="margin-top:12px" onclick="toggle('achievements-overlay',false)">KAPAT</button>
+  </div>
+</div>
+<div id="daily-overlay" class="overlay hidden" onclick="toggle('daily-overlay',false)">
+  <div class="panel" onclick="event.stopPropagation()">
+    <div class="daily-hero">
+      <div style="font-size:12px;opacity:.88">Gunluk kayit</div>
+      <h2 id="daily-streak" style="font-family:'Montserrat',sans-serif;margin:6px 0">1 Gunluk Seri</h2>
+      <div id="daily-meta" style="font-size:13px;color:#dbeafe">Bugun odulun hazir.</div>
+    </div>
+    <h3 class="section-title" style="font-size:18px">Bugunun Gorevleri</h3>
+    <div id="task-list" class="task-list"></div>
+    <button class="btn btn-secondary" style="margin-top:12px" onclick="toggle('daily-overlay',false)">KAPAT</button>
+  </div>
+</div>
+<div id="gift-overlay" class="overlay hidden">
+  <div class="card" style="text-align:center">
+    <div id="gift-emoji" class="gift-box" onclick="clickGift()">🎁</div>
+    <h2 style="font-family:'Montserrat',sans-serif;margin:10px 0 4px">TIKLA VE PATLAT!</h2>
+    <p style="font-size:13px;color:#64748b;margin:0">Hediye kutusunu acmak icin kutuya tikla.</p>
+  </div>
+</div>
+<div id="game-over" class="overlay hidden">
+  <div class="card gameover-card">
+    <div class="gameover-badge">OYUN BITTI</div>
+    <div style="font-size:64px;margin-top:10px">🚑</div>
+    <h2 style="font-family:'Montserrat',sans-serif;color:var(--red);margin:10px 0 6px">GOREV BASARISIZ</h2>
+    <p id="game-over-msg" style="font-size:14px;color:#7f1d1d;margin:0 0 10px">Bu vardiya kapandi ama bir sonraki deneme seni bekliyor.</p>
+    <div class="summary-grid">
+      <div class="summary-item"><span>En iyi seviye</span><b id="summary-best">0</b></div>
+      <div class="summary-item"><span>Mevcut seviye</span><b id="summary-level">0</b></div>
+      <div class="summary-item"><span>Toplanan para</span><b id="summary-coins">0</b></div>
+      <div class="summary-item"><span>Dogru cevap</span><b id="summary-correct">0</b></div>
+    </div>
+    <div id="game-over-rank" class="motivation"></div>
+    <button class="btn btn-dark" onclick="restartGame()">YENIDEN BASLAT</button>
+    <button class="btn btn-secondary" onclick="logoutFromGame()">CIKIS YAP</button>
+  </div>
+</div>
+<div id="combo-text" class="combo-text">KOMBO X2</div>
+<div id="toast-stack" class="toast-stack"></div>
+<div id="app" class="hidden">
+  <div class="top-bar" id="top-bar">
+    <div class="top-head">
+      <div>
+        <div id="rank-name" class="rank">STAJYER HEMSIRE</div>
+        <h2 id="user-display">Oyuncu</h2>
+      </div>
+      <div class="top-actions">
+        <button class="action market" onclick="openShop()">MARKET</button>
+        <button class="action logout" onclick="logoutFromGame()">CIKIS</button>
+      </div>
+    </div>
+    <div class="xp-wrap"><div id="xp-bar"></div></div>
+    <div class="stats">
+      <span>💰 <span id="coin-val">0</span></span>
+      <span>LVL <span id="level-val">1</span></span>
+      <span>❤️ <span id="life-val">5</span> <span id="shield-val" class="hidden">🛡️ 0</span></span>
+    </div>
+    <div class="mini-grid">
+      <button class="mini-btn ach-btn" onclick="openAchievements()">BASARILARIM</button>
+      <button class="mini-btn daily-btn" onclick="openDailyPanel()">GUNLUKLER</button>
+    </div>
+  </div>
+  <div id="question-card" class="question-card">
+    <div class="label">ALMANCA VAKA CUMLESI</div>
+    <div id="scenario-text" class="scenario">Die Szene wird geladen...</div>
+    <div id="sample-text" class="sample">Beispiel wird geladen...</div>
+    <h2 id="question-word" class="question-word">Thermometer</h2>
+    <div id="options" class="options"></div>
+  </div>
+</div>
 <script>
-const DATA=[{de:"Blutdruck",tr:"Tansiyon",vaka:"Hastanın tansiyonu çok yüksek görünüyor."},{de:"Spritze",tr:"Şırınga",vaka:"İlacı şırıngaya dikkatlice çekin."},{de:"Verband",tr:"Sargı / Pansuman",vaka:"Yaranın pansumanı kirlenmiş, değiştirelim."},{de:"Schmerzmittel",tr:"Ağrı kesici",vaka:"Hasta ağrısı olduğunu söylüyor, ağrı kesici getirin."},{de:"Rollstuhl",tr:"Tekerlekli sandalye",vaka:"Hasta yürüyemiyor, bir tekerlekli sandalye lazım."},{de:"Notaufnahme",tr:"Acil servis",vaka:"Durumu kritik, hastayı acil servise götürün."},{de:"Thermometer",tr:"Ateş ölçer",vaka:"Ateş ölçer ile hastanın ateşini kontrol et."}];
-const SHOP_ITEMS=[{id:'h1',n:'Hızlı Serum',d:'+1 Can İadesi',p:250,l:1,i:'💉'},{id:'h2',n:'Vitamin Paketi',d:'+2 Can İadesi',p:450,l:3,i:'💊'},{id:'h3',n:'Nöbet İzni',d:'+5 Can İadesi',p:1000,l:10,i:'🛌'},{id:'s1',n:'Steril Maske',d:'1 Hata & Kombo Koruması',p:600,l:2,i:'😷'},{id:'s2',n:'Çelik Eldiven',d:'2 Hata & Kombo Koruması',p:1100,l:5,i:'🧤'},{id:'g1',n:'Şans Kutusu',d:'Hediye Paketi Açar',p:350,l:2,i:'🎁'},{id:'x1',n:'Tıbbi Sözlük',d:'+1200 XP Puanı',p:800,l:4,i:'📒'},{id:'x2',n:'Seminer Bileti',d:'+3000 XP Puanı',p:2000,l:8,i:'📚'},{id:'x3',n:'Lisans Belgesi',d:'+6000 XP Puanı',p:4000,l:15,i:'📜'},{id:'x4',n:'Başhekim Onayı',d:'+12000 XP Puanı',p:7000,l:20,i:'🧾'}];
-const REWARDS=[{i:'💰',t:'Maaş Primi',d:'+250 Para kazandın!',fn:()=>addCoins(250)},{i:'💰',t:'Ek Mesai',d:'+400 Para kazandın!',fn:()=>addCoins(400)},{i:'💎',t:'İkramiye',d:'+1000 Para kazandın!',fn:()=>addCoins(1000)},{i:'📉',t:'Tıbbi Hata',d:'-150 Para kesildi!',fn:()=>spendCoinsPenalty(150)},{i:'💸',t:'Kantin Borcu',d:'-50 Para gitti!',fn:()=>spendCoinsPenalty(50)},{i:'📉',t:'Cihaz Arızası',d:'-300 Para tamire gitti!',fn:()=>spendCoinsPenalty(300)},{i:'💉',t:'Vitamin',d:'+1 Can kazandın!',fn:()=>st.lives+=1},{i:'🚑',t:'İlk Yardım',d:'+2 Can kazandın!',fn:()=>st.lives+=2},{i:'🏥',t:'Dinlenme',d:'Canın fullendi (+5)!',fn:()=>st.lives+=5},{i:'🤒',t:'Grip Oldun',d:'-1 Can gitti!',fn:()=>st.lives--},{i:'🤕',t:'İş Kazası',d:'-2 Can gitti!',fn:()=>st.lives-=2},{i:'🎓',t:'Eğitim',d:'+200 XP kazandın!',fn:()=>st.xp+=200},{i:'📚',t:'Kitap Oku',d:'+400 XP kazandın!',fn:()=>st.xp+=400},{i:'🔬',t:'Laboratuvar',d:'+600 XP kazandın!',fn:()=>st.xp+=600},{i:'📋',t:'Evrak Kaybı',d:'-150 XP silindi!',fn:()=>st.xp=Math.max(0,st.xp-150)},{i:'🛡️',t:'Yüz Siperliği',d:'+1 Kalkan kazandın!',fn:()=>st.shields++},{i:'🛡️',t:'Tam Zırh',d:'+2 Kalkan kazandın!',fn:()=>st.shields+=2},{i:'☕',t:'Kahve Molası',d:'+50 Para kazandın.',fn:()=>addCoins(50)},{i:'🎁',t:'Ekstra Kutu',d:'Bir hediye daha!',fn:()=>queue.push('gift')},{i:'🧹',t:'Temizlik',d:'+100 XP kazandın.',fn:()=>st.xp+=100},{i:'😡',t:'Şikayet',d:'-200 Para cezası!',fn:()=>spendCoinsPenalty(200)},{i:'🏆',t:'Ayın Elemanı',d:'+750 Para ödülü!',fn:()=>addCoins(750)},{i:'📞',t:'Mavi Kod',d:'+300 XP kazandın.',fn:()=>st.xp+=300},{i:'🚗',t:'Park Cezası',d:'-100 Para gitti.',fn:()=>spendCoinsPenalty(100)},{i:'🍰',t:'Pasta Günü',d:'+500 XP kazandın.',fn:()=>st.xp+=500},{i:'😴',t:'Nöbette Uyku',d:'-1 Can, -100 XP',fn:()=>{st.lives--;st.xp=Math.max(0,st.xp-100)}},{i:'✨',t:'Süper Vizit',d:'+1 Can, +200 Para',fn:()=>{st.lives++;addCoins(200)}},{i:'📝',t:'Sınavı Geçtin',d:'+450 XP kazandın.',fn:()=>st.xp+=450},{i:'⚖️',t:'Nötr Olay',d:'Hiçbir şey değişmedi.',fn:()=>{}},{i:'🧼',t:'Sterilizasyon',d:'+1 Kalkan kazandın.',fn:()=>st.shields++}];const RANKS=['Stajyer Hemşire','Asistan Hemşire','Uzman Hemşire','Servis Şefi','Başhemşire','Hastane Müdürü'];const ACCOUNTS_KEY='pflege_accounts_v1';let PROFILE_KEY='pflege_profile_v2_guest';let authMode='register';let currentUser=null;const ACHIEVEMENTS=[{id:'first_steps',icon:'🩺',title:'İlk Temas',desc:'İlk doğru cevabı ver.',check:()=>st.correct>=1},{id:'combo_5',icon:'🔥',title:'Seri Uzmanı',desc:'5 doğru kombo yakala.',check:()=>st.bestStreak>=5},{id:'coin_1000',icon:'💰',title:'Biriken Bütçe',desc:'1000 coin biriktir.',check:()=>st.coins>=1000||profile.totalCoinsEarned>=1000},{id:'shield_stack',icon:'🛡️',title:'Savunma Hattı',desc:'3 kalkan biriktir.',check:()=>st.shields>=3},{id:'level_5',icon:'🎖️',title:'Terfi Geldi',desc:'Seviye 5 ol.',check:()=>st.level>=5||profile.bestLevel>=5},{id:'gift_opened',icon:'🎁',title:'Sürpriz Avcısı',desc:'İlk hediye paketini aç.',check:()=>st.giftsOpened>=1||profile.giftsOpened>=1},{id:'daily_loyal',icon:'📅',title:'Sadık Görevli',desc:'3 günlük giriş serisine ulaş.',check:()=>profile.loginStreak>=3},{id:'veteran',icon:'👑',title:'Vardiya Efsanesi',desc:'Toplam 50 doğru cevap ver.',check:()=>profile.lifetimeCorrect>=50}];const DAILY_TASK_TEMPLATES=[{id:'correct5',title:'5 doğru cevap ver',target:5,reward:{coins:180},measure:()=>profile.daily.progress.correct||0},{id:'coins250',title:'250 coin kazan',target:250,reward:{xp:350},measure:()=>profile.daily.progress.coinsEarned||0},{id:'gift1',title:'1 hediye paketi aç',target:1,reward:{shields:1},measure:()=>profile.daily.progress.gifts||0},{id:'combo3',title:'3 kombo yap',target:3,reward:{coins:120,xp:120},measure:()=>profile.daily.progress.combo||0}];const DEFAULT_PROFILE=()=>({lastName:'',age:'',bestLevel:Number(localStorage.getItem('best_pf')||0),loginStreak:0,lastLoginDate:'',totalCoinsEarned:0,lifetimeCorrect:0,giftsOpened:0,achievements:[],daysPlayed:0,daily:{date:'',progress:{},claimedLogin:false,completed:[]}});const DEFAULT_STATE=()=>({xp:0,coins:200,lives:5,level:1,streak:0,bestStreak:0,shields:0,name:'',busy:false,giftClicks:0,correct:0,gameOver:false,giftsOpened:0});let st=DEFAULT_STATE(),queue=[],profile=loadProfile(),audioCtx;function loadAccounts(){try{return JSON.parse(localStorage.getItem(ACCOUNTS_KEY)||'{}')}catch(err){return {}}}function saveAccounts(accounts){localStorage.setItem(ACCOUNTS_KEY,JSON.stringify(accounts))}async function hashPassword(password){if(!(window.crypto&&crypto.subtle)){return btoa(unescape(encodeURIComponent(password)))}const data=new TextEncoder().encode(password);const hash=await crypto.subtle.digest('SHA-256',data);return Array.from(new Uint8Array(hash)).map(b=>b.toString(16).padStart(2,'0')).join('')}function getProfileKey(username){return 'pflege_profile_'+username}function loadProfile(){try{const raw=localStorage.getItem(PROFILE_KEY);return raw?{...DEFAULT_PROFILE(),...JSON.parse(raw)}:DEFAULT_PROFILE()}catch(err){return DEFAULT_PROFILE()}}function saveProfile(){localStorage.setItem(PROFILE_KEY,JSON.stringify(profile));localStorage.setItem('best_pf',String(profile.bestLevel||0))}function todayKey(){return new Date().toLocaleDateString('en-CA')}function dayDiff(a,b){if(!a||!b)return 999;const first=new Date(a+'T00:00:00');const second=new Date(b+'T00:00:00');return Math.round((second-first)/86400000)}function resetDailyIfNeeded(){const today=todayKey();if(profile.daily.date!==today){profile.daily={date:today,progress:{correct:0,coinsEarned:0,gifts:0,combo:0},claimedLogin:false,completed:[]}}}function initProfileUI(){document.getElementById('auth-fullname').value=profile.lastName||'';document.getElementById('auth-age').value=profile.age||'';document.getElementById('auth-username').value=currentUser?.username||'';renderAchievements();renderDaily();setAuthMode(authMode)}function initAudio(){if(!audioCtx){const AudioClass=window.AudioContext||window.webkitAudioContext;if(AudioClass)audioCtx=new AudioClass()}if(audioCtx&&audioCtx.state==='suspended')audioCtx.resume()}function playSound(type){if(!audioCtx)return;const now=audioCtx.currentTime;const settings={correct:[[740,.08,'sine'],[980,.12,'triangle']],wrong:[[240,.16,'sawtooth']],level:[[520,.1,'triangle'],[760,.14,'triangle'],[1040,.18,'sine']],gift:[[660,.08,'sine'],[880,.1,'triangle'],[1320,.18,'sine']],unlock:[[500,.08,'square'],[840,.14,'triangle']],over:[[220,.22,'sawtooth'],[140,.26,'sine']]}[type];if(!settings)return;settings.forEach((cfg,index)=>{const[freq,duration,wave]=cfg;const osc=audioCtx.createOscillator();const gain=audioCtx.createGain();osc.type=wave;osc.frequency.setValueAtTime(freq,now+index*.04);gain.gain.setValueAtTime(.0001,now+index*.04);gain.gain.exponentialRampToValueAtTime(.08,now+index*.04+.01);gain.gain.exponentialRampToValueAtTime(.0001,now+index*.04+duration);osc.connect(gain);gain.connect(audioCtx.destination);osc.start(now+index*.04);osc.stop(now+index*.04+duration)})}function toast(title,text,color='#0f172a'){const stack=document.getElementById('toast-stack');const el=document.createElement('div');el.className='toast';el.style.borderLeft=`5px solid ${color}`;el.innerHTML=`<b>${title}</b><small>${text}</small>`;stack.appendChild(el);setTimeout(()=>el.remove(),3200)}function addCoins(amount){st.coins+=amount;profile.totalCoinsEarned+=amount;profile.daily.progress.coinsEarned=(profile.daily.progress.coinsEarned||0)+amount}function spendCoinsPenalty(amount){st.coins=Math.max(0,st.coins-amount)}function grantDailyReward(reward){if(reward.coins)addCoins(reward.coins);if(reward.xp)st.xp+=reward.xp;if(reward.shields)st.shields+=reward.shields;if(reward.lives)st.lives+=reward.lives}function applyLoginReward(){resetDailyIfNeeded();const today=todayKey();const diff=dayDiff(profile.lastLoginDate,today);if(profile.lastLoginDate!==today){profile.loginStreak=diff===1?profile.loginStreak+1:1;profile.lastLoginDate=today;profile.daysPlayed+=1;profile.daily.claimedLogin=false}if(!profile.daily.claimedLogin){profile.daily.claimedLogin=true;addCoins(150);toast('Günlük Giriş Ödülü',`+150 coin kazandın. Seri: ${profile.loginStreak} gün`,'#10b981');playSound('unlock')}saveProfile()}function activeDailyTasks(){const daySeed=Number(todayKey().replaceAll('-',''));const rotated=[...DAILY_TASK_TEMPLATES].sort((a,b)=>((daySeed+a.id.length)%7)-((daySeed+b.id.length)%7));return rotated.slice(0,3)}function renderAchievements(){const list=document.getElementById('achievements-list');if(!list)return;list.innerHTML='';ACHIEVEMENTS.forEach(item=>{const unlocked=profile.achievements.includes(item.id);const card=document.createElement('div');card.className=`achievement-item ${unlocked?'':'locked'}`;card.innerHTML=`<div class="icon">${item.icon}</div><b>${item.title}</b><span>${item.desc}</span>`;list.appendChild(card)})}function renderDaily(){const streakEl=document.getElementById('daily-streak');const loginText=document.getElementById('daily-login-text');const list=document.getElementById('daily-list');if(!streakEl||!loginText||!list)return;streakEl.innerText=`${Math.max(profile.loginStreak,1)} Günlük Seri`;loginText.innerText=`Toplam giriş: ${profile.daysPlayed} gün | Bugün: ${profile.daily.claimedLogin?'ödül alındı':'ödül hazır'}`;list.innerHTML='';activeDailyTasks().forEach(task=>{const value=Math.min(task.measure(),task.target);const done=profile.daily.completed.includes(task.id);const card=document.createElement('div');card.className=`task-item ${done?'done':''}`;card.innerHTML=`<div class="task-head"><span>${task.title}</span><span>${done?'Tamamlandı':`${value}/${task.target}`}</span></div><div class="task-progress"><div style="width:${value/task.target*100}%"></div></div>`;list.appendChild(card)})}function checkDailyTasks(){activeDailyTasks().forEach(task=>{if(profile.daily.completed.includes(task.id))return;if(task.measure()>=task.target){profile.daily.completed.push(task.id);grantDailyReward(task.reward);toast('Günlük Görev Tamamlandı',`${task.title} görevini bitirdin.`,'#0ea5e9');playSound('unlock')}});saveProfile();renderDaily()}function checkAchievements(){let changed=false;ACHIEVEMENTS.forEach(item=>{if(!profile.achievements.includes(item.id)&&item.check()){profile.achievements.push(item.id);changed=true;toast(`Başarım Açıldı ${item.icon}`,item.title,'#f59e0b');playSound('unlock');confetti({particleCount:70,spread:70,origin:{y:.6}})}});if(changed){renderAchievements();saveProfile()}}function buildGameOverMessage(){if(st.correct>=15)return 'Harika direndin. Bir sonraki denemede bu performansı rahatlıkla zirveye taşıyabilirsin.';if(st.level>=5)return 'Güçlü bir koşuydu. Biraz daha kalkan ve market kullanımıyla çok daha ileri gidebilirsin.';return 'Başlangıç zor olabilir. Birkaç doğru seriyle ritmi yakaladığında oyun çok daha akıcı olacak.'}
-function resetState(keepName=true){const prevName=st.name;st=DEFAULT_STATE();if(keepName)st.name=prevName;queue=[];document.getElementById('gift-emoji').style.transform='scale(1)'}function setAuthMessage(message,color='#ef4444'){const el=document.getElementById('auth-msg');el.innerText=message||'';el.style.color=color}function setAuthMode(mode){authMode=mode;const register=mode==='register';document.getElementById('auth-mode-label').innerText=register?'Yeni hesap oluştur ve vardiyanı başlat.':'Kullanıcı adı ve şifrenle giriş yap.';document.getElementById('auth-submit').innerText=register?'KAYIT OL VE DEVAM ET':'GİRİŞ YAP';document.getElementById('auth-fullname').classList.toggle('hidden',!register);document.getElementById('auth-age').classList.toggle('hidden',!register);document.getElementById('register-tab').style.background=register?'#0f172a':'#fff';document.getElementById('register-tab').style.color=register?'#fff':'#0f172a';document.getElementById('register-tab').style.borderColor='#0f172a';document.getElementById('login-tab').style.background=!register?'#0f172a':'#fff';document.getElementById('login-tab').style.color=!register?'#fff':'#0f172a';document.getElementById('login-tab').style.borderColor='#0f172a';setAuthMessage('')}async function showNurse(){initAudio();const fullName=document.getElementById('auth-fullname').value.trim();const age=document.getElementById('auth-age').value.trim();const username=document.getElementById('auth-username').value.trim().toLowerCase();const password=document.getElementById('auth-password').value;const accounts=loadAccounts();if(!username||!password){setAuthMessage('Kullanıcı adı ve şifre zorunlu.');return}if(authMode==='register'){if(!fullName||!age){setAuthMessage('Ad soyad ve yaş alanlarını doldur.');return}if(accounts[username]){setAuthMessage('Bu kullanıcı adı zaten kayıtlı.');return}accounts[username]={username,fullName,age,passwordHash:await hashPassword(password)};saveAccounts(accounts);PROFILE_KEY=getProfileKey(username);profile=DEFAULT_PROFILE();profile.lastName=fullName;profile.age=age;currentUser=accounts[username];st.name=fullName;saveProfile();setAuthMessage('Kayıt tamamlandı. Giriş yapıldı.','#10b981')}else{const account=accounts[username];if(!account){setAuthMessage('Kullanıcı bulunamadı.');return}if(account.passwordHash!==await hashPassword(password)){setAuthMessage('Şifre hatalı.');return}PROFILE_KEY=getProfileKey(username);profile=loadProfile();profile.lastName=profile.lastName||account.fullName;profile.age=profile.age||account.age;currentUser=account;st.name=profile.lastName||account.fullName;saveProfile();setAuthMessage('Giriş başarılı.','#10b981')}document.getElementById('u-display').innerText=st.name;toggle('login-overlay',false);toggle('nurse-overlay',true)}function startApp(){initAudio();applyLoginReward();st.gameOver=false;profile.lastName=st.name||profile.lastName;profile.age=profile.age||currentUser?.age||'';saveProfile();toggle('login-overlay',false);toggle('nurse-overlay',false);toggle('over-overlay',false);toggle('app',true);upUI();renderAchievements();renderDaily();next()}function upUI(){document.getElementById('c-val').innerText=st.coins;document.getElementById('h-val').innerText=st.lives;document.getElementById('l-val').innerText=st.level;const rIdx=Math.min(Math.floor((st.level-1)/3),RANKS.length-1);document.getElementById('rank-name').innerText=RANKS[rIdx];const sb=document.getElementById('shield-val');if(st.shields>0){sb.innerText=`🛡️ ${st.shields}`;sb.classList.remove('hidden')}else sb.classList.add('hidden');const app=document.getElementById('app');app.classList.toggle('danger-vignette',st.lives<=2&&!st.gameOver);app.classList.toggle('combo-fury',st.streak>=3);const nx=st.level*400;document.getElementById('xp-bar').style.width=Math.min(100,st.xp/nx*100)+'%';if(st.xp>=nx){st.level++;st.xp=0;addCoins(st.level*100);queue.push('levelup')}profile.bestLevel=Math.max(profile.bestLevel,st.level);saveProfile()}function processQueue(){upUI();checkAchievements();checkDailyTasks();if(queue.length>0){const action=queue.shift();if(action==='levelup')showLevelUp();else if(action==='gift')toggle('gift-lock',true)}else{st.busy=false;next()}saveProfile()}function showLevelUp(){playSound('level');document.getElementById('res-ico').innerText='🎖️';document.getElementById('res-ttl').innerText='LEVEL ATLADIN!';document.getElementById('res-dsc').innerHTML=`Tebrikler ${st.name}, artık <b>Seviye ${st.level}</b> oldun! Terfi aldın ve maaşın yattı.`;document.getElementById('res-btn').onclick=()=>{toggle('res-overlay',false);processQueue()};toggle('res-overlay',true);confetti()}function gameOver(){st.gameOver=true;profile.bestLevel=Math.max(profile.bestLevel,st.level);document.getElementById('o-best').innerText=profile.bestLevel;document.getElementById('o-lvl').innerText=st.level;document.getElementById('o-coin').innerText=st.coins;document.getElementById('o-correct').innerText=st.correct;document.getElementById('o-rank').innerText=document.getElementById('rank-name').innerText;document.getElementById('o-msg').innerText=`${st.name}, son canını kaybettin. Bu vardiya kapandı.`;document.getElementById('o-quote').innerText=buildGameOverMessage();toggle('over-overlay',true);playSound('over');saveProfile()}function restartGame(){resetState(true);document.getElementById('u-display').innerText=st.name||'Hemşire';startApp()}function backToMenu(){resetState(false);document.getElementById('auth-password').value='';document.getElementById('auth-fullname').value=profile.lastName||currentUser?.fullName||'';document.getElementById('auth-age').value=profile.age||currentUser?.age||'';document.getElementById('auth-username').value=currentUser?.username||'';toggle('app',false);toggle('over-overlay',false);toggle('nurse-overlay',false);toggle('login-overlay',true);setAuthMode('login')} function triggerEff(type){const app=document.getElementById('app');app.classList.remove('shake-eff','flash-red','flash-green');void app.offsetWidth;if(type==='correct')app.classList.add('flash-green');else app.classList.add('shake-eff','flash-red');setTimeout(()=>app.classList.remove('shake-eff','flash-red','flash-green'),500)}function spawnText(e,txt,col){const s=document.createElement('span');s.className='float-txt';s.innerText=txt;s.style.color=col;s.style.left=e.clientX+'px';s.style.top=e.clientY-20+'px';document.body.appendChild(s);setTimeout(()=>s.remove(),1000)}function next(){if(st.gameOver)return;const q=DATA[Math.floor(Math.random()*DATA.length)];document.getElementById('v-txt').innerText=q.vaka;document.getElementById('q-word').innerText=q.de;const opts=[q.tr,...DATA.filter(d=>d.tr!==q.tr).map(d=>d.tr)].slice(0,4).sort(()=>Math.random()-.5);const grid=document.getElementById('opt-grid');grid.innerHTML='';opts.forEach(o=>{const b=document.createElement('button');b.className='opt';b.innerText=o;b.onclick=e=>{if(st.busy)return;initAudio();st.busy=true;if(o===q.tr){b.classList.add('correct');triggerEff('correct');playSound('correct');st.xp+=80;addCoins(25);st.streak++;st.bestStreak=Math.max(st.bestStreak,st.streak);st.correct++;profile.lifetimeCorrect+=1;profile.daily.progress.correct=(profile.daily.progress.correct||0)+1;if(st.streak>=3)profile.daily.progress.combo=Math.max(profile.daily.progress.combo||0,st.streak);spawnText(e,'+80 XP','#10b981');showCombo(st.streak);if(st.streak>=5){st.streak=0;queue.push('gift')}}else{b.classList.add('wrong');triggerEff('wrong');playSound('wrong');if(st.shields>0){st.shields--;spawnText(e,'🛡️ KALKAN KORUDU','#f59e0b')}else{st.lives--;st.streak=0;spawnText(e,'-1 CAN','#ef4444')}if(st.lives<=0){gameOver();return}}setTimeout(processQueue,800)};grid.appendChild(b)})}function showCombo(c){if(c<2)return;const ct=document.getElementById('combo-text');ct.innerText=`KOMBO X${c}`;ct.classList.remove('combo-anim');void ct.offsetWidth;ct.classList.add('combo-anim')}function openShop(){const list=document.getElementById('shop-list');list.innerHTML='';SHOP_ITEMS.forEach(it=>{const locked=st.level<it.l;const div=document.createElement('div');div.className=`file-item ${locked?'locked':''}`;div.innerHTML=`<div class="file-icon">${locked?'🔒':it.i}</div><div class="file-info"><b>${it.n}</b><span>${locked?'Seviye '+it.l+' kilidi':it.d}</span></div><div class="price-tag">${it.p} 💰</div>`;if(!locked){div.onclick=()=>{if(st.coins>=it.p){st.coins-=it.p;if(it.id==='h1')st.lives++;if(it.id==='h2')st.lives+=2;if(it.id==='h3')st.lives+=5;if(it.id==='s1')st.shields++;if(it.id==='s2')st.shields+=2;if(it.id==='x1')st.xp+=1200;if(it.id==='x2')st.xp+=3000;if(it.id==='x3')st.xp+=6000;if(it.id==='x4')st.xp+=12000;if(it.id==='g1'){queue.push('gift');toggle('shop-overlay',false);processQueue();return}upUI();checkAchievements();saveProfile();toast('Market','Ekipman envantere eklendi.','#f59e0b')}else toast('Market','Yetersiz bütçe!','#ef4444')}}list.appendChild(div)});toggle('shop-overlay',true)}function clickGift(){st.giftClicks++;document.getElementById('gift-emoji').style.transform=`scale(${1+st.giftClicks*.3})`;if(st.giftClicks>=6){st.giftClicks=0;st.giftsOpened++;profile.giftsOpened+=1;profile.daily.progress.gifts=(profile.daily.progress.gifts||0)+1;document.getElementById('gift-emoji').style.transform='scale(1)';const r=REWARDS[Math.floor(Math.random()*REWARDS.length)];r.fn();toggle('gift-lock',false);document.getElementById('res-ico').innerText=r.i;document.getElementById('res-ttl').innerText=r.t;document.getElementById('res-dsc').innerText=r.d;document.getElementById('res-btn').onclick=()=>{toggle('res-overlay',false);processQueue()};toggle('res-overlay',true);playSound('gift');confetti()}}function openAchievements(){renderAchievements();toggle('achievements-overlay',true)}function openDailyPanel(){renderDaily();toggle('daily-overlay',true)}function toggle(id,show){document.getElementById(id).classList.toggle('hidden',!show)}resetDailyIfNeeded();initProfileUI();
+const BASE_TERMS = [
+  { de:'Blutdruck', tr:'Tansiyon' },
+  { de:'Spritze', tr:'Siriga' },
+  { de:'Verband', tr:'Sargi / pansuman' },
+  { de:'Schmerzmittel', tr:'Agri kesici' },
+  { de:'Rollstuhl', tr:'Tekerlekli sandalye' },
+  { de:'Notaufnahme', tr:'Acil servis' },
+  { de:'Thermometer', tr:'Ates olcer' },
+  { de:'Krankenhaus', tr:'Hastane' },
+  { de:'Pflegekraft', tr:'Bakim personeli' },
+  { de:'Arzt', tr:'Doktor' },
+  { de:'Krankenschwester', tr:'Hemsire' },
+  { de:'Puls', tr:'Nabiz' },
+  { de:'Atmung', tr:'Solunum' },
+  { de:'Fieber', tr:'Ates' },
+  { de:'Wunde', tr:'Yara' },
+  { de:'Infusion', tr:'Serum' },
+  { de:'Tablette', tr:'Tablet ilac' },
+  { de:'Operation', tr:'Ameliyat' },
+  { de:'Untersuchung', tr:'Muayene' },
+  { de:'Diagnose', tr:'Teshis' },
+  { de:'Behandlung', tr:'Tedavi' },
+  { de:'Krampf', tr:'Kramp' },
+  { de:'Husten', tr:'Oksuruk' },
+  { de:'Erbrechen', tr:'Kusma' },
+  { de:'Uebelkeit', tr:'Mide bulantisi' },
+  { de:'Schwindel', tr:'Bas donmesi' },
+  { de:'Allergie', tr:'Alerji' },
+  { de:'Kruecke', tr:'Koltuk degnegi' },
+  { de:'Katheter', tr:'Kateter' },
+  { de:'Kanuele', tr:'Kanul' },
+  { de:'Blutzucker', tr:'Kan sekeri' },
+  { de:'Blutprobe', tr:'Kan ornegi' },
+  { de:'Labor', tr:'Laboratuvar' },
+  { de:'Lunge', tr:'Akciger' },
+  { de:'Herz', tr:'Kalp' },
+  { de:'Leber', tr:'Karaciger' },
+  { de:'Niere', tr:'Bobrek' },
+  { de:'Magen', tr:'Mide' },
+  { de:'Darm', tr:'Bagirsak' },
+  { de:'Kopfschmerzen', tr:'Bas agrisi' },
+  { de:'Rueckenschmerzen', tr:'Sirt agrisi' },
+  { de:'Hals', tr:'Bogaz' },
+  { de:'Lagerung', tr:'Pozisyonlama' },
+  { de:'Pflegeplan', tr:'Bakim plani' },
+  { de:'Desinfektion', tr:'Dezenfeksiyon' },
+  { de:'Sterilisation', tr:'Sterilizasyon' },
+  { de:'Maske', tr:'Maske' },
+  { de:'Handschuhe', tr:'Eldiven' },
+  { de:'Beatmung', tr:'Solunum destegi' },
+  { de:'Sauerstoff', tr:'Oksijen' },
+  { de:'Rehabilitation', tr:'Rehabilitasyon' },
+  { de:'Entlassung', tr:'Taburcu' },
+  { de:'Aufnahme', tr:'Kabul' },
+  { de:'Station', tr:'Servis' },
+  { de:'Intensivstation', tr:'Yogun bakim' },
+  { de:'Medikament', tr:'Ilac' },
+  { de:'Nebenwirkung', tr:'Yan etki' },
+  { de:'Dosierung', tr:'Dozaj' },
+  { de:'Rezept', tr:'Recete' },
+  { de:'Impfung', tr:'Asi' },
+  { de:'Harn', tr:'Idrar' },
+  { de:'Stuhlprobe', tr:'Diski ornegi' },
+  { de:'Verletzung', tr:'Yaralanma' },
+  { de:'Knochenbruch', tr:'Kemik kirigi' },
+  { de:'Schwellung', tr:'Sislik' },
+  { de:'Rettungswagen', tr:'Ambulans' },
+  { de:'Herzinfarkt', tr:'Kalp krizi' },
+  { de:'Schlaganfall', tr:'Felc' },
+  { de:'Pflaster', tr:'Yara bandi' },
+  { de:'Fieberkurve', tr:'Ates cizelgesi' },
+  { de:'Bettpfanne', tr:'Surgulu kap' },
+  { de:'Waschung', tr:'Temizleme islemi' },
+  { de:'Bewusstsein', tr:'Bilinç' },
+  { de:'Mundpflege', tr:'Agiz bakimi' },
+  { de:'Dekubitus', tr:'Basinç yarasi' },
+  { de:'Injektion', tr:'Enjeksiyon' },
+  { de:'Tropf', tr:'Damla serum' },
+  { de:'Pflegedokumentation', tr:'Bakim dokumantasyonu' },
+  { de:'Blase', tr:'Mesane' },
+  { de:'Hebehilfe', tr:'Kaldirma yardimi' },
+  { de:'Fiebermesser', tr:'Ates olcer cihaz' }
+];
+const SENTENCE_TEMPLATES = [
+  term => `Der Patient benoetigt dringend ${term.de} fuer die weitere Versorgung.`,
+  term => `Auf der Station erklaert die Pflegekraft heute das Wort ${term.de}.`,
+  term => `Vor der Behandlung bereitet das Team ${term.de} sorgfaeltig vor.`,
+  term => `Im Aufnahmegespraech wird ${term.de} sofort dokumentiert.`,
+  term => `Die Krankenschwester kontrolliert ${term.de} noch einmal am Bett.`,
+  term => `Im Nachtdienst wird ${term.de} besonders haeufig gebraucht.`,
+  term => `Der Arzt bittet darum, ${term.de} sofort bereitzustellen.`,
+  term => `Bei der Visite spricht das Team ueber ${term.de} und die richtige Anwendung.`
+];
+const SHOP_ITEMS = [
+  { id:'life1', title:'Schnelles Serum', desc:'+1 can', price:250, level:1, icon:'💉', apply:()=>state.lives++ },
+  { id:'life2', title:'Vitamin Paket', desc:'+2 can', price:420, level:2, icon:'💊', apply:()=>state.lives+=2 },
+  { id:'shield1', title:'Schutzschild', desc:'+1 kalkan', price:540, level:2, icon:'🛡️', apply:()=>state.shields++ },
+  { id:'shield2', title:'Doppel Schutz', desc:'+2 kalkan', price:980, level:5, icon:'🧤', apply:()=>state.shields+=2 },
+  { id:'xp1', title:'Mini Seminar', desc:'+900 XP', price:700, level:3, icon:'📚', apply:()=>state.xp+=900 },
+  { id:'xp2', title:'Fachkongress', desc:'+2600 XP', price:1800, level:7, icon:'🎓', apply:()=>state.xp+=2600 },
+  { id:'gift', title:'Gluecksbox', desc:'Bir hediye kutusu ac', price:400, level:2, icon:'🎁', apply:()=>eventQueue.push({type:'gift'}) }
+];
+const ACHIEVEMENTS = [
+  { id:'first', icon:'🩺', title:'Ilk Temas', desc:'Ilk dogru cevabini ver.', check:()=>state.correct>=1 },
+  { id:'combo3', icon:'⚡', title:'Seri Baslangici', desc:'3 komboya ulas.', check:()=>state.bestCombo>=3 },
+  { id:'combo5', icon:'🔥', title:'Klinik Ritmi', desc:'5 komboya ulas.', check:()=>state.bestCombo>=5 },
+  { id:'coins1000', icon:'💰', title:'Kasa Doluyor', desc:'1000 coin biriktir.', check:()=>state.coins>=1000 || profile.totalCoins>=1000 },
+  { id:'level5', icon:'🎖️', title:'Terfi', desc:'Seviye 5 ol.', check:()=>state.level>=5 || profile.bestLevel>=5 },
+  { id:'level10', icon:'🏅', title:'Uzmanlasma', desc:'Seviye 10 ol.', check:()=>state.level>=10 || profile.bestLevel>=10 },
+  { id:'gift', icon:'🎁', title:'Surpriz Sever', desc:'Ilk hediye kutunu ac.', check:()=>profile.giftsOpened>=1 || state.giftsOpened>=1 },
+  { id:'daily3', icon:'📅', title:'Duzenli Nobet', desc:'3 gunluk giris serisine ulas.', check:()=>profile.loginStreak>=3 },
+  { id:'daily7', icon:'📆', title:'Aliskanlik', desc:'7 gunluk giris serisine ulas.', check:()=>profile.loginStreak>=7 },
+  { id:'veteran', icon:'👑', title:'Tibbi Sozluk', desc:'Toplam 100 dogru cevap ver.', check:()=>profile.totalCorrect>=100 },
+  { id:'guardian', icon:'🛡️', title:'Koruyucu', desc:'3 kalkan biriktir.', check:()=>state.shields>=3 },
+  { id:'collector', icon:'💎', title:'Odul Avcisi', desc:'3 gunluk gorev odulu al.', check:()=>profile.claimedDailyRewards>=3 }
+];
+const DAILY_TASK_POOL = [
+  { id:'correct6', title:'6 dogru cevap ver', target:6, reward:{coins:220}, progress:()=>profile.daily.progress.correct||0 },
+  { id:'coins300', title:'300 coin kazan', target:300, reward:{xp:380}, progress:()=>profile.daily.progress.coins||0 },
+  { id:'combo4', title:'4 komboya ulas', target:4, reward:{shields:1}, progress:()=>profile.daily.progress.combo||0 },
+  { id:'gift1', title:'1 hediye kutusu ac', target:1, reward:{coins:150,xp:150}, progress:()=>profile.daily.progress.gifts||0 },
+  { id:'levelup', title:'1 kez level atla', target:1, reward:{coins:260}, progress:()=>profile.daily.progress.levelups||0 }
+];
+const GAME_OVER_QUOTES = [
+  'Bugunluk nobet bitti. Bir sonraki denemede daha guclu doneceksin.',
+  'Almanca tibbi kelimeler sabir ister. Ritmi buldugunda seri kendiliginden gelecek.',
+  'Marketi daha erken kullanip kalkan biriktirmek seni cok ileri goturebilir.'
+];
+const DEFAULT_PROFILE = () => ({
+  fullName:'', age:'', bestLevel:1, totalCoins:0, totalCorrect:0, loginStreak:0, lastLoginDate:'', daysPlayed:0,
+  giftsOpened:0, claimedDailyRewards:0, achievements:[], daily:{ date:'', progress:{}, completed:[], claimed:{} }
+});
+const DEFAULT_STATE = () => ({ level:1, xp:0, coins:220, lives:5, shields:0, combo:0, bestCombo:0, correct:0, giftsOpened:0, busy:false, gameOver:false, currentQuestion:null, order:[], cursor:0, name:'' });
+const ACCOUNT_KEY = 'pflege_accounts_v2';
+const CURRENT_KEY = 'pflege_current_user_v2';
+let profileKey = 'pflege_profile_guest';
+let authMode = 'register';
+let currentUser = null;
+let profile = DEFAULT_PROFILE();
+let state = DEFAULT_STATE();
+let questionBank = [];
+let eventQueue = [];
+let audioCtx;
+const $ = id => document.getElementById(id);
+const els = {
+  loginOverlay:$('login-overlay'), authTitle:null, authDesc:$('auth-subtitle'), authSwitch:null,
+  fullName:$('auth-fullname'), age:$('auth-age'), username:$('auth-username'), password:$('auth-password'), authBtn:$('auth-submit'), authHint:$('auth-msg'),
+  registerTab:$('register-tab'), loginTab:$('login-tab'),
+  introOverlay:$('intro-overlay'), startBtn:null, continueBtn:null,
+  playerName:$('user-display'), playerMeta:$('rank-name'), xpBar:$('xp-bar'), levelTxt:$('level-val'), coinTxt:$('coin-val'), lifeTxt:$('life-val'), shieldTxt:$('shield-val'),
+  questionCounter:null, scenario:$('scenario-text'), sample:$('sample-text'), questionWord:$('question-word'), options:$('options'),
+  shopBtn:null, logoutBtn:null, achievementsBtn:null, dailyBtn:null,
+  shopOverlay:$('shop-overlay'), shopItems:$('shop-list'), closeShop:null,
+  achievementsOverlay:$('achievements-overlay'), achievementGrid:$('achievement-list'), achievementCount:null, closeAchievements:null,
+  dailyOverlay:$('daily-overlay'), dailyTasks:$('task-list'), streakValue:$('daily-streak'), dailyClaimInfo:$('daily-meta'), closeDaily:null,
+  giftOverlay:$('gift-overlay'), giftResult:$('gift-emoji'), claimGift:null,
+  modalOverlay:$('modal-overlay'), modalTitle:null, modalBody:$('modal-body'), modalContinue:$('modal-btn'),
+  gameOverOverlay:$('game-over'), gameOverStats:null, gameOverQuote:$('game-over-rank'), restartBtn:null, homeBtn:null,
+  summaryBest:$('summary-best'), summaryLevel:$('summary-level'), summaryCoins:$('summary-coins'), summaryCorrect:$('summary-correct'), gameOverMsg:$('game-over-msg'),
+  toastStack:$('toast-stack'), comboText:$('combo-text'), app:$('app')
+};
+
+function loadAccounts(){ try { return JSON.parse(localStorage.getItem(ACCOUNT_KEY) || '{}'); } catch { return {}; } }
+function saveAccounts(accounts){ localStorage.setItem(ACCOUNT_KEY, JSON.stringify(accounts)); }
+function getProfileKey(username){ return `pflege_profile_${username}`; }
+function todayKey(){ return new Date().toISOString().slice(0,10); }
+function dayDiff(a,b){ return Math.round((new Date(b) - new Date(a)) / 86400000); }
+function shuffle(arr){ const copy=[...arr]; for(let i=copy.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [copy[i],copy[j]]=[copy[j],copy[i]]; } return copy; }
+function xpGoal(level){ return 220 + (level-1) * 110; }
+function levelLabel(level){ if(level>=15) return 'Chefarzt Wortmeister'; if(level>=10) return 'Deutsch Spezialist'; if(level>=5) return 'Stationsprofi'; return 'Pflege Schuler'; }
+function toast(title, text){ const item=document.createElement('div'); item.className='toast'; item.innerHTML=`<b>${title}</b><small>${text}</small>`; els.toastStack.appendChild(item); setTimeout(()=>item.remove(),3600); }
+function toggle(el, show){
+  const node = typeof el === 'string' ? $(el) : el;
+  if(!node) return;
+  node.classList.toggle('hidden', !show);
+}
+function saveCurrentUser(){ if(currentUser) localStorage.setItem(CURRENT_KEY, currentUser); else localStorage.removeItem(CURRENT_KEY); }
+function loadProfile(){ try { const raw=localStorage.getItem(profileKey); profile={...DEFAULT_PROFILE(), ...(raw?JSON.parse(raw):{})}; } catch { profile=DEFAULT_PROFILE(); } }
+function saveProfile(){ localStorage.setItem(profileKey, JSON.stringify(profile)); }
+function resetState(){ state=DEFAULT_STATE(); state.name = profile.fullName || currentUser || 'Gast'; state.order = shuffle(questionBank.map((_,i)=>i)); state.cursor = 0; state.currentQuestion = null; }
+function persistTotals(){ profile.bestLevel = Math.max(profile.bestLevel || 1, state.level); profile.totalCoins = Math.max(profile.totalCoins || 0, state.coins); profile.totalCorrect = Math.max(profile.totalCorrect || 0, state.correct + (profile.totalCorrect || 0)); saveProfile(); }
+
+async function hashPassword(value){
+  if(window.crypto?.subtle){
+    const buffer = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(value));
+    return Array.from(new Uint8Array(buffer)).map(v=>v.toString(16).padStart(2,'0')).join('');
+  }
+  let hash = 0;
+  for(const ch of value){ hash = ((hash<<5)-hash) + ch.charCodeAt(0); hash |= 0; }
+  return `fallback_${Math.abs(hash)}`;
+}
+
+function setAuthMode(mode){
+  authMode = mode;
+  const register = mode === 'register';
+  if(els.authDesc) els.authDesc.textContent = register ? 'Almanca tibbi terimlerle dolu, gösterişli ve uzun soluklu bir egitim oyunu.' : 'Kullanici adin ve sifrenle kaldigin yerden devam et.';
+  els.fullName.classList.toggle('hidden', !register);
+  els.age.classList.toggle('hidden', !register);
+  els.authBtn.textContent = register ? 'KAYIT OL VE DEVAM ET' : 'GIRIS YAP VE DEVAM ET';
+  if(els.authHint) els.authHint.textContent = register ? 'Bilgilerin bu tarayicida saklanir.' : 'Gunluk serin ve odullerin seni bekliyor.';
+  if(els.registerTab) els.registerTab.className = `btn ${register?'btn-primary':'btn-secondary'}`;
+  if(els.loginTab) els.loginTab.className = `btn ${!register?'btn-primary':'btn-secondary'}`;
+}
+
+function buildQuestionBank(){
+  const bank=[];
+  BASE_TERMS.forEach((term, index) => {
+    SENTENCE_TEMPLATES.forEach((tpl, tplIndex) => {
+      const scenario = tpl.scenario.replaceAll('{de}', term.de).replaceAll('{tr}', term.tr);
+      const sample = tpl.sample.replaceAll('{de}', term.de).replaceAll('{tr}', term.tr);
+      const distractors = shuffle(BASE_TERMS.filter(item=>item.de!==term.de)).slice(0,3).map(item=>item.tr);
+      const options = shuffle([term.tr, ...distractors]);
+      bank.push({
+        id:`${index}-${tplIndex}`,
+        term:term.de,
+        answer:term.tr,
+        scenario,
+        sample,
+        options
+      });
+    });
+  });
+  return shuffle(bank);
+}
+
+function initAudio(){ if(audioCtx) return; try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch {} }
+function beep(freq, duration, type='sine', gain=0.03){
+  if(!audioCtx) return;
+  const osc = audioCtx.createOscillator();
+  const vol = audioCtx.createGain();
+  osc.type = type; osc.frequency.value = freq; vol.gain.value = gain;
+  osc.connect(vol); vol.connect(audioCtx.destination); osc.start();
+  setTimeout(()=>{ osc.stop(); osc.disconnect(); vol.disconnect(); }, duration);
+}
+function playSound(kind){
+  initAudio();
+  if(!audioCtx) return;
+  if(audioCtx.state === 'suspended') audioCtx.resume();
+  if(kind==='correct'){ beep(720,120,'triangle',0.04); setTimeout(()=>beep(920,120,'triangle',0.04),90); }
+  if(kind==='wrong'){ beep(240,160,'sawtooth',0.045); setTimeout(()=>beep(170,180,'sawtooth',0.035),120); }
+  if(kind==='level'){ beep(520,100,'sine',0.035); setTimeout(()=>beep(760,120,'sine',0.04),110); setTimeout(()=>beep(980,180,'triangle',0.05),220); }
+  if(kind==='reward'){ beep(660,100,'triangle',0.04); setTimeout(()=>beep(880,120,'triangle',0.04),100); setTimeout(()=>beep(1120,180,'triangle',0.04),220); }
+  if(kind==='gameover'){ beep(300,180,'square',0.04); setTimeout(()=>beep(220,230,'square',0.04),180); }
+}
+
+function ensureDailyState(){
+  const today = todayKey();
+  if(profile.daily.date !== today){
+    profile.daily = { date:today, progress:{correct:0,coins:0,combo:0,gifts:0,levelups:0}, completed:[], claimed:{} };
+    const tasks = shuffle(DAILY_TASK_POOL).slice(0,3);
+    tasks.forEach(task => profile.daily.progress[task.id] = 0);
+    profile.daily.completed = tasks.map(task => task.id);
+  }
+  saveProfile();
+}
+
+function selectedDailyTasks(){
+  return profile.daily.completed.map(id => DAILY_TASK_POOL.find(task=>task.id===id)).filter(Boolean);
+}
+
+function markLoginStreak(){
+  const today = todayKey();
+  const last = profile.lastLoginDate;
+  if(!last){ profile.loginStreak = 1; profile.daysPlayed = 1; }
+  else {
+    const diff = dayDiff(last, today);
+    if(diff === 1){ profile.loginStreak += 1; profile.daysPlayed += 1; }
+    else if(diff > 1){ profile.loginStreak = 1; profile.daysPlayed += 1; }
+  }
+  profile.lastLoginDate = today;
+  saveProfile();
+}
+
+function queueEvent(evt){ eventQueue.push(evt); if(eventQueue.length===1) showNextEvent(); }
+function showNextEvent(){
+  if(!eventQueue.length) return;
+  const evt = eventQueue[0];
+  els.modalBody.innerHTML = `<h2 style="font-family:'Montserrat',sans-serif;color:#0ea5e9;margin-top:0">${evt.title}</h2>${evt.body}`;
+  els.modalContinue.textContent = evt.button || 'Devam';
+  toggle(els.modalOverlay, true);
+}
+function closeCurrentEvent(){
+  eventQueue.shift();
+  toggle(els.modalOverlay, false);
+  if(eventQueue.length) setTimeout(showNextEvent, 120);
+}
+
+function nurseHTML(text, note='Devam ettiginde oyun akisi kaldigi yerden surer.'){
+  return `<div class="nurse-wrap"><div class="nurse-figure"><div class="nurse-hat"></div><div class="nurse-head"></div><div class="nurse-body"></div><div class="nurse-legs"></div></div><div class="bubble">${text}<div class="speech-note">${note}</div></div></div>`;
+}
+
+function addCoins(amount){ state.coins += amount; profile.totalCoins += amount; profile.daily.progress.coins = (profile.daily.progress.coins || 0) + amount; }
+function addXp(amount){ state.xp += amount; while(state.xp >= xpGoal(state.level)){ state.xp -= xpGoal(state.level); state.level += 1; profile.bestLevel = Math.max(profile.bestLevel, state.level); profile.daily.progress.levelups = (profile.daily.progress.levelups || 0) + 1; playSound('level'); queueEvent({ title:'Terfi!', body:nurseHTML(`Harika! Yeni seviyen <b>${state.level}</b>. Alman tibbi kelimelerde giderek daha guclu oluyorsun.`), button:'Devam Et' }); } }
+function addShield(amount){ state.shields += amount; }
+function loseLife(){ if(state.shields>0){ state.shields -= 1; toast('Kalkan Kullanimda','Bu hatayi kalkan senin yerine karsiladi.'); return; } state.lives -= 1; els.app.classList.add('flash-red','shake'); setTimeout(()=>els.app.classList.remove('flash-red','shake'),420); if(state.lives<=0) endGame(); }
+
+function updateDailyProgress(type, value=1){ profile.daily.progress[type] = Math.max(profile.daily.progress[type] || 0, value); checkDailyTasks(); }
+function incrementDaily(type, amount=1){ profile.daily.progress[type] = (profile.daily.progress[type] || 0) + amount; checkDailyTasks(); }
+
+function checkAchievements(){
+  let unlocked = false;
+  ACHIEVEMENTS.forEach(item => {
+    if(!profile.achievements.includes(item.id) && item.check()){
+      profile.achievements.push(item.id);
+      unlocked = true;
+      playSound('reward');
+      toast('Basarim Acildi', `${item.icon} ${item.title}`);
+      queueEvent({ title:'Basarim Tamamlandi', body:nurseHTML(`<b>${item.icon} ${item.title}</b> rozetini kazandin.<div class="badge-row"><span class="capsule" style="background:#dbeafe;color:#1d4ed8">Rozet Acildi</span><span class="capsule" style="background:#dcfce7;color:#15803d">Profiline Kaydedildi</span></div><p>${item.desc}</p>`), button:'Devam Et' });
+    }
+  });
+  if(unlocked) saveProfile();
+}
+
+function checkDailyTasks(){
+  const finished = selectedDailyTasks().filter(task => task.progress() >= task.target && !profile.daily.claimed[task.id]);
+  if(finished.length){
+    finished.forEach(task => {
+      if(!profile.daily.claimed[`announced_${task.id}`]){
+        profile.daily.claimed[`announced_${task.id}`] = true;
+        queueEvent({
+          title:'Gunluk Gorev Hazir',
+          body:nurseHTML(`<b>${task.title}</b> gorevini tamamladin. Hadi odulu almaya gidelim.`, 'Devam ettiginde gunluk gorev ekranin acilacak ve odulunu alabileceksin.'),
+          button:'Odulu Goster'
+        });
+      }
+    });
+    saveProfile();
+  }
+}
+
+function renderAchievements(){
+  const unlocked = new Set(profile.achievements);
+  els.achievementGrid.innerHTML = ACHIEVEMENTS.map(item => `
+    <div class="achievement ${unlocked.has(item.id)?'':'locked'}">
+      <div class="icon">${item.icon}</div>
+      <b>${item.title}</b>
+      <span>${item.desc}</span>
+    </div>`).join('');
+  if(els.achievementCount) els.achievementCount.textContent = `${profile.achievements.length}/${ACHIEVEMENTS.length}`;
+}
+
+function claimTaskReward(task){
+  if(profile.daily.claimed[task.id]) return;
+  if(task.progress() < task.target) return;
+  if(task.reward.coins) addCoins(task.reward.coins);
+  if(task.reward.xp) addXp(task.reward.xp);
+  if(task.reward.shields) addShield(task.reward.shields);
+  profile.daily.claimed[task.id] = true;
+  profile.claimedDailyRewards += 1;
+  saveProfile();
+  playSound('reward');
+  if(window.confetti) confetti({ particleCount:90, spread:70, origin:{y:.7} });
+  queueEvent({ title:'Gunluk Odul Alindi', body:nurseHTML(`Odulun hesabina eklendi. ${task.reward.coins?`<b>+${task.reward.coins} coin</b><br>`:''}${task.reward.xp?`<b>+${task.reward.xp} XP</b><br>`:''}${task.reward.shields?`<b>+${task.reward.shields} kalkan</b>`:''}`), button:'Harika' });
+  renderDaily();
+  updateUI();
+  checkAchievements();
+}
+
+function renderDaily(){
+  els.streakValue.textContent = `${profile.loginStreak} Gunluk Seri`;
+  const tasks = selectedDailyTasks();
+  const doneCount = tasks.filter(task => task.progress() >= task.target).length;
+  els.dailyClaimInfo.textContent = `${doneCount}/${tasks.length} gorev bugun tamamlandi.`;
+  els.dailyTasks.innerHTML = tasks.map(task => {
+    const progress = task.progress();
+    const percent = Math.min(100, Math.round(progress / task.target * 100));
+    const done = progress >= task.target;
+    const claimed = !!profile.daily.claimed[task.id];
+    return `<div class="task ${done?'done':''}">
+      <div class="task-head"><span>${task.title}</span><span>${Math.min(progress,task.target)}/${task.target}</span></div>
+      <div class="task-bar"><div style="width:${percent}%"></div></div>
+      <div style="margin-top:10px;font-size:12px;color:#475569">Odul: ${task.reward.coins?`${task.reward.coins} coin `:''}${task.reward.xp?`${task.reward.xp} XP `:''}${task.reward.shields?`${task.reward.shields} kalkan`:''}</div>
+      <button class="btn ${done && !claimed ? 'btn-primary' : 'btn-secondary'}" data-claim="${task.id}" ${done && !claimed ? '' : 'disabled'} style="width:100%;margin-top:10px">${claimed?'Alindi':done?'Odulu Al':'Devam Et'}</button>
+    </div>`;
+  }).join('');
+  els.dailyTasks.querySelectorAll('[data-claim]').forEach(btn => btn.onclick = () => {
+    const task = DAILY_TASK_POOL.find(item => item.id === btn.dataset.claim);
+    if(task) claimTaskReward(task);
+  });
+}
+
+function renderShop(){
+  els.shopItems.innerHTML = SHOP_ITEMS.map(item => {
+    const locked = state.coins < item.price;
+    return `<div class="shop-item ${locked?'locked':''}" data-buy="${item.id}"><div class="shop-icon">${item.icon}</div><div class="shop-info"><b>${item.title}</b><span>${item.desc}</span></div><div class="price">${item.price}</div></div>`;
+  }).join('');
+  els.shopItems.querySelectorAll('[data-buy]').forEach(btn => btn.onclick = () => {
+    const item = SHOP_ITEMS.find(x=>x.id===btn.dataset.buy);
+    if(!item || state.coins < item.price) return;
+    state.coins -= item.price;
+    item.apply();
+    playSound('reward');
+    toast('Market', `${item.title} hesabina eklendi.`);
+    renderShop(); updateUI(); checkAchievements();
+  });
+}
+
+function openShop(){ renderShop(); toggle(els.shopOverlay, true); }
+function openAchievements(){ renderAchievements(); toggle(els.achievementsOverlay, true); }
+function openDailyPanel(){ renderDaily(); toggle(els.dailyOverlay, true); }
+
+function spawnFloat(text, color){
+  const div=document.createElement('div');
+  div.className='float-txt';
+  div.style.color=color;
+  div.textContent=text;
+  div.style.left=`${30 + Math.random()*40}%`;
+  div.style.top=`${40 + Math.random()*18}%`;
+  els.app.appendChild(div);
+  setTimeout(()=>div.remove(),1000);
+}
+function showCombo(){ els.comboText.textContent = `${state.combo}X KOMBO`; els.comboText.classList.remove('combo-anim'); void els.comboText.offsetWidth; els.comboText.classList.add('combo-anim'); }
+
+function updateUI(){
+  els.playerName.textContent = state.name;
+  els.playerMeta.textContent = levelLabel(state.level);
+  els.levelTxt.textContent = state.level;
+  els.coinTxt.textContent = state.coins;
+  els.lifeTxt.textContent = state.lives;
+  els.shieldTxt.textContent = `🛡️ ${state.shields}`;
+  els.shieldTxt.classList.toggle('hidden', state.shields <= 0);
+  els.xpBar.style.width = `${Math.min(100, Math.round(state.xp / xpGoal(state.level) * 100))}%`;
+  els.app.style.boxShadow = state.lives <= 2 ? 'inset 0 0 0 4px rgba(239,68,68,.18)' : 'none';
+  saveProfile();
+}
+
+function nextQuestion(){
+  if(state.gameOver) return;
+  if(state.cursor >= state.order.length) state.order = shuffle(questionBank.map((_,i)=>i)), state.cursor = 0;
+  state.currentQuestion = questionBank[state.order[state.cursor++]];
+  const q = state.currentQuestion;
+  els.scenario.textContent = q.scenario;
+  els.sample.textContent = q.sample;
+  els.questionWord.textContent = q.term;
+  els.options.innerHTML = q.options.map(option => `<button class="opt" data-option="${option.replaceAll('"','&quot;')}">${option}</button>`).join('');
+  els.options.querySelectorAll('.opt').forEach(btn => btn.onclick = () => handleAnswer(btn, btn.dataset.option));
+  updateUI();
+}
+function openGift(){
+  const rewards = shuffle([
+    {text:'+180 coin', apply:()=>addCoins(180)},
+    {text:'+1 kalkan', apply:()=>addShield(1)},
+    {text:'+260 XP', apply:()=>addXp(260)},
+    {text:'+1 can', apply:()=>state.lives += 1}
+  ]);
+  const reward = rewards[0];
+  reward.apply();
+  state.giftsOpened += 1;
+  profile.giftsOpened += 1;
+  incrementDaily('gifts',1);
+  els.giftResult.innerHTML = `✅<div style="font-size:15px;margin-top:8px"><b>${reward.text}</b><div style="margin-top:6px;color:#475569">Odul hesabina islendi. Kapatmak icin tekrar tikla.</div></div>`;
+  els.giftResult.dataset.opened = '1';
+  toggle(els.giftOverlay, true);
+  playSound('reward');
+  checkAchievements();
+  updateUI();
+}
+
+function handleAnswer(button, answer){
+  if(state.busy || state.gameOver) return;
+  state.busy = true;
+  const correct = answer === state.currentQuestion.answer;
+  const buttons = [...els.options.querySelectorAll('.opt')];
+  buttons.forEach(btn => btn.disabled = true);
+  if(correct){
+    button.classList.add('correct');
+    state.combo += 1;
+    state.bestCombo = Math.max(state.bestCombo, state.combo);
+    state.correct += 1;
+    addCoins(70 + state.combo * 12);
+    addXp(110 + state.combo * 18);
+    incrementDaily('correct',1);
+    updateDailyProgress('combo', state.bestCombo);
+    playSound('correct');
+    spawnFloat(`+${70 + state.combo * 12}`, '#16a34a');
+    if(state.combo >= 3) showCombo();
+    els.app.classList.add('flash-green');
+    setTimeout(()=>els.app.classList.remove('flash-green'),280);
+  } else {
+    button.classList.add('wrong');
+    const trueBtn = buttons.find(btn => btn.dataset.option === state.currentQuestion.answer);
+    if(trueBtn) trueBtn.classList.add('correct');
+    state.combo = 0;
+    playSound('wrong');
+    loseLife();
+  }
+  updateUI();
+  checkAchievements();
+  setTimeout(() => {
+    state.busy = false;
+    if(!state.gameOver) nextQuestion();
+  }, 850);
+}
+
+function buildGameOver(){
+  if(els.summaryBest) els.summaryBest.textContent = profile.bestLevel;
+  if(els.summaryLevel) els.summaryLevel.textContent = state.level;
+  if(els.summaryCoins) els.summaryCoins.textContent = state.coins;
+  if(els.summaryCorrect) els.summaryCorrect.textContent = state.correct;
+  if(els.gameOverMsg) els.gameOverMsg.textContent = 'Bu vardiya kapandi ama bir sonraki deneme seni bekliyor.';
+  els.gameOverQuote.textContent = GAME_OVER_QUOTES[Math.floor(Math.random()*GAME_OVER_QUOTES.length)];
+}
+
+function endGame(){
+  state.gameOver = true;
+  playSound('gameover');
+  persistTotals();
+  buildGameOver();
+  toggle(els.gameOverOverlay, true);
+}
+
+function restartGame(){
+  resetState();
+  state.name = profile.fullName || currentUser || 'Gast';
+  toggle(els.gameOverOverlay, false);
+  toggle(els.introOverlay, false);
+  toggle(els.app, true);
+  nextQuestion();
+}
+
+function logoutFromGame(){
+  currentUser = null;
+  saveCurrentUser();
+  toggle(els.shopOverlay,false);
+  toggle(els.achievementsOverlay,false);
+  toggle(els.dailyOverlay,false);
+  toggle(els.giftOverlay,false);
+  toggle(els.gameOverOverlay,false);
+  toggle(els.introOverlay,false);
+  toggle(els.modalOverlay,false);
+  eventQueue = [];
+  profile = DEFAULT_PROFILE();
+  state = DEFAULT_STATE();
+  toggle(els.app, false);
+  setAuthMode('login');
+  toggle(els.loginOverlay, true);
+}
+
+async function handleAuth(){
+  const username = els.username.value.trim().toLowerCase();
+  const password = els.password.value.trim();
+  if(!username || !password){ toast('Eksik Alan', 'Kullanici adi ve sifre gerekli.'); return; }
+  const accounts = loadAccounts();
+  if(authMode === 'register'){
+    const fullName = els.fullName.value.trim();
+    const age = els.age.value.trim();
+    if(!fullName || !age){ toast('Eksik Alan', 'Ad soyad ve yas bilgisini de gir.'); return; }
+    if(accounts[username]){ toast('Kayit Var', 'Bu kullanici adi zaten alinmis.'); return; }
+    accounts[username] = { username, passwordHash: await hashPassword(password), fullName, age };
+    saveAccounts(accounts);
+    profileKey = getProfileKey(username);
+    currentUser = username;
+    saveCurrentUser();
+    profile = DEFAULT_PROFILE();
+    profile.fullName = fullName;
+    profile.age = age;
+    markLoginStreak();
+    ensureDailyState();
+    saveProfile();
+  } else {
+    const account = accounts[username];
+    if(!account){ toast('Bulunamadi', 'Bu kullanici adiyla kayit yok.'); return; }
+    const ok = account.passwordHash === await hashPassword(password);
+    if(!ok){ toast('Sifre Hatali', 'Sifreyi tekrar kontrol et.'); return; }
+    currentUser = username;
+    profileKey = getProfileKey(username);
+    saveCurrentUser();
+    loadProfile();
+    profile.fullName = profile.fullName || account.fullName || username;
+    profile.age = profile.age || account.age || '';
+    markLoginStreak();
+    ensureDailyState();
+    saveProfile();
+  }
+  resetState();
+  state.name = profile.fullName || currentUser;
+  toggle(els.app, true);
+  toggle(els.loginOverlay, false);
+  toggle(els.introOverlay, true);
+  els.username.value=''; els.password.value='';
+}
+
+function startFlow(){
+  toggle(els.introOverlay, false);
+  toggle(els.app, true);
+  nextQuestion();
+  if(profile.loginStreak > 1){
+    queueEvent({ title:'Gunluk Giris', body:nurseHTML(`Hos geldin <b>${state.name}</b>. Giris serin <b>${profile.loginStreak} gun</b> oldu.`), button:'Baslayalim' });
+  }
+}
+
+function startGame(){ startFlow(); }
+
+function clickGift(){
+  if(els.giftResult.dataset.opened === '1'){
+    els.giftResult.dataset.opened = '0';
+    els.giftResult.textContent = '🎁';
+    toggle(els.giftOverlay, false);
+    updateUI();
+    return;
+  }
+  openGift();
+}
+
+els.authBtn.onclick = handleAuth;
+if(els.startBtn) els.startBtn.onclick = startFlow;
+if(els.continueBtn) els.continueBtn.onclick = () => toggle(els.introOverlay, false);
+if(els.shopBtn) els.shopBtn.onclick = openShop;
+if(els.logoutBtn) els.logoutBtn.onclick = logoutFromGame;
+if(els.achievementsBtn) els.achievementsBtn.onclick = openAchievements;
+if(els.dailyBtn) els.dailyBtn.onclick = openDailyPanel;
+if(els.closeShop) els.closeShop.onclick = () => toggle(els.shopOverlay, false);
+if(els.closeAchievements) els.closeAchievements.onclick = () => toggle(els.achievementsOverlay, false);
+if(els.closeDaily) els.closeDaily.onclick = () => toggle(els.dailyOverlay, false);
+if(els.claimGift) els.claimGift.onclick = () => { toggle(els.giftOverlay, false); updateUI(); };
+els.modalContinue.onclick = () => {
+  const evt = eventQueue[0];
+  closeCurrentEvent();
+  if(evt?.title === 'Gunluk Gorev Hazir') setTimeout(openDailyPanel, 140);
+};
+if(els.restartBtn) els.restartBtn.onclick = restartGame;
+if(els.homeBtn) els.homeBtn.onclick = () => { toggle(els.gameOverOverlay, false); toggle(els.introOverlay, true); };
+
+questionBank = buildQuestionBank();
+setAuthMode('register');
+const remembered = localStorage.getItem(CURRENT_KEY);
+if(remembered){
+  const accounts = loadAccounts();
+  if(accounts[remembered]){
+    currentUser = remembered;
+    profileKey = getProfileKey(remembered);
+    loadProfile();
+    markLoginStreak();
+    ensureDailyState();
+    resetState();
+    state.name = profile.fullName || currentUser;
+    toggle(els.loginOverlay, false);
+    toggle(els.introOverlay, true);
+    saveProfile();
+  }
+}
+if(!remembered){
+  toggle(els.loginOverlay, true);
+}
+renderAchievements();
+renderDaily();
+renderShop();
+updateUI();
 </script>
 </body>
 </html>
-
-
-
