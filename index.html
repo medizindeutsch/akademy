@@ -3,154 +3,194 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MedDeutsch Elite v5 - ASIL</title>
+    <title>MedDeutsch Career Pro - ASIL</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --der: #3a7bd5; --die: #f44336; --das: #4caf50;
-            --bg: #f8fafc; --text: #1e293b; --card: #ffffff;
-        }
-        .dark-mode {
-            --bg: #0f172a; --text: #f1f5f9; --card: #1e293b;
+            --primary: #0ea5e9; --secondary: #6366f1;
+            --success: #22c55e; --danger: #ef4444;
+            --warning: #f59e0b; --bg: #f8fafc;
         }
 
-        body {
-            font-family: 'Poppins', sans-serif; background: var(--bg); color: var(--text);
-            margin: 0; display: flex; justify-content: center; min-height: 100vh; transition: 0.3s;
-        }
-
+        body { font-family: 'Poppins', sans-serif; background: var(--bg); margin: 0; display: flex; justify-content: center; min-height: 100vh; overflow-x: hidden; }
         #app-container { width: 100%; max-width: 450px; padding: 20px; position: relative; }
 
-        .top-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .mode-btn { background: none; border: none; font-size: 24px; cursor: pointer; }
-
-        /* CAN GÖSTERGESİ (5 CAN) */
-        .hearts-container { font-size: 20px; font-weight: 900; letter-spacing: 2px; }
-
-        .timer-container { width: 100%; height: 8px; background: #e2e8f0; border-radius: 10px; margin-bottom: 20px; overflow: hidden; }
-        #timer-fill { height: 100%; width: 100%; background: linear-gradient(90deg, #00d2ff, #3a7bd5); transition: linear 1s; }
-
-        .card {
-            background: var(--card); border-radius: 30px; padding: 30px 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1); text-align: center; margin-bottom: 20px;
-            position: relative; border: 1px solid rgba(255,255,255,0.1);
+        /* GİRİŞ EKRANI */
+        #login-screen {
+            position: fixed; inset: 0; background: white; z-index: 1000;
+            display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 30px; text-align: center;
         }
+        .login-card { background: #f1f5f9; padding: 30px; border-radius: 30px; width: 80%; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
+        .input-name { width: 100%; padding: 15px; border-radius: 15px; border: 2px solid #e2e8f0; margin: 20px 0; font-family: inherit; font-weight: 600; text-align: center; font-size: 16px; }
 
-        .badge { padding: 5px 15px; border-radius: 12px; font-weight: 800; color: white; font-size: 12px; text-transform: uppercase; }
-        .der { background: var(--der); } .die { background: var(--die); } .das { background: var(--das); }
-
-        .btn-opt {
-            background: var(--card); color: var(--text); border: 2px solid #e2e8f0;
-            border-radius: 20px; padding: 15px 20px; width: 100%; margin-bottom: 12px;
-            font-weight: 600; text-align: left; cursor: pointer; transition: 0.2s;
+        /* MARKET SİSTEMİ */
+        .market-overlay {
+            position: fixed; bottom: -100%; left: 0; width: 100%; background: white;
+            border-radius: 30px 30px 0 0; box-shadow: 0 -10px 30px rgba(0,0,0,0.1);
+            transition: 0.4s; z-index: 500; padding: 25px; box-sizing: border-box;
         }
-        .btn-opt:hover { border-color: #3a7bd5; transform: scale(1.02); }
+        .market-overlay.active { bottom: 0; }
+        .shop-item { display: flex; justify-content: space-between; align-items: center; background: #f8fafc; padding: 12px; border-radius: 15px; margin-bottom: 10px; border: 1px solid #e2e8f0; }
 
-        /* HATA LİSTESİ TASARIMI */
-        .error-panel {
-            background: rgba(244, 67, 54, 0.05); border: 2px dashed #f44336;
-            border-radius: 20px; padding: 15px; margin-top: 20px;
+        /* OYUN KARTLARI */
+        .case-card { 
+            background: linear-gradient(135deg, #ffffff 0%, #f0f9ff 100%);
+            border-radius: 25px; padding: 25px; box-shadow: 0 15px 35px rgba(0,0,0,0.05);
+            text-align: center; margin-bottom: 20px; border: 1px solid #e0f2fe;
+            position: relative; animation: slideIn 0.5s ease-out;
         }
-        .error-title { color: #f44336; font-weight: 900; margin-bottom: 10px; font-size: 16px; text-transform: uppercase; }
-        .error-item { 
-            display: flex; justify-content: space-between; background: var(--card);
-            padding: 10px 15px; border-radius: 12px; margin-bottom: 8px; font-size: 13px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
+        .visual-icon { font-size: 60px; margin-bottom: 15px; display: block; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.1)); }
+        
+        .timer-bar { width: 100%; height: 8px; background: #e2e8f0; border-radius: 10px; margin: 15px 0; overflow: hidden; }
+        #timer-fill { height: 100%; width: 100%; background: var(--primary); transition: linear 1s; }
+
+        .btn { cursor: pointer; border: none; border-radius: 18px; font-family: 'Montserrat', sans-serif; font-weight: 800; transition: 0.2s; }
+        .btn-main { background: var(--primary); color: white; padding: 15px 25px; box-shadow: 0 5px 15px rgba(14, 165, 233, 0.3); }
+        .btn-opt { background: white; color: #334155; border: 2px solid #f1f5f9; padding: 14px; width: 100%; margin-bottom: 10px; text-align: left; }
+        .btn-opt:hover { border-color: var(--primary); transform: translateX(5px); background: #f0f9ff; }
+
+        .rank-tag { background: var(--warning); color: white; padding: 3px 10px; border-radius: 8px; font-size: 10px; letter-spacing: 1px; }
         .hidden { display: none !important; }
-        .correct { background: #dcfce7 !important; border-color: #22c55e !important; }
-        .wrong { background: #fee2e2 !important; border-color: #ef4444 !important; }
-
-        #combo-ui { position: absolute; right: 25px; top: 100px; font-weight: 900; color: #f59e0b; opacity: 0; transition: 0.3s; }
     </style>
 </head>
 <body>
 
-<div id="app-container">
-    <div class="top-nav">
-        <div class="hearts-container">❤️ <span id="hearts">5</span></div>
-        <div id="xp-display" style="font-weight: 900;">XP: 0</div>
-        <button class="mode-btn" onclick="toggleTheme()">🌙</button>
-    </div>
-
-    <div class="timer-container"><div id="timer-fill"></div></div>
-    <div id="combo-ui">🔥 <span id="combo-count">0</span> COMBO</div>
-
-    <div id="quiz-screen">
-        <div class="card">
-            <div id="art-badge" class="badge">MEDICAL</div>
-            <h1 id="q-word" style="font-size: 30px; margin: 15px 0;">Yükleniyor...</h1>
-            <button onclick="speak()" style="background:#3a7bd520; border:none; padding:15px; border-radius:50%; cursor:pointer;">🔊</button>
+    <div id="login-screen">
+        <div class="login-card">
+            <span style="font-size: 50px;">🩺</span>
+            <h1 style="font-family:'Montserrat'; margin: 10px 0;">MedDeutsch</h1>
+            <p style="font-size: 13px; color: #64748b;">Mesleki kariyerinize hoş geldiniz Herr/Frau Doktor.</p>
+            <input type="text" id="user-name" class="input-name" placeholder="Adınızı giriniz...">
+            <button class="btn btn-main" onclick="startApp()">KLİNİĞE GİRİŞ YAP</button>
         </div>
-        <div id="options-grid"></div>
     </div>
 
-    <div id="over-screen" class="hidden">
-        <div class="card">
-            <h2 style="font-size: 36px; margin:0;">🚑 OYUN BİTTİ</h2>
-            <p id="final-score" style="font-size: 20px; font-weight: 700; color:#3a7bd5;">0 XP</p>
-            
-            <div id="error-section" class="error-panel hidden">
-                <div class="error-title">⚠️ HATALARINI NOT AL</div>
-                <div id="error-list"></div>
+    <div id="app-container" class="hidden">
+        <div style="background:white; padding:15px; border-radius:25px; box-shadow:0 4px 15px rgba(0,0,0,0.03); margin-bottom:20px;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <div>
+                    <span class="rank-tag" id="user-rank">STUDENT</span>
+                    <div style="font-weight:900; font-size:18px;" id="disp-name">Doktor</div>
+                </div>
+                <div style="text-align:right;">
+                    <div style="font-weight:900; color:var(--warning);">💰 <span id="xp-bank">0</span> XP</div>
+                    <div style="font-size:12px; color:#94a3b8;">❤️ <span id="lives">5</span></div>
+                </div>
             </div>
+            <div class="timer-bar"><div id="timer-fill"></div></div>
+            <button class="btn" style="background:#f1f5f9; padding:5px 15px; font-size:11px; width:100%;" onclick="toggleShop(true)">🛒 EKİPMAN MARKETİ</button>
+        </div>
 
-            <button class="btn-opt" style="background:#3a7bd5; color:white; text-align:center; margin-top:20px;" onclick="location.reload()">YENİDEN DENE</button>
+        <div id="game-zone">
+            <div class="case-card">
+                <span id="q-icon" class="visual-icon">🩹</span>
+                <div id="vaka-box" style="background:#fff7ed; padding:12px; border-radius:15px; font-size:13px; color:#9a3412; margin-bottom:15px; border:1px solid #ffedd5;" class="hidden">
+                    <b>Befund:</b> <span id="vaka-text">...</span>
+                </div>
+                <div id="art-label" style="font-size:10px; font-weight:800; color:var(--primary);">ARTIKEL</div>
+                <h2 id="q-word" style="margin:5px 0 15px 0; font-size:26px; font-weight:900;">...</h2>
+                <button onclick="speak()" style="border:none; background:#e0f2fe; padding:12px; border-radius:50%; cursor:pointer;">🔊</button>
+            </div>
+            <div id="options-grid"></div>
+        </div>
+
+        <div id="market" class="market-overlay">
+            <div style="display:flex; justify-content:space-between; margin-bottom:15px;">
+                <h3 style="margin:0;">🛒 Tıbbi Ekipman</h3>
+                <button onclick="toggleShop(false)" style="border:none; background:none; font-weight:900;">✕</button>
+            </div>
+            <div class="shop-item">
+                <span>💉 Defibrilatör (+1 Can)</span>
+                <button class="btn btn-main" style="padding:5px 12px; font-size:12px;" onclick="buyItem('heart', 50)">50 XP</button>
+            </div>
+            <div class="shop-item">
+                <span>☕ Kahve (+5 Saniye)</span>
+                <button class="btn btn-main" style="padding:5px 12px; font-size:12px;" onclick="buyItem('time', 20)">20 XP</button>
+            </div>
+        </div>
+
+        <div id="over-screen" class="hidden">
+            <div class="case-card">
+                <h1 style="font-size:40px;">🚑</h1>
+                <h2>Nöbet Bitti!</h2>
+                <div id="mistakes-log" style="text-align:left; background:#fff1f2; padding:15px; border-radius:15px; font-size:12px;"></div>
+                <button class="btn btn-main" style="width:100%; margin-top:20px;" onclick="location.reload()">YENİ NÖBETE BAŞLA</button>
+            </div>
         </div>
     </div>
-</div>
 
 <script>
-    const VOCAB = [
-        { de: "Herzinfarkt", art: "der", tr: "Kalp krizi" },
-        { de: "Blutdruck", art: "der", tr: "Kan basıncı" },
-        { de: "Entzündung", art: "die", tr: "İltihap" },
-        { de: "Fieber", art: "das", tr: "Ateş" },
-        { de: "Untersuchung", art: "die", tr: "Muayene" },
-        { de: "Husten", art: "der", tr: "Öksürük" },
-        { de: "Übelkeit", art: "die", tr: "Bulantı" },
-        { de: "Erbrechen", art: "das", tr: "Kusma" },
-        { de: "Atemnot", art: "die", tr: "Nefes darlığı" },
-        { de: "Schwindel", art: "der", tr: "Baş dönmesi" },
-        { de: "Wirbelsäule", art: "die", tr: "Omurga" },
-        { de: "Gelenk", art: "das", tr: "Eklem" },
-        { de: "Gehirn", art: "das", tr: "Beyin" },
-        { de: "Lunge", art: "die", tr: "Akciğer" },
-        { de: "Magen", art: "der", tr: "Mide" }
+    const DATA = [
+        { de: "Herzinfarkt", art: "der", tr: "Kalp krizi", icon: "🫀", vaka: "Der Patient klagt über retrosternale Schmerzen und kalten Schweiß." },
+        { de: "Lungenentzündung", art: "die", tr: "Zatürre", icon: "🫁", vaka: "Auskultation zeigt Rasselgeräusche; der Patient hat hohes Fieber." },
+        { de: "Bluthochdruck", art: "der", tr: "Hipertansiyon", icon: "🩸", vaka: "Der Wert liegt bei 180/100 mmHg." },
+        { de: "Gehirnerschütterung", art: "die", tr: "Beyin sarsıntısı", icon: "🧠", vaka: "Nach dem Sturz ist der Patient desorientiert und hat Übelkeit." },
+        { de: "Bauchspeicheldrüse", art: "die", tr: "Pankreas", icon: "🤢", vaka: "Dieses Organ ist für die Insulinproduktion verantwortlich." },
+        { de: "Wirbelsäule", art: "die", tr: "Omurga", icon: "🦴", vaka: "Der Patient hat Taubheitsgefühle in den Beinen nach einem Trauma." },
+        { de: "Gallenblase", art: "die", tr: "Safra kesesi", icon: "🍏", vaka: "Kolikartige Schmerzen im rechten Oberbauch nach fettigem Essen." },
+        { de: "Magengeschwür", art: "das", tr: "Mide ülseri", icon: "🥣", vaka: "Brennende Schmerzen im Epigastrium, besser nach dem Essen." }
     ];
 
-    let state = {
-        xp: 0, hearts: 5, combo: 0, current: null, 
-        timeLeft: 15, timerInterval: null, mistakes: []
+    let state = { 
+        name: "Doktor", xp: parseInt(localStorage.getItem('med_xp_v7')) || 0, 
+        lives: 5, current: null, timer: 15, interval: null, mistakes: [] 
     };
 
-    function toggleTheme() {
-        document.body.classList.toggle('dark-mode');
-        document.querySelector('.mode-btn').innerText = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
+    function startApp() {
+        const input = document.getElementById('user-name').value;
+        if(input) state.name = input;
+        document.getElementById('login-screen').classList.add('hidden');
+        document.getElementById('app-container').classList.remove('hidden');
+        document.getElementById('disp-name').innerText = "Dr. " + state.name;
+        updateUI();
+        nextTask();
+    }
+
+    function toggleShop(show) {
+        document.getElementById('market').classList.toggle('active', show);
+    }
+
+    function buyItem(type, cost) {
+        if(state.xp >= cost) {
+            state.xp -= cost;
+            if(type === 'heart') state.lives++;
+            if(type === 'time') state.timer += 5;
+            updateUI();
+            confetti({ particleCount: 30, colors: ['#fbbf24'] });
+        } else { alert("Yetersiz XP!"); }
     }
 
     function startTimer() {
-        state.timeLeft = 15;
-        clearInterval(state.timerInterval);
-        state.timerInterval = setInterval(() => {
-            state.timeLeft--;
-            document.getElementById('timer-fill').style.width = (state.timeLeft / 15 * 100) + "%";
-            if(state.timeLeft <= 0) handleWrong(null);
+        state.timer = 15;
+        clearInterval(state.interval);
+        state.interval = setInterval(() => {
+            state.timer--;
+            document.getElementById('timer-fill').style.width = (state.timer/15*100) + "%";
+            if(state.timer <= 0) checkResult(false);
         }, 1000);
     }
 
-    function nextQuestion() {
-        state.current = VOCAB[Math.floor(Math.random() * VOCAB.length)];
-        const badge = document.getElementById('art-badge');
-        badge.innerText = state.current.art;
-        badge.className = `badge ${state.current.art}`;
-        document.getElementById('q-word').innerText = state.current.de;
+    function nextTask() {
+        state.current = DATA[Math.floor(Math.random() * DATA.length)];
         
+        // Görsel ve Vaka ayarları
+        document.getElementById('q-icon').innerText = state.current.icon;
+        document.getElementById('q-word').innerText = state.current.de;
+        document.getElementById('art-label').innerText = state.current.art.toUpperCase();
+        
+        if(Math.random() > 0.5) {
+            document.getElementById('vaka-box').classList.remove('hidden');
+            document.getElementById('vaka-text').innerText = state.current.vaka;
+        } else {
+            document.getElementById('vaka-box').classList.add('hidden');
+        }
+
         let opts = [state.current.tr];
         while(opts.length < 4) {
-            let r = VOCAB[Math.floor(Math.random() * VOCAB.length)].tr;
+            let r = DATA[Math.floor(Math.random() * DATA.length)].tr;
             if(!opts.includes(r)) opts.push(r);
         }
         opts.sort(() => Math.random() - 0.5);
@@ -161,81 +201,50 @@
             const b = document.createElement('button');
             b.className = "btn-opt";
             b.innerText = o;
-            b.onclick = () => (o === state.current.tr ? handleCorrect(b) : handleWrong(b));
+            b.onclick = () => checkResult(o === state.current.tr, b);
             grid.appendChild(b);
         });
         startTimer();
     }
 
-    function handleCorrect(btn) {
-        clearInterval(state.timerInterval);
-        state.combo++;
-        state.xp += 10 + (state.combo * 2);
-        btn.classList.add('correct');
-        
-        if(state.combo >= 3) {
-            const ui = document.getElementById('combo-ui');
-            ui.style.opacity = "1";
-            document.getElementById('combo-count').innerText = state.combo;
-        }
-
-        confetti({ particleCount: 40, spread: 60, origin: { y: 0.8 } });
-        setTimeout(nextQuestion, 500);
-        updateUI();
-    }
-
-    function handleWrong(btn) {
-        clearInterval(state.timerInterval);
-        state.combo = 0;
-        state.hearts--;
-        if(btn) btn.classList.add('wrong');
-        document.getElementById('combo-ui').style.opacity = "0";
-        
-        // Hata listesine ekle
-        if(!state.mistakes.find(m => m.de === state.current.de)) {
-            state.mistakes.push(state.current);
-        }
-
-        if(state.hearts <= 0) {
-            endGame();
+    function checkResult(isCorrect, btn) {
+        clearInterval(state.interval);
+        if(isCorrect) {
+            state.xp += 15;
+            if(btn) btn.style.background = "#dcfce7";
+            confetti({ particleCount: 40, spread: 60, origin: { y: 0.8 } });
+            setTimeout(nextTask, 600);
         } else {
-            setTimeout(nextQuestion, 800);
+            state.lives--;
+            if(btn) btn.style.background = "#fee2e2";
+            if(!state.mistakes.find(m => m.de === state.current.de)) state.mistakes.push(state.current);
+            if(state.lives <= 0) return endGame();
+            setTimeout(nextTask, 800);
         }
         updateUI();
-    }
-
-    function endGame() {
-        document.getElementById('quiz-screen').classList.add('hidden');
-        document.getElementById('over-screen').classList.remove('hidden');
-        document.getElementById('final-score').innerText = state.xp + " TOPLAM XP";
-        
-        if(state.mistakes.length > 0) {
-            const section = document.getElementById('error-section');
-            const list = document.getElementById('error-list');
-            section.classList.remove('hidden');
-            list.innerHTML = state.mistakes.map(m => `
-                <div class="error-item">
-                    <span><b>${m.art} ${m.de}</b></span>
-                    <span style="color:#94a3b8">➔</span>
-                    <span>${m.tr}</span>
-                </div>
-            `).join('');
-        }
     }
 
     function updateUI() {
-        document.getElementById('hearts').innerText = state.hearts;
-        document.getElementById('xp-display').innerText = "XP: " + state.xp;
+        document.getElementById('lives').innerText = state.lives;
+        document.getElementById('xp-bank').innerText = state.xp;
+        let r = "STUDENT";
+        if(state.xp > 500) r = "CHEFARZT"; else if(state.xp > 200) r = "FACHARZT";
+        document.getElementById('user-rank').innerText = r;
+        localStorage.setItem('med_xp_v7', state.xp);
+    }
+
+    function endGame() {
+        document.getElementById('game-zone').classList.add('hidden');
+        document.getElementById('over-screen').classList.remove('hidden');
+        document.getElementById('mistakes-log').innerHTML = "<b>HATALARINI NOT AL:</b><br>" + 
+            state.mistakes.map(m => `${m.icon} ${m.art} ${m.de} (${m.tr})`).join('<br>');
     }
 
     function speak() {
         window.speechSynthesis.cancel();
-        const u = new SpeechSynthesisUtterance(`${state.current.art} ${state.current.de}`);
-        u.lang = 'de-DE'; u.rate = 0.8;
-        window.speechSynthesis.speak(u);
+        let u = new SpeechSynthesisUtterance(`${state.current.art} ${state.current.de}`);
+        u.lang = 'de-DE'; window.speechSynthesis.speak(u);
     }
-
-    nextQuestion();
 </script>
 </body>
 </html>
