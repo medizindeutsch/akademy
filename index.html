@@ -3,132 +3,151 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>PflegeAkademy: Career Path v2026</title>
+    <title>PflegeAkademy: Ultimate Combo Edition</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        :root { --n-blue: #0ea5e9; --m-green: #10b981; --w-gold: #f59e0b; --d-red: #ef4444; --dark: #1e293b; }
+        :root { --n-blue: #0ea5e9; --m-green: #10b981; --w-gold: #f59e0b; --d-red: #ef4444; --dark: #0f172a; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
-        body { font-family: 'Poppins', sans-serif; background: #f1f5f9; margin: 0; overflow: hidden; height: 100vh; display: flex; justify-content: center; }
-        #app { width: 100%; max-width: 500px; height: 100%; display: flex; flex-direction: column; padding: 15px; position: relative; }
+        body { font-family: 'Poppins', sans-serif; background: #0f172a; margin: 0; overflow: hidden; height: 100vh; display: flex; justify-content: center; color: white; }
+        #app { width: 100%; max-width: 500px; height: 100%; display: flex; flex-direction: column; padding: 15px; position: relative; background: #f1f5f9; color: #1e293b; }
 
         /* ÜST PANEL */
-        .top-panel { background: var(--dark); color: white; padding: 18px; border-radius: 30px; margin-bottom: 15px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); border-bottom: 4px solid var(--n-blue); }
-        .xp-container { background: #334155; height: 12px; border-radius: 10px; margin: 12px 0; overflow: hidden; }
-        #xp-bar { background: linear-gradient(90deg, #10b981, #34d399); height: 100%; width: 0%; transition: 0.6s; }
-        .stats-row { display: flex; justify-content: space-between; font-weight: 800; font-size: 14px; }
+        .top-panel { background: var(--dark); color: white; padding: 18px; border-radius: 30px; margin-bottom: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); border-bottom: 4px solid var(--n-blue); }
+        .xp-container { background: #334155; height: 12px; border-radius: 10px; margin: 12px 0; overflow: hidden; border: 1px solid #475569; }
+        #xp-bar { background: linear-gradient(90deg, #0ea5e9, #38bdf8); height: 100%; width: 0%; transition: 0.6s; }
+        .stats-row { display: flex; justify-content: space-between; font-weight: 800; font-size: 13px; color: #cbd5e1; }
 
         /* SORU KARTI */
-        .q-card { background: white; border-radius: 30px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); text-align: center; }
-        .vaka { background: #f8fafc; padding: 15px; border-radius: 20px; border-left: 5px solid var(--n-blue); font-size: 13px; text-align: left; margin-bottom: 15px; color: #64748b; }
-        .opt { background: white; border: 2px solid #f1f5f9; border-radius: 20px; padding: 15px; margin-bottom: 10px; width: 100%; font-weight: 700; cursor: pointer; text-align: left; transition: 0.2s; }
-        .opt.correct { background: var(--m-green); color: white; border-color: var(--m-green); }
+        .q-card { background: white; border-radius: 35px; padding: 25px; box-shadow: 0 15px 40px rgba(0,0,0,0.08); text-align: center; border: 1px solid #e2e8f0; }
+        .vaka { background: #f8fafc; padding: 15px; border-radius: 20px; border-left: 6px solid var(--n-blue); font-size: 13px; text-align: left; margin-bottom: 15px; color: #475569; line-height: 1.5; }
+        .opt { background: white; border: 2px solid #f1f5f9; border-radius: 20px; padding: 16px; margin-bottom: 10px; width: 100%; font-weight: 700; cursor: pointer; text-align: left; transition: 0.2s; font-size: 15px; }
+        .opt:active { transform: scale(0.98); }
+        .opt.correct { background: var(--m-green); color: white; border-color: var(--m-green); box-shadow: 0 5px 15px rgba(16,185,129,0.4); }
         .opt.wrong { background: var(--d-red); color: white; border-color: var(--d-red); }
 
-        /* HEDİYE PAKETİ EKRANI */
-        .gift-lock-overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.98); z-index: 10000; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .gift-emoji { font-size: 120px; transition: transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275); cursor: pointer; }
-        .click-text { font-family: 'Montserrat'; color: white; font-size: 24px; margin-top: 20px; animation: pulse 1s infinite; text-align: center; }
-        @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.1); opacity: 0.7; } }
+        /* KOMBO YAZISI */
+        #combo-text { position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%); font-family: 'Montserrat'; font-size: 50px; color: var(--w-gold); text-shadow: 0 0 20px rgba(245,158,11,0.8); z-index: 500; pointer-events: none; opacity: 0; }
+        .combo-anim { animation: comboPop 0.8s ease-out forwards; }
+        @keyframes comboPop { 
+            0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0; } 
+            50% { transform: translate(-50%, -50%) scale(1.3); opacity: 1; }
+            100% { transform: translate(-50%, -70%) scale(1); opacity: 0; }
+        }
 
-        /* MARKET ÖĞELERİ */
-        .shop-item { background: #f8fafc; padding: 15px; border-radius: 20px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; cursor: pointer; border: 2px solid transparent; transition: 0.2s; position: relative; }
-        .shop-item.locked { opacity: 0.5; cursor: not-allowed; background: #e2e8f0; }
-        .shop-item:not(.locked):hover { border-color: var(--n-blue); background: #f0f9ff; }
-        .price { background: var(--w-gold); padding: 5px 12px; border-radius: 10px; font-weight: 900; color: #000; }
-        .lock-tag { position: absolute; top: -5px; right: 10px; background: var(--d-red); color: white; font-size: 10px; padding: 2px 8px; border-radius: 5px; font-weight: 900; }
+        /* HEDİYE KİLİDİ */
+        .gift-lock-overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.98); z-index: 10000; display: flex; flex-direction: column; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
+        .gift-clicker { position: relative; cursor: pointer; text-align: center; }
+        .gift-emoji { font-size: 130px; transition: transform 0.1s; filter: drop-shadow(0 0 30px gold); }
+        .click-hint { font-family: 'Montserrat'; color: white; font-size: 26px; margin-top: 30px; animation: pulse 0.8s infinite; text-shadow: 0 0 10px var(--n-blue); }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.15); color: var(--w-gold); } 100% { transform: scale(1); } }
+
+        /* MARKET */
+        .shop-item { background: #f8fafc; padding: 18px; border-radius: 22px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; cursor: pointer; border: 2px solid transparent; transition: 0.3s; position: relative; overflow: hidden; }
+        .shop-item.locked { background: #e2e8f0; opacity: 0.6; cursor: not-allowed; }
+        .shop-item:not(.locked):hover { border-color: var(--n-blue); background: #f0f9ff; transform: translateY(-2px); }
+        .price-badge { background: var(--w-gold); padding: 6px 14px; border-radius: 12px; font-weight: 900; color: #1e293b; font-size: 14px; box-shadow: 0 4px 10px rgba(245,158,11,0.3); }
+        .lock-banner { position: absolute; top: 0; left: 0; background: var(--d-red); color: white; font-size: 9px; padding: 2px 10px; font-weight: 900; border-bottom-right-radius: 10px; }
 
         /* MODALLAR */
-        .overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.95); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; }
-        .fancy-card { background: white; padding: 30px; border-radius: 40px; width: 100%; max-width: 400px; box-shadow: 0 25px 60px rgba(0,0,0,0.5); }
-        .lvl-up-title { font-family: 'Montserrat'; font-size: 32px; background: linear-gradient(to bottom, #f59e0b, #d97706); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.96); z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 20px; text-align: center; }
+        .fancy-card { background: white; padding: 35px; border-radius: 45px; width: 100%; max-width: 420px; box-shadow: 0 30px 70px rgba(0,0,0,0.6); position: relative; color: #1e293b; }
+        .lvl-up-title { font-family: 'Montserrat'; font-size: 38px; color: var(--w-gold); text-shadow: 0 4px 10px rgba(0,0,0,0.1); margin: 5px 0; }
+        .reward-box { background: #f0fdf4; border: 2px dashed #22c55e; padding: 10px; border-radius: 15px; color: #15803d; font-weight: 800; margin-top: 15px; }
+        
         .hidden { display: none !important; }
+        .shop-btn { background: var(--w-gold); color: #1e293b; border: none; padding: 10px 20px; border-radius: 15px; font-weight: 900; font-family: 'Montserrat'; cursor: pointer; box-shadow: 0 5px 15px rgba(245,158,11,0.4); }
     </style>
 </head>
 <body>
 
-    <div id="login-overlay" class="overlay" style="background: white;">
-        <div class="fancy-card" style="box-shadow: none; border: 1px solid #eee;">
-            <div style="font-size: 60px;">🏥</div>
-            <h1 style="font-family:'Montserrat'; color:var(--n-blue);">PflegeAkademy</h1>
-            <input type="text" id="u-name" placeholder="İsminiz" style="width:100%; padding:18px; border-radius:20px; border:2px solid #ddd; margin-bottom:20px; text-align:center; font-size:18px;">
-            <button onclick="greetNurse()" style="width:100%; background:var(--n-blue); color:white; padding:18px; border:none; border-radius:20px; font-weight:900; cursor:pointer;">KARİYERE BAŞLA</button>
+    <div id="login-overlay" class="overlay" style="background: #f1f5f9;">
+        <div class="fancy-card" style="box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 2px solid #e2e8f0;">
+            <div style="font-size: 80px; margin-bottom: 10px;">🩺</div>
+            <h1 style="font-family:'Montserrat'; color:var(--n-blue); font-size: 32px; margin: 0;">PflegeAkademy</h1>
+            <p style="color: #64748b; margin-bottom: 30px;">Kariyerin Seni Bekliyor Aslanım</p>
+            <input type="text" id="u-name" placeholder="Adınız Soyadınız" style="width:100%; padding:20px; border-radius:20px; border:2px solid #e2e8f0; margin-bottom:20px; text-align:center; font-size:18px; font-family:'Poppins';">
+            <button onclick="greetNurse()" style="width:100%; background:var(--n-blue); color:white; padding:20px; border:none; border-radius:20px; font-weight:900; font-size:18px; cursor:pointer; box-shadow: 0 10px 20px rgba(14,165,233,0.3);">SİSTEME GİR</button>
         </div>
     </div>
 
     <div id="nurse-overlay" class="overlay hidden">
         <div class="fancy-card">
-            <h2 id="n-title" style="color:var(--n-blue);">Hoş Geldin!</h2>
-            <p style="font-weight: 600; color: #475569;">Level atladıkça soru başına daha çok kazanacaksın ve markette yeni ürünlerin kilidini açacaksın! Başarılar aslanım. 🩺</p>
-            <button onclick="startApp()" style="background:var(--m-green); color:white; border:none; padding:15px 40px; border-radius:20px; font-weight:900; cursor:pointer;">BAŞLAYALIM!</button>
+            <h2 id="n-title" style="color:var(--n-blue); font-size: 28px;">Hoş Geldin!</h2>
+            <p style="font-weight: 600; font-size: 17px; color: #475569; line-height: 1.6;">Unutma! <span style="color:var(--m-green)">5 doğru kombo</span> yapınca sana özel bir hediye paketi getireceğim. Onu patlatmadan oyuna dönemezsin. Hazır mısın?</p>
+            <button onclick="startApp()" style="background:var(--m-green); color:white; border:none; padding:18px 50px; border-radius:20px; font-weight:900; cursor:pointer; margin-top: 10px;">HAZIRIM ASLANIM!</button>
         </div>
-        <div style="font-size: 150px; margin-top: 20px;">👩‍⚕️</div>
+        <div style="font-size: 160px; position: absolute; bottom: -30px; opacity: 0.1; pointer-events: none;">👩‍⚕️</div>
     </div>
 
     <div id="gift-lock" class="gift-lock-overlay hidden">
-        <div onclick="clickGift()" style="text-align:center;">
+        <div class="gift-clicker" onclick="clickGift()">
             <div id="gift-emoji" class="gift-emoji">🎁</div>
-            <div class="click-text">SÜREKLİ TIKLA!<br><small>(HEDİYEYİ PATLAT)</small></div>
+            <div class="click-hint">SÜREKLİ TIKLA!</div>
         </div>
     </div>
+
+    <div id="combo-text">KOMBO X2</div>
 
     <div id="app" class="hidden">
         <div class="top-panel">
             <div style="display:flex; justify-content:space-between; align-items:center;">
                 <div>
-                    <div id="rank-name" style="font-size:10px; font-weight:900; color:var(--n-blue); text-transform:uppercase;">STAJYER</div>
-                    <div id="u-display" style="font-weight:700;">Hemşire</div>
+                    <div id="rank-name" style="font-size:10px; font-weight:900; color:var(--n-blue); letter-spacing:1.5px;">STAJYER</div>
+                    <div id="u-display" style="font-weight:700; font-size: 18px;">Hemşire</div>
                 </div>
                 <button class="shop-btn" onclick="openShop()">🛒 MARKET</button>
             </div>
             <div class="xp-container"><div id="xp-bar"></div></div>
             <div class="stats-row">
-                <span>💰 <span id="c-val">100</span> <small id="income-tag" style="color:var(--m-green); font-size:9px;">(+20)</small></span>
+                <span>💰 <span id="c-val">100</span> <small id="income-tag" style="color:var(--m-green)">(+25)</small></span>
                 <span>LVL <span id="l-val">1</span></span>
                 <span>❤️ <span id="h-val">5</span></span>
             </div>
         </div>
 
         <div class="q-card">
-            <div class="vaka" id="v-txt">Yükleniyor...</div>
-            <h2 id="q-word" style="font-size: 24px; margin-bottom:20px;">Kelime</h2>
+            <div class="vaka" id="v-txt">Vaka yükleniyor...</div>
+            <h2 id="q-word" style="font-size: 26px; margin: 10px 0 25px 0; color: var(--dark);">Wort</h2>
             <div id="opt-grid"></div>
         </div>
     </div>
 
     <div id="shop-overlay" class="overlay hidden" onclick="toggle('shop-overlay', false)">
-        <div class="fancy-card" onclick="event.stopPropagation()" style="max-height: 80vh; overflow-y: auto;">
-            <h2 style="margin-top:0;">Hastane Marketi</h2>
+        <div class="fancy-card" onclick="event.stopPropagation()" style="max-height: 85vh; overflow-y: auto; padding: 25px;">
+            <h2 style="margin:0 0 20px 0; font-family:'Montserrat';">Hastane Marketi</h2>
             <div id="shop-list"></div>
-            <button onclick="toggle('shop-overlay', false)" style="width:100%; padding:15px; border:none; border-radius:15px; font-weight:700; margin-top:10px;">ÇIK</button>
+            <button onclick="toggle('shop-overlay', false)" style="width:100%; padding:15px; border:none; border-radius:20px; font-weight:900; margin-top:15px; background: #eee;">KAPAT</button>
         </div>
     </div>
 
     <div id="res-overlay" class="overlay hidden">
-        <div class="fancy-card">
-            <div id="res-ico" style="font-size:70px;">📦</div>
-            <h1 id="res-ttl" class="lvl-up-title">BİLGİ</h1>
-            <p id="res-dsc" style="font-size:16px; font-weight:600; color:#475569; margin:15px 0;">...</p>
-            <button onclick="toggle('res-overlay', false)" style="width:100%; background:var(--n-blue); color:white; padding:15px; border:none; border-radius:15px; font-weight:900;">TAMAM</button>
+        <div class="fancy-card" id="res-card">
+            <div id="res-ico" style="font-size:80px;">🏆</div>
+            <h1 id="res-ttl" class="lvl-up-title">TEBRİKLER!</h1>
+            <p id="res-dsc" style="font-size:17px; font-weight:600; color:#475569; margin:15px 0;">...</p>
+            <div id="reward-info" class="reward-box hidden"></div>
+            <button onclick="toggle('res-overlay', false)" style="width:100%; background:var(--n-blue); color:white; padding:18px; border:none; border-radius:20px; font-weight:900; margin-top:20px; cursor:pointer;">DEVAM ET</button>
         </div>
     </div>
 
 <script>
     const DATA = [
-        { de: "Herzinsuffizienz", tr: "Kalp yetmezliği", vaka: "Das Herz des Patienten pumpt nicht genug Blut." },
-        { de: "Schmerzmittel", tr: "Ağrı kesici", vaka: "Geben Sie dem Patienten ein leichtes Schmerzmittel." },
-        { de: "Nadel", tr: "İğne", vaka: "Die Nadel muss steril sein." },
-        { de: "Puls", tr: "Nabız", vaka: "Ich muss Ihren Puls fühlen." }
+        { de: "Blutdruck", tr: "Tansiyon", vaka: "Wir müssen den Blutdruck des Patienten sofort messen." },
+        { de: "Infusion", tr: "Serum", vaka: "Die Infusion läuft langsam in die Vene." },
+        { de: "Verband", tr: "Sargı", vaka: "Der Verband am Bein muss gewechselt werden." },
+        { de: "Nüchtern", tr: "Aç karnına", vaka: "Der Patient muss für die OP nüchtern sein." },
+        { de: "Atemnot", tr: "Nefes darlığı", vaka: "Hilfe! Der Patient klagt über starke Atemnot." }
     ];
 
-    const RANKS = ["Stajyer", "Yardımcı Hemşire", "Kıdemli Hemşire", "Servis Sorumlusu", "Başhemşire", "Hastane Müdürü"];
+    const RANKS = ["Stajyer", "Yardımcı Hemşire", "Kıdemli Hemşire", "Servis Sorumlusu", "Başhemşire", "Profesör Hemşire"];
 
     let st = { xp: 0, coins: 150, lives: 5, level: 1, streak: 0, busy: false, name: "", giftClicks: 0, hasShield: false };
 
     function greetNurse() {
         st.name = document.getElementById('u-name').value || "Hemşire";
         document.getElementById('u-display').innerText = st.name;
-        document.getElementById('n-title').innerText = "Başlayalım " + st.name;
+        document.getElementById('n-title').innerText = "Hoş Geldin " + st.name + "!";
         toggle('login-overlay', false); toggle('nurse-overlay', true);
     }
 
@@ -142,7 +161,7 @@
         document.getElementById('h-val').innerText = st.lives;
         document.getElementById('l-val').innerText = st.level;
         
-        let income = 20 + (st.level * 5); // LEVEL AMACI 1: Maaş artışı
+        let income = 20 + (st.level * 5);
         document.getElementById('income-tag').innerText = `(+${income})`;
         
         let rankIdx = Math.min(Math.floor((st.level - 1) / 2), RANKS.length - 1);
@@ -152,10 +171,22 @@
         document.getElementById('xp-bar').style.width = (st.xp / nx * 100) + "%";
         
         if(st.xp >= nx) {
-            st.level++; st.xp = 0; st.coins += 500;
-            showRes("🏆", "LEVEL ATLADIN!", `Tebrikler! Seviye: ${st.level}<br>Maaşın arttı ve markette yeni ürünler açılmış olabilir!`);
-            fire();
+            st.level++; st.xp = 0; 
+            let bonus = st.level * 200;
+            st.coins += bonus;
+            showLevelUp(bonus);
         }
+    }
+
+    function showLevelUp(bonus) {
+        document.getElementById('res-ico').innerText = "🎇";
+        document.getElementById('res-ttl').innerText = "LEVEL ATLADIN!";
+        document.getElementById('res-dsc').innerHTML = `Tebrikler ${st.name}!<br>Artık <b>${st.level}. Seviye</b> bir sağlıkçısın.`;
+        const rb = document.getElementById('reward-info');
+        rb.innerText = `ÖDÜL: +${bonus} ÇİP PARA`;
+        rb.classList.remove('hidden');
+        toggle('res-overlay', true);
+        fireworks();
     }
 
     function next() {
@@ -173,13 +204,19 @@
                 if(o === q.tr) {
                     b.classList.add('correct'); 
                     st.xp += 60; 
-                    st.coins += (20 + (st.level * 5)); // Maaş uygulaması
+                    st.coins += (20 + (st.level * 5)); 
                     st.streak++;
-                    if(st.streak >= 5) { st.streak = 0; setTimeout(() => toggle('gift-lock', true), 500); }
+                    showComboEffect(st.streak);
+                    if(st.streak >= 5) { 
+                        st.streak = 0;
+                        setTimeout(() => toggle('gift-lock', true), 800);
+                    }
                 } else {
                     b.classList.add('wrong');
-                    if(st.hasShield) { st.hasShield = false; showRes("🛡️", "KALKAN!", "Maske seni korudu!"); }
-                    else { st.lives--; }
+                    if(st.hasShield) { 
+                        st.hasShield = false; 
+                        showNotification("🛡️", "KALKAN KORUDU", "Masken sayesinde canın gitmedi!"); 
+                    } else { st.lives--; }
                     st.streak = 0;
                     if(st.lives <= 0) location.reload();
                 }
@@ -189,23 +226,36 @@
         });
     }
 
+    function showComboEffect(count) {
+        if(count < 2) return;
+        const ct = document.getElementById('combo-text');
+        ct.innerText = `KOMBO X${count}`;
+        ct.classList.remove('combo-anim');
+        void ct.offsetWidth; // Reset animation
+        ct.classList.add('combo-anim');
+    }
+
     function openShop() {
         const list = document.getElementById('shop-list');
         list.innerHTML = "";
         const items = [
-            { id: 'heart', n: "Serum", d: "+1 Can", p: 300, l: 1 },
-            { id: 'gift', n: "Süpriz Paket", d: "Rastgele Ödül", p: 800, l: 1 },
-            { id: 'shield', n: "Koruyucu Maske", d: "Hata Koruması", p: 500, l: 3 }, // LEVEL AMACI 2: Kilitli eşya
-            { id: 'doctor', n: "Doktorun Onayı", d: "+1000 XP (Anında)", p: 2500, l: 5 } // LEVEL AMACI 2: Kilitli eşya
+            { id: 'heart', n: "Serum Paketi", d: "+1 Can Verir", p: 300, l: 1, icon: "💉" },
+            { id: 'gift', n: "Sürpriz Paket", d: "Aç ve Ödülünü Al!", p: 200, l: 3, icon: "🎁" },
+            { id: 'shield', n: "Koruyucu Maske", d: "1 Hata Koruması", p: 500, l: 5, icon: "🛡️" },
+            { id: 'xp', n: "Profesörlük Tezi", d: "+1500 XP Verir", p: 1000, l: 25, icon: "🎓" }
         ];
 
         items.forEach(i => {
-            const div = document.createElement('div');
             const isLocked = st.level < i.l;
+            const div = document.createElement('div');
             div.className = `shop-item ${isLocked ? 'locked' : ''}`;
             div.innerHTML = `
-                <div><b>${i.n}</b><span>${i.d}</span></div>
-                ${isLocked ? `<div class="lock-tag">LVL ${i.l}</div>` : `<div class="price">${i.p} 💰</div>`}
+                ${isLocked ? `<div class="lock-banner">LVL ${i.l} AÇILIR</div>` : ''}
+                <div style="display:flex; align-items:center;">
+                    <span style="font-size:30px; margin-right:15px;">${i.icon}</span>
+                    <div><b>${i.n}</b><span>${i.d}</span></div>
+                </div>
+                ${!isLocked ? `<div class="price-badge">${i.p} 💰</div>` : '🔒'}
             `;
             if(!isLocked) div.onclick = () => buy(i.id, i.p, i.n);
             list.appendChild(div);
@@ -214,51 +264,83 @@
     }
 
     function buy(id, cost, name) {
-        if(st.coins < cost) { alert("Para yetmiyor!"); return; }
+        if(st.coins < cost) { alert("Yetersiz Çip Para!"); return; }
         st.coins -= cost;
         if(id === 'gift') { toggle('shop-overlay', false); toggle('gift-lock', true); }
         else if(id === 'heart') st.lives++;
         else if(id === 'shield') st.hasShield = true;
-        else if(id === 'doctor') st.xp += 1000;
+        else if(id === 'xp') st.xp += 1500;
         
         upUI();
-        showRes("🛒", "ALINDI!", `<b>${name}</b> başarıyla satın alındı.`);
+        showNotification("🛒", "SATIN ALINDI", `<b>${name}</b> başarıyla alındı.`);
     }
 
     function clickGift() {
         st.giftClicks++;
-        let s = 1 + (st.giftClicks * 0.4);
+        let s = 1 + (st.giftClicks * 0.45);
         document.getElementById('gift-emoji').style.transform = `scale(${s})`;
+        
         if(st.giftClicks >= 6) {
+            // EFEKTLİ PATLAMA
             document.getElementById('gift-emoji').style.transform = `scale(0)`;
-            // LEVEL AMACI 3: Üst levellerde daha çok ödül
-            let multi = st.level >= 5 ? 2 : 1; 
-            let items = [
-                { i: "💰", t: "PARA!", d: `+${400*multi} 💰 Kazandın!`, fn: () => st.coins += (400*multi) },
-                { i: "💉", t: "CAN!", d: "+2 Can Kazandın!", fn: () => st.lives += 2 },
-                { i: "🔥", t: "KAYIP", d: "-100 💰 Gitti!", fn: () => st.coins = Math.max(0, st.coins-100) }
+            document.body.style.animation = "shake 0.5s";
+            bigExplosion();
+
+            let multi = st.level >= 10 ? 2 : 1;
+            let pool = [
+                { i: "💰", t: "PARA YAĞMURU", d: `+${500*multi} Çip Para!`, fn: () => st.coins += (500*multi) },
+                { i: "💉", t: "SAĞLIK DESTEĞİ", d: "+2 Can Kazandın!", fn: () => st.lives += 2 },
+                { i: "☣️", t: "TIBBİ HATA", d: "-100 Çip Para Gitti!", fn: () => st.coins = Math.max(0, st.coins-100) }
             ];
-            let r = items[Math.floor(Math.random()*items.length)];
+            let r = pool[Math.floor(Math.random()*pool.length)];
             r.fn();
+            
             setTimeout(() => {
-                toggle('gift-lock', false); showRes(r.i, r.t, r.d);
-                st.giftClicks = 0; document.getElementById('gift-emoji').style.transform = `scale(1)`;
+                document.body.style.animation = "";
+                toggle('gift-lock', false);
+                showNotification(r.i, r.t, r.d);
+                st.giftClicks = 0;
+                document.getElementById('gift-emoji').style.transform = `scale(1)`;
                 upUI();
-            }, 300);
+            }, 500);
         }
     }
 
-    function showRes(i, t, d) {
+    function showNotification(i, t, d) {
         document.getElementById('res-ico').innerText = i;
         document.getElementById('res-ttl').innerText = t;
         document.getElementById('res-dsc').innerHTML = d;
+        document.getElementById('reward-info').classList.add('hidden');
         toggle('res-overlay', true);
     }
 
     function toggle(id, show) { document.getElementById(id).classList.toggle('hidden', !show); }
-    function fire() {
-        confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+
+    function bigExplosion() {
+        confetti({ particleCount: 200, spread: 100, origin: { y: 0.5 }, colors: ['#0ea5e9', '#f59e0b', '#10b981'] });
+    }
+
+    function fireworks() {
+        let duration = 3 * 1000;
+        let end = Date.now() + duration;
+        (function frame() {
+            confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 } });
+            confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 } });
+            if (Date.now() < end) requestAnimationFrame(frame);
+        }());
     }
 </script>
+
+<style>
+    @keyframes shake {
+        0% { transform: translate(1px, 1px) rotate(0deg); }
+        20% { transform: translate(-3px, 0px) rotate(1deg); }
+        40% { transform: translate(3px, 2px) rotate(-1deg); }
+        60% { transform: translate(-3px, 1px) rotate(0deg); }
+        80% { transform: translate(3px, -1px) rotate(1deg); }
+        100% { transform: translate(1px, 1px) rotate(0deg); }
+    }
+</style>
+
 </body>
 </html>
