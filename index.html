@@ -2,787 +2,254 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>PflegeAkademy | Medizinisches Deutsch</title>
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PflegeAkademie</title>
 <style>
-:root{--blue:#0ea5e9;--cyan:#67e8f9;--teal:#14b8a6;--green:#10b981;--gold:#f59e0b;--red:#ef4444;--dark:#07111f;--ink:#163047;--paper:#f8fbff;--line:#d9e7f3}
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;outline:none}body{margin:0;font-family:'Poppins',sans-serif;background:radial-gradient(circle at top,#1d4ed8 0%,#0f172a 45%,#020617 100%);height:100vh;overflow:hidden;display:flex;justify-content:center}button,input{font-family:inherit}#app-shell{width:100%;max-width:520px;height:100%;position:relative}#app{width:100%;height:100%;display:flex;flex-direction:column;padding:14px;position:relative;background:linear-gradient(180deg,#f6fbff 0%,#eaf6ff 42%,#dceffc 100%);overflow:hidden}#app:before,#app:after{content:"";position:absolute;border-radius:999px;filter:blur(8px);opacity:.45;pointer-events:none}#app:before{width:220px;height:220px;background:radial-gradient(circle,#67e8f9 0%,transparent 70%);top:-60px;right:-70px}#app:after{width:200px;height:200px;background:radial-gradient(circle,#f59e0b 0%,transparent 72%);bottom:-80px;left:-80px}.hidden{display:none!important}.overlay{position:fixed;inset:0;background:rgba(2,6,23,.86);display:flex;align-items:center;justify-content:center;padding:18px;z-index:50}.card,.panel{background:rgba(255,255,255,.95);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.35);box-shadow:0 24px 60px rgba(2,6,23,.35)}.card{width:100%;max-width:430px;border-radius:30px;padding:28px}.panel{width:100%;max-width:460px;border-radius:26px;padding:22px}.hero{position:relative;overflow:hidden;background:linear-gradient(135deg,#031527,#0f3d5d 58%,#10b981 140%);color:#fff}.hero:before{content:"";position:absolute;inset:-20% auto auto -10%;width:220px;height:220px;background:radial-gradient(circle,rgba(103,232,249,.35),transparent 70%);border-radius:50%}.hero h1{font-family:'Montserrat',sans-serif;font-size:31px;line-height:1.02;margin:8px 0 6px}.hero p{font-size:13px;line-height:1.6;color:#d5eef9}.capsule-row{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0 12px}.capsule{padding:8px 12px;border-radius:999px;background:rgba(255,255,255,.12);font-size:11px;font-weight:700;letter-spacing:.04em}.auth-switch{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:16px 0 12px}.field{width:100%;padding:15px 16px;border-radius:16px;border:2px solid #d9e7f3;background:#fff;color:#163047;font-size:14px;margin-top:10px}.field:focus{border-color:var(--blue);box-shadow:0 0 0 4px rgba(14,165,233,.15)}.btn{border:none;border-radius:16px;padding:15px 16px;font-weight:800;cursor:pointer;transition:.2s}.btn:hover{transform:translateY(-1px)}.btn-primary{background:linear-gradient(135deg,var(--blue),#2563eb);color:#fff;box-shadow:0 12px 24px rgba(37,99,235,.28)}.btn-secondary{background:#fff;color:#0f172a;border:2px solid #d5e3ee}.btn-dark{background:#0f172a;color:#fff}.top-bar{position:relative;z-index:1;padding:18px 18px 16px;border-radius:28px;background:linear-gradient(140deg,#031525,#0b2745 58%,#0ea5e9 160%);color:#fff;box-shadow:0 18px 40px rgba(2,6,23,.24)}.top-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}.top-head h2{margin:4px 0 0;font-size:18px}.rank{font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#67e8f9}.top-actions{display:flex;gap:8px}.action{border:none;border-radius:13px;padding:10px 12px;font-size:12px;font-weight:800;cursor:pointer}.market{background:linear-gradient(135deg,#f59e0b,#f97316);color:#fff}.logout{background:#fff;color:#0f172a}.xp-wrap{background:rgba(255,255,255,.12);height:12px;border-radius:999px;margin:14px 0 10px;overflow:hidden;border:1px solid rgba(255,255,255,.14)}#xp-bar{height:100%;width:0;background:linear-gradient(90deg,#67e8f9,#818cf8)}.stats{display:flex;justify-content:space-between;font-size:13px;color:#d7e7f4;font-weight:700;gap:8px}.mini-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}.mini-btn{border:none;border-radius:14px;padding:11px 10px;font-size:12px;font-weight:800;cursor:pointer;color:#fff}.ach-btn{background:linear-gradient(135deg,#f59e0b,#f97316)}.daily-btn{background:linear-gradient(135deg,#10b981,#14b8a6)}.question-card{flex:1;position:relative;z-index:1;margin-top:14px;background:rgba(255,255,255,.82);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.6);border-radius:30px;padding:22px;box-shadow:0 16px 44px rgba(15,23,42,.08);display:flex;flex-direction:column;justify-content:center}.label{display:inline-flex;align-self:center;padding:7px 12px;border-radius:999px;background:#dff4ff;color:#075985;font-size:11px;font-weight:800;letter-spacing:.05em;margin-bottom:14px}.scenario,.sample{padding:14px 16px;border-radius:18px;text-align:left;font-size:14px;line-height:1.6}.scenario{background:#eff8ff;border-left:5px solid var(--blue);color:#164e63}.sample{background:#f0fdf4;border-left:5px solid var(--green);color:#166534;margin:12px 0 18px}.question-word{font-family:'Montserrat',sans-serif;font-size:31px;text-align:center;color:#082f49;margin:0 0 18px}.options{display:grid;gap:10px}.opt{width:100%;padding:16px 14px;border-radius:18px;border:2px solid #dbe9f5;background:#fff;color:#163047;font-weight:700;text-align:left;cursor:pointer;transition:.2s}.opt:hover:not(:disabled){transform:translateY(-2px);border-color:var(--blue);background:#f0f9ff}.opt.correct{background:#10b981;color:#fff;border-color:#10b981}.opt.wrong{background:#ef4444;color:#fff;border-color:#ef4444}.archive{background:#cbd5e1;padding:10px;border-radius:18px 18px 12px 12px;max-width:430px;width:100%}.archive-body{background:#fff;border:1px solid #94a3b8;border-radius:8px;padding:14px;max-height:58vh;overflow:auto}.shop-item{display:flex;align-items:center;background:#fff;border:1px solid #e2e8f0;border-radius:12px;margin-bottom:10px;cursor:pointer;transition:.2s}.shop-item:hover:not(.locked){transform:scale(1.02);border-color:var(--blue)}.shop-item.locked{opacity:.5;filter:grayscale(1);cursor:not-allowed}.shop-icon{width:56px;height:56px;display:flex;align-items:center;justify-content:center;background:#f8fafc;border-right:1px dashed #cbd5e1;font-size:24px}.shop-info{padding:10px;flex:1}.shop-info b{display:block;color:#0f172a;font-size:13px}.shop-info span{font-size:11px;color:#64748b}.price{margin:10px;background:#fff7ed;color:#b45309;padding:6px 10px;border-radius:9px;font-size:12px;font-weight:900;border:1px solid #fed7aa}.summary-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:18px 0}.summary-item{background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:14px}.summary-item span{display:block;color:#64748b;font-size:12px;margin-bottom:5px}.summary-item b{font-size:18px;color:#0f172a}.motivation{background:#0f172a;color:#fff;border-radius:18px;padding:14px;font-size:13px;line-height:1.6;text-align:left}.achievement-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;max-height:52vh;overflow:auto}.achievement{border-radius:18px;padding:14px;background:#f8fafc;border:1px solid #e2e8f0}.achievement.locked{opacity:.48;filter:grayscale(1)}.achievement .icon{font-size:28px;margin-bottom:6px}.achievement b{display:block;font-size:13px;color:#0f172a}.achievement span{display:block;font-size:11px;color:#64748b;margin-top:4px}.daily-hero{background:linear-gradient(135deg,#0f172a,#1d4ed8);color:#fff;border-radius:18px;padding:16px;margin-bottom:12px}.task-list{display:flex;flex-direction:column;gap:10px;max-height:40vh;overflow:auto}.task{border:1px solid #dbeafe;background:#f8fbff;border-radius:16px;padding:14px}.task.done{background:#ecfdf5;border-color:#86efac}.task-head{display:flex;justify-content:space-between;gap:8px;font-size:13px;font-weight:700;color:#0f172a}.task-bar{height:8px;background:#dbeafe;border-radius:999px;overflow:hidden;margin-top:10px}.task-bar div{height:100%;background:linear-gradient(90deg,#10b981,#0ea5e9)}.toast-stack{position:fixed;top:16px;right:16px;display:flex;flex-direction:column;gap:10px;width:min(320px,calc(100vw - 32px));z-index:120}.toast{background:#0f172a;color:#fff;border-radius:18px;padding:14px 16px;box-shadow:0 16px 40px rgba(0,0,0,.22)}.toast b{display:block;margin-bottom:4px}.toast small{color:#cbd5e1}.nurse-wrap{display:flex;gap:16px;align-items:center}.nurse-figure{width:110px;min-width:110px;height:150px;position:relative}.nurse-head{width:58px;height:58px;border-radius:50%;background:#ffd7b5;position:absolute;left:26px;top:18px;box-shadow:0 6px 0 #4338ca inset}.nurse-hat{position:absolute;left:31px;top:6px;width:48px;height:24px;border-radius:12px 12px 6px 6px;background:#fff;border:3px solid #bfdbfe}.nurse-hat:after{content:'+';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#ef4444;font-weight:900}.nurse-body{position:absolute;left:18px;top:72px;width:74px;height:66px;border-radius:24px 24px 18px 18px;background:linear-gradient(180deg,#fff,#dbeafe);border:3px solid #bfdbfe}.nurse-body:before,.nurse-body:after{content:'';position:absolute;background:#dbeafe;border-radius:16px;width:18px;height:54px;top:8px}.nurse-body:before{left:-12px;transform:rotate(18deg)}.nurse-body:after{right:-12px;transform:rotate(-18deg)}.nurse-legs{position:absolute;left:34px;top:132px;width:42px;height:16px}.nurse-legs:before,.nurse-legs:after{content:'';position:absolute;width:10px;height:28px;background:#fff;border-radius:8px}.nurse-legs:before{left:4px}.nurse-legs:after{right:4px}.bubble{flex:1;background:#eff6ff;border:1px solid #bfdbfe;color:#163047;border-radius:22px;padding:16px;font-size:14px;line-height:1.7}.badge-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.speech-note{font-size:12px;color:#64748b;margin-top:8px}.float-txt{position:absolute;font-family:'Montserrat',sans-serif;font-size:24px;font-weight:900;pointer-events:none;z-index:999;animation:floatUp 1s forwards ease-out;text-shadow:2px 2px 0 #fff}.flash-green{background:#ecfdf5!important}.flash-red{background:#fef2f2!important}.shake{animation:shake .4s cubic-bezier(.36,.07,.19,.97) both}.combo-text{position:absolute;top:26%;left:50%;transform:translate(-50%,-50%);font-family:'Montserrat',sans-serif;font-size:48px;color:var(--gold);opacity:0;pointer-events:none;text-shadow:2px 2px 0 #0f172a;z-index:80}.combo-anim{animation:comboPop .8s forwards}.footer-note{font-size:11px;color:#93c5fd;margin-top:10px}@keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-12px)}40%,80%{transform:translateX(12px)}}@keyframes comboPop{0%{scale:.5;opacity:0}40%{scale:1.16;opacity:1}100%{scale:1;opacity:0;transform:translate(-50%,-100px)}}@keyframes floatUp{0%{opacity:1;transform:translateY(0) scale(.8)}100%{opacity:0;transform:translateY(-90px) scale(1.16)}}@media (max-width:560px){.question-word{font-size:28px}.nurse-wrap{flex-direction:column;text-align:center}.nurse-figure{height:142px}}
+:root{--b1:#071321;--b2:#123d67;--c:#f8fbff;--l:#d9e7f4;--t:#18324a;--m:#5f7387;--blue:#1d4ed8;--cyan:#0ea5e9;--green:#16a34a;--gold:#f59e0b;--red:#ef4444}*{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Tahoma,sans-serif;color:var(--t);background:radial-gradient(circle at top right,rgba(255,255,255,.16),transparent 30%),linear-gradient(160deg,var(--b1),var(--b2) 55%,#0ea5e9 150%);min-height:100vh}.hidden{display:none!important}.overlay{position:fixed;inset:0;background:rgba(2,8,23,.82);display:flex;align-items:center;justify-content:center;padding:18px;z-index:50}.card,.panel{width:min(100%,470px);background:rgba(255,255,255,.97);border:1px solid rgba(255,255,255,.6);border-radius:28px;box-shadow:0 28px 64px rgba(0,0,0,.25)}.card{padding:26px}.panel{padding:22px}.hero{color:#fff;background:radial-gradient(circle at top right,rgba(103,232,249,.35),transparent 30%),linear-gradient(145deg,#03101e,#11406c 55%,#10b981 150%)}.hero h1{font-size:32px;line-height:1.05;margin:8px 0 10px}.hero p{line-height:1.6;color:#dcedfb}.tags{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0}.tag{padding:8px 12px;border-radius:999px;background:rgba(255,255,255,.12);font-size:12px;font-weight:700}.switch{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0 10px}.field,.btn{width:100%;border-radius:16px;padding:15px 16px;font:inherit}.field{margin-top:10px;border:2px solid var(--l);background:#fff}.field:focus{outline:none;border-color:var(--cyan);box-shadow:0 0 0 4px rgba(6,182,212,.12)}.btn{border:none;font-weight:800;cursor:pointer}.btn-primary{color:#fff;background:linear-gradient(135deg,#1d4ed8,#0ea5e9)}.btn-secondary{color:#0f172a;background:#fff;border:2px solid var(--l)}.btn-dark{color:#fff;background:#0f172a}.shell{width:min(100%,560px);margin:0 auto;min-height:100vh;padding:14px}.top{border-radius:28px;padding:18px;color:#fff;background:radial-gradient(circle at top right,rgba(103,232,249,.25),transparent 30%),linear-gradient(145deg,#041220,#123f6c 55%,#0ea5e9 160%);box-shadow:0 22px 48px rgba(0,0,0,.18)}.top-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.rank{font-size:12px;font-weight:800;letter-spacing:.08em;color:#93c5fd}.player{font-size:22px;font-weight:800;margin-top:4px}.micro{font-size:12px;color:#dbeafe;margin-top:6px}.chips{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}.chip{border:none;border-radius:14px;padding:10px 12px;font-weight:800;cursor:pointer}.market{background:linear-gradient(135deg,#f59e0b,#fb7185);color:#fff}.light{background:#fff;color:#0f172a}.bar{height:12px;margin:14px 0 10px;border-radius:999px;overflow:hidden;background:rgba(255,255,255,.16)}.bar>div{height:100%;width:0;background:linear-gradient(90deg,#67e8f9,#818cf8)}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;font-size:13px;font-weight:700}.stat{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:10px;text-align:center}.quick{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.quick button{border:none;border-radius:16px;padding:12px;font-weight:800;color:#fff;cursor:pointer}.ach{background:linear-gradient(135deg,#f59e0b,#f97316)}.daily{background:linear-gradient(135deg,#10b981,#06b6d4)}.stage{margin-top:14px;background:rgba(255,255,255,.96);border-radius:28px;padding:22px;box-shadow:0 20px 44px rgba(15,23,42,.08)}.label{display:inline-block;padding:8px 12px;border-radius:999px;font-size:11px;font-weight:800;color:#075985;background:#e0f2fe}.scenario,.sample{margin-top:14px;border-radius:18px;padding:15px 16px;line-height:1.65}.scenario{background:#eff6ff;border-left:5px solid #3b82f6;color:#1d4d6e}.sample{background:#f0fdf4;border-left:5px solid #16a34a;color:#166534}.word{margin:18px 0;font-size:34px;font-weight:900;text-align:center;color:#0f2f49}.options{display:grid;gap:10px}.opt{width:100%;text-align:left;border:2px solid #d9e7f3;background:#fff;color:#19324a;border-radius:18px;padding:16px;font-size:15px;font-weight:700;cursor:pointer}.opt:hover:not(:disabled){border-color:#0ea5e9;background:#f0f9ff}.opt.correct{background:#16a34a;color:#fff;border-color:#16a34a}.opt.wrong{background:#ef4444;color:#fff;border-color:#ef4444}.meta{margin-top:12px;font-size:12px;color:var(--m);text-align:center}.scroll{max-height:58vh;overflow:auto}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.box{border:1px solid #dce8f5;border-radius:18px;padding:14px;background:#f8fbff}.box.locked{opacity:.46;filter:grayscale(1)}.box .icon{font-size:30px}.box b{display:block;margin-top:6px}.box span{display:block;font-size:12px;color:#617487;margin-top:6px}.daily-card{background:linear-gradient(135deg,#0f172a,#1d4ed8);color:#fff;border-radius:18px;padding:16px;margin-bottom:12px}.task{border:1px solid #d9e7f3;border-radius:18px;padding:14px;margin-top:10px;background:#fff}.task.done{background:#ecfdf5;border-color:#86efac}.task-top{display:flex;justify-content:space-between;gap:10px;font-weight:700}.task-bar{height:8px;border-radius:999px;background:#dbeafe;overflow:hidden;margin:10px 0}.task-bar div{height:100%;background:linear-gradient(90deg,#10b981,#0ea5e9)}.shop-item{display:flex;align-items:center;gap:12px;border:1px solid #dbe7f4;border-radius:18px;padding:14px;margin-top:10px;background:#fff}.shop-item.locked{opacity:.55}.price{margin-left:auto;font-weight:900;color:#b45309;background:#fff7ed;border:1px solid #fed7aa;border-radius:12px;padding:8px 10px}.summary{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:16px 0}.summary>div{border:1px solid #dbe7f4;border-radius:18px;padding:14px;background:#fff}.summary span{display:block;font-size:12px;color:#607387}.summary b{display:block;font-size:22px;margin-top:4px}.note{font-size:13px;line-height:1.6;color:#4b5f72}.toast-wrap{position:fixed;top:16px;right:16px;width:min(320px,calc(100vw - 32px));z-index:100}.toast{margin-top:10px;background:#0f172a;color:#fff;border-radius:18px;padding:14px 16px;box-shadow:0 18px 40px rgba(0,0,0,.22)}.toast b{display:block;margin-bottom:4px}.nurse{display:flex;gap:16px;align-items:center}.figure{width:108px;min-width:108px;height:150px;position:relative}.head{width:56px;height:56px;border-radius:50%;background:#ffd7b5;position:absolute;left:26px;top:18px}.hat{width:48px;height:22px;position:absolute;left:30px;top:6px;border-radius:12px 12px 4px 4px;background:#fff;border:3px solid #bfdbfe}.hat:after{content:'+';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#ef4444;font-weight:900}.body{width:74px;height:66px;position:absolute;left:18px;top:74px;border-radius:24px 24px 16px 16px;background:linear-gradient(180deg,#fff,#dbeafe);border:3px solid #bfdbfe}.bubble{flex:1;border-radius:22px;padding:16px;line-height:1.65;background:#eff6ff;border:1px solid #bfdbfe}.foot{margin-top:10px;color:#dbeafe;font-size:12px}@media (max-width:560px){.stats{grid-template-columns:1fr 1fr}.grid{grid-template-columns:1fr}.nurse{flex-direction:column;text-align:center}}
 </style>
 </head>
 <body>
-<div id="app-shell">
-<div id="login-overlay" class="overlay">
-  <div class="card hero">
-    <div style="position:relative;z-index:1">
-      <div style="font-size:58px">🏥</div>
-      <h1>PflegeAkademy Medizinisches Deutsch</h1>
-      <p id="auth-subtitle">Almanca tibbi terimlerle dolu, gösterişli ve uzun soluklu bir eğitim oyunu.</p>
-      <div class="capsule-row">
-        <div class="capsule">500+ SORU</div>
-        <div class="capsule">TIBBI ALMANCA</div>
-        <div class="capsule">GUNLUK GOREVLER</div>
-      </div>
-      <div class="auth-switch">
-        <button id="register-tab" class="btn btn-secondary" onclick="setAuthMode('register')">KAYIT OL</button>
-        <button id="login-tab" class="btn btn-secondary" onclick="setAuthMode('login')">GIRIS YAP</button>
-      </div>
-      <input id="auth-fullname" class="field" type="text" placeholder="Ad Soyad">
-      <input id="auth-age" class="field" type="number" min="10" max="99" placeholder="Yas">
-      <input id="auth-username" class="field" type="text" placeholder="Kullanici adi">
-      <input id="auth-password" class="field" type="password" placeholder="Sifre">
-      <div id="auth-msg" style="min-height:18px;font-size:12px;margin-top:10px;color:#fecaca"></div>
-      <button id="auth-submit" class="btn btn-primary" onclick="handleAuth()">KAYIT OL VE DEVAM ET</button>
-      <div class="footer-note">Tip: Her kullanicinin ilerlemesi kendi hesabina kaydolur.</div>
-    </div>
-  </div>
-</div>
-<div id="intro-overlay" class="overlay hidden">
-  <div class="card">
-    <h2 style="font-family:'Montserrat',sans-serif;color:#0ea5e9;margin:0 0 10px">Willkommen!</h2>
-    <p style="font-size:14px;color:#475569;line-height:1.7;text-align:left;margin:0">Bu simülasyonda Almanca tibbi terimleri vaka cümleleri içinde görüp Türkçe anlamlarını seçeceksin. Kombolar seni hediye kutularına, görevler ise ekstra ödüllere götürecek.</p>
-    <button class="btn btn-primary" style="margin-top:16px" onclick="startGame()">HAZIRIM, BASLAYALIM</button>
-  </div>
-</div>
-<div id="modal-overlay" class="overlay hidden">
-  <div class="panel">
-    <div id="modal-body"></div>
-    <button id="modal-btn" class="btn btn-primary">DEVAM ET</button>
-  </div>
-</div>
-<div id="shop-overlay" class="overlay hidden" onclick="toggle('shop-overlay',false)">
-  <div class="archive" onclick="event.stopPropagation()">
-    <div style="padding:4px 8px 8px;text-align:center;font-size:12px;font-weight:800;color:#0f172a">HASTANE ENVANTER DOSYASI</div>
-    <div class="archive-body" id="shop-list"></div>
-    <button class="btn btn-secondary" style="margin-top:10px" onclick="toggle('shop-overlay',false)">KAPAT</button>
-  </div>
-</div>
-<div id="achievements-overlay" class="overlay hidden" onclick="toggle('achievements-overlay',false)">
-  <div class="panel" onclick="event.stopPropagation()">
-    <h2 class="section-title">Basarilarim</h2>
-    <div id="achievement-list" class="achievement-grid"></div>
-    <button class="btn btn-secondary" style="margin-top:12px" onclick="toggle('achievements-overlay',false)">KAPAT</button>
-  </div>
-</div>
-<div id="daily-overlay" class="overlay hidden" onclick="toggle('daily-overlay',false)">
-  <div class="panel" onclick="event.stopPropagation()">
-    <div class="daily-hero">
-      <div style="font-size:12px;opacity:.88">Gunluk kayit</div>
-      <h2 id="daily-streak" style="font-family:'Montserrat',sans-serif;margin:6px 0">1 Gunluk Seri</h2>
-      <div id="daily-meta" style="font-size:13px;color:#dbeafe">Bugun odulun hazir.</div>
-    </div>
-    <h3 class="section-title" style="font-size:18px">Bugunun Gorevleri</h3>
-    <div id="task-list" class="task-list"></div>
-    <button class="btn btn-secondary" style="margin-top:12px" onclick="toggle('daily-overlay',false)">KAPAT</button>
-  </div>
-</div>
-<div id="gift-overlay" class="overlay hidden">
-  <div class="card" style="text-align:center">
-    <div id="gift-emoji" class="gift-box" onclick="clickGift()">🎁</div>
-    <h2 style="font-family:'Montserrat',sans-serif;margin:10px 0 4px">TIKLA VE PATLAT!</h2>
-    <p style="font-size:13px;color:#64748b;margin:0">Hediye kutusunu acmak icin kutuya tikla.</p>
-  </div>
-</div>
-<div id="game-over" class="overlay hidden">
-  <div class="card gameover-card">
-    <div class="gameover-badge">OYUN BITTI</div>
-    <div style="font-size:64px;margin-top:10px">🚑</div>
-    <h2 style="font-family:'Montserrat',sans-serif;color:var(--red);margin:10px 0 6px">GOREV BASARISIZ</h2>
-    <p id="game-over-msg" style="font-size:14px;color:#7f1d1d;margin:0 0 10px">Bu vardiya kapandi ama bir sonraki deneme seni bekliyor.</p>
-    <div class="summary-grid">
-      <div class="summary-item"><span>En iyi seviye</span><b id="summary-best">0</b></div>
-      <div class="summary-item"><span>Mevcut seviye</span><b id="summary-level">0</b></div>
-      <div class="summary-item"><span>Toplanan para</span><b id="summary-coins">0</b></div>
-      <div class="summary-item"><span>Dogru cevap</span><b id="summary-correct">0</b></div>
-    </div>
-    <div id="game-over-rank" class="motivation"></div>
-    <button class="btn btn-dark" onclick="restartGame()">YENIDEN BASLAT</button>
-    <button class="btn btn-secondary" onclick="logoutFromGame()">CIKIS YAP</button>
-  </div>
-</div>
-<div id="combo-text" class="combo-text">KOMBO X2</div>
-<div id="toast-stack" class="toast-stack"></div>
-<div id="app" class="hidden">
-  <div class="top-bar" id="top-bar">
-    <div class="top-head">
-      <div>
-        <div id="rank-name" class="rank">STAJYER HEMSIRE</div>
-        <h2 id="user-display">Oyuncu</h2>
-      </div>
-      <div class="top-actions">
-        <button class="action market" onclick="openShop()">MARKET</button>
-        <button class="action logout" onclick="logoutFromGame()">CIKIS</button>
-      </div>
-    </div>
-    <div class="xp-wrap"><div id="xp-bar"></div></div>
-    <div class="stats">
-      <span>💰 <span id="coin-val">0</span></span>
-      <span>LVL <span id="level-val">1</span></span>
-      <span>❤️ <span id="life-val">5</span> <span id="shield-val" class="hidden">🛡️ 0</span></span>
-    </div>
-    <div class="mini-grid">
-      <button class="mini-btn ach-btn" onclick="openAchievements()">BASARILARIM</button>
-      <button class="mini-btn daily-btn" onclick="openDailyPanel()">GUNLUKLER</button>
-    </div>
-  </div>
-  <div id="question-card" class="question-card">
-    <div class="label">ALMANCA VAKA CUMLESI</div>
-    <div id="scenario-text" class="scenario">Die Szene wird geladen...</div>
-    <div id="sample-text" class="sample">Beispiel wird geladen...</div>
-    <h2 id="question-word" class="question-word">Thermometer</h2>
-    <div id="options" class="options"></div>
-  </div>
-</div>
+<div class="toast-wrap" id="toast-wrap"></div>
+<div id="auth-overlay" class="overlay"><div class="card hero"><div style="font-size:56px">??</div><h1>PflegeAkademie Medizinisches Deutsch</h1><p>Her soruda Almanca tibbi bir kelime gelecek. Ustte yalnizca Almanca ornek cumleler olacak ve asagida 4 Turkce sik cikacak.</p><div class="tags"><div class="tag" id="term-count">500+ KELIME</div><div class="tag">4 SIK</div><div class="tag">KALICI KAYIT</div></div><div class="switch"><button id="register-tab" class="btn btn-primary">KAYIT OL</button><button id="login-tab" class="btn btn-secondary">GIRIS YAP</button></div><input id="full-name" class="field" placeholder="Ad Soyad"><input id="age" class="field" type="number" min="10" max="99" placeholder="Yas"><input id="username" class="field" placeholder="Kullanici adi"><input id="password" class="field" type="password" placeholder="Sifre"><div id="auth-message" class="foot"></div><button id="auth-submit" class="btn btn-primary" style="margin-top:12px">KAYIT OL VE DEVAM ET</button></div></div>
+<div id="message-overlay" class="overlay hidden"><div class="panel"><div id="message-body"></div><button id="message-continue" class="btn btn-primary" style="margin-top:14px">DEVAM ET</button></div></div>
+<div id="shop-overlay" class="overlay hidden"><div class="panel"><h2 style="margin-top:0">Market</h2><div id="shop-list" class="scroll"></div><button class="btn btn-secondary" id="shop-close" style="margin-top:12px">KAPAT</button></div></div>
+<div id="achievements-overlay" class="overlay hidden"><div class="panel"><h2 style="margin-top:0">Basarilarim</h2><div id="achievement-summary" class="note"></div><div id="achievement-list" class="grid scroll" style="margin-top:12px"></div><button class="btn btn-secondary" id="achievements-close" style="margin-top:12px">KAPAT</button></div></div>
+<div id="daily-overlay" class="overlay hidden"><div class="panel"><div class="daily-card"><div style="font-size:12px;opacity:.85">Gunluk durum</div><div id="daily-streak" style="font-size:26px;font-weight:900;margin-top:6px">1 Gunluk Seri</div><div id="daily-info" style="margin-top:6px;font-size:13px;color:#dbeafe">Bugun yeni gorevlerin hazir.</div></div><div id="daily-list" class="scroll"></div><button class="btn btn-secondary" id="daily-close" style="margin-top:12px">KAPAT</button></div></div>
+<div id="gameover-overlay" class="overlay hidden"><div class="card"><div style="font-size:58px;text-align:center">??</div><h2 style="text-align:center;color:#ef4444;margin:10px 0 0">OYUN BITTI</h2><p class="note" style="text-align:center">Canlar bitti. Yeni bir denemede daha yuksek seviyeye cikabilirsin.</p><div class="summary"><div><span>Seviye</span><b id="go-level">1</b></div><div><span>Dogru</span><b id="go-correct">0</b></div><div><span>Coin</span><b id="go-coins">0</b></div><div><span>Kelime Havuzu</span><b id="go-bank">0</b></div></div><button id="restart-btn" class="btn btn-dark">YENIDEN BASLAT</button><button id="logout-home-btn" class="btn btn-secondary" style="margin-top:10px">CIKIS YAP</button></div></div>
+<div class="shell"><div id="app" class="hidden"><div class="top"><div class="top-head"><div><div class="rank" id="rank-text">PFLEGE SCHULER</div><div class="player" id="player-name">Oyuncu</div><div class="micro" id="player-micro">0 kelimelik havuz aktif</div></div><div class="chips"><button class="chip market" id="shop-btn">MARKET</button><button class="chip light" id="logout-btn">CIKIS</button></div></div><div class="bar"><div id="xp-bar"></div></div><div class="stats"><div class="stat">Seviye<br><span id="level-text">1</span></div><div class="stat">Coin<br><span id="coin-text">0</span></div><div class="stat">Can<br><span id="life-text">5</span></div><div class="stat">Kalkan<br><span id="shield-text">0</span></div></div><div class="quick"><button class="ach" id="achievements-btn">BASARILARIM</button><button class="daily" id="daily-btn">GUNLUKLER</button></div></div><div class="stage"><div class="label">ALMANCA ORNEK CUMLE</div><div id="scenario" class="scenario">Die Szene wird geladen.</div><div id="sample" class="sample">Das Beispiel wird geladen.</div><div id="word" class="word">Blutdruck</div><div id="options" class="options"></div><div id="progress-text" class="meta">Soru 1 / 1</div></div></div></div>
 <script>
-const BASE_TERMS = [
-  { de:'Blutdruck', tr:'Tansiyon' },
-  { de:'Spritze', tr:'Siriga' },
-  { de:'Verband', tr:'Sargi / pansuman' },
-  { de:'Schmerzmittel', tr:'Agri kesici' },
-  { de:'Rollstuhl', tr:'Tekerlekli sandalye' },
-  { de:'Notaufnahme', tr:'Acil servis' },
-  { de:'Thermometer', tr:'Ates olcer' },
-  { de:'Krankenhaus', tr:'Hastane' },
-  { de:'Pflegekraft', tr:'Bakim personeli' },
-  { de:'Arzt', tr:'Doktor' },
-  { de:'Krankenschwester', tr:'Hemsire' },
-  { de:'Puls', tr:'Nabiz' },
-  { de:'Atmung', tr:'Solunum' },
-  { de:'Fieber', tr:'Ates' },
-  { de:'Wunde', tr:'Yara' },
-  { de:'Infusion', tr:'Serum' },
-  { de:'Tablette', tr:'Tablet ilac' },
-  { de:'Operation', tr:'Ameliyat' },
-  { de:'Untersuchung', tr:'Muayene' },
-  { de:'Diagnose', tr:'Teshis' },
-  { de:'Behandlung', tr:'Tedavi' },
-  { de:'Krampf', tr:'Kramp' },
-  { de:'Husten', tr:'Oksuruk' },
-  { de:'Erbrechen', tr:'Kusma' },
-  { de:'Uebelkeit', tr:'Mide bulantisi' },
-  { de:'Schwindel', tr:'Bas donmesi' },
-  { de:'Allergie', tr:'Alerji' },
-  { de:'Kruecke', tr:'Koltuk degnegi' },
-  { de:'Katheter', tr:'Kateter' },
-  { de:'Kanuele', tr:'Kanul' },
-  { de:'Blutzucker', tr:'Kan sekeri' },
-  { de:'Blutprobe', tr:'Kan ornegi' },
-  { de:'Labor', tr:'Laboratuvar' },
-  { de:'Lunge', tr:'Akciger' },
-  { de:'Herz', tr:'Kalp' },
-  { de:'Leber', tr:'Karaciger' },
-  { de:'Niere', tr:'Bobrek' },
-  { de:'Magen', tr:'Mide' },
-  { de:'Darm', tr:'Bagirsak' },
-  { de:'Kopfschmerzen', tr:'Bas agrisi' },
-  { de:'Rueckenschmerzen', tr:'Sirt agrisi' },
-  { de:'Hals', tr:'Bogaz' },
-  { de:'Lagerung', tr:'Pozisyonlama' },
-  { de:'Pflegeplan', tr:'Bakim plani' },
-  { de:'Desinfektion', tr:'Dezenfeksiyon' },
-  { de:'Sterilisation', tr:'Sterilizasyon' },
-  { de:'Maske', tr:'Maske' },
-  { de:'Handschuhe', tr:'Eldiven' },
-  { de:'Beatmung', tr:'Solunum destegi' },
-  { de:'Sauerstoff', tr:'Oksijen' },
-  { de:'Rehabilitation', tr:'Rehabilitasyon' },
-  { de:'Entlassung', tr:'Taburcu' },
-  { de:'Aufnahme', tr:'Kabul' },
-  { de:'Station', tr:'Servis' },
-  { de:'Intensivstation', tr:'Yogun bakim' },
-  { de:'Medikament', tr:'Ilac' },
-  { de:'Nebenwirkung', tr:'Yan etki' },
-  { de:'Dosierung', tr:'Dozaj' },
-  { de:'Rezept', tr:'Recete' },
-  { de:'Impfung', tr:'Asi' },
-  { de:'Harn', tr:'Idrar' },
-  { de:'Stuhlprobe', tr:'Diski ornegi' },
-  { de:'Verletzung', tr:'Yaralanma' },
-  { de:'Knochenbruch', tr:'Kemik kirigi' },
-  { de:'Schwellung', tr:'Sislik' },
-  { de:'Rettungswagen', tr:'Ambulans' },
-  { de:'Herzinfarkt', tr:'Kalp krizi' },
-  { de:'Schlaganfall', tr:'Felc' },
-  { de:'Pflaster', tr:'Yara bandi' },
-  { de:'Fieberkurve', tr:'Ates cizelgesi' },
-  { de:'Bettpfanne', tr:'Surgulu kap' },
-  { de:'Waschung', tr:'Temizleme islemi' },
-  { de:'Bewusstsein', tr:'Bilinç' },
-  { de:'Mundpflege', tr:'Agiz bakimi' },
-  { de:'Dekubitus', tr:'Basinç yarasi' },
-  { de:'Injektion', tr:'Enjeksiyon' },
-  { de:'Tropf', tr:'Damla serum' },
-  { de:'Pflegedokumentation', tr:'Bakim dokumantasyonu' },
-  { de:'Blase', tr:'Mesane' },
-  { de:'Hebehilfe', tr:'Kaldirma yardimi' },
-  { de:'Fiebermesser', tr:'Ates olcer cihaz' }
+const STORAGE={accounts:'medterm_accounts',current:'medterm_current_user',prefix:'medterm_profile_'};
+const LEGACY={accounts:['pflege_accounts_v2','pflege_accounts_v1'],current:['pflege_current_user_v2','pflege_current_user_v1']};
+const BASE_RAW=`
+Blutdruck|Tansiyon
+Spritze|Siringa
+Verband|Sargi
+Schmerzmittel|Agri kesici
+Rollstuhl|Tekerlekli sandalye
+Notaufnahme|Acil servis
+Thermometer|Ates olcer
+Krankenhaus|Hastane
+Pflegekraft|Bakim personeli
+Arzt|Doktor
+Krankenschwester|Hemsire
+Puls|Nabiz
+Atmung|Solunum
+Fieber|Ates
+Wunde|Yara
+Infusion|Serum
+Tablette|Tablet ilac
+Operation|Ameliyat
+Untersuchung|Muayene
+Diagnose|Teshis
+Behandlung|Tedavi
+Krampf|Kramp
+Husten|Oksuruk
+Erbrechen|Kusma
+Uebelkeit|Mide bulantisi
+Schwindel|Bas donmesi
+Allergie|Alerji
+Kruecke|Koltuk degnegi
+Katheter|Kateter
+Kanuele|Kanul
+Blutzucker|Kan sekeri
+Blutprobe|Kan ornegi
+Labor|Laboratuvar
+Lunge|Akciger
+Herz|Kalp
+Leber|Karaciger
+Niere|Bobrek
+Magen|Mide
+Darm|Bagirsak
+Kopfschmerzen|Bas agrisi
+Rueckenschmerzen|Sirt agrisi
+Hals|Bogaz
+Lagerung|Pozisyonlama
+Pflegeplan|Bakim plani
+Desinfektion|Dezenfeksiyon
+Sterilisation|Sterilizasyon
+Maske|Maske
+Handschuhe|Eldiven
+Beatmung|Solunum destegi
+Sauerstoff|Oksijen
+Rehabilitation|Rehabilitasyon
+Entlassung|Taburcu
+Aufnahme|Kabul
+Station|Servis
+Intensivstation|Yogun bakim
+Medikament|Ilac
+Nebenwirkung|Yan etki
+Dosierung|Dozaj
+Rezept|Recete
+Impfung|Asi
+Harn|Idrar
+Stuhlprobe|Diski ornegi
+Verletzung|Yaralanma
+Knochenbruch|Kemik kirigi
+Schwellung|Sislik
+Rettungswagen|Ambulans
+Herzinfarkt|Kalp krizi
+Schlaganfall|Felc
+Pflaster|Yara bandi
+Fieberkurve|Ates cizelgesi
+Bettpfanne|Surgulu kap
+Waschung|Temizleme islemi
+Dekubitus|Basin yarasi
+Drainage|Drenaj
+Magensonde|Mide sondasi
+Anamnese|Hasta oykusu
+Vitalzeichen|Hayati bulgular
+Sepsis|Sepsis
+Tumor|Tumor
+Krebs|Kanser
+Asthma|Astim
+Bronchitis|Bronsit
+Thrombose|Tromboz
+Durchfall|Ishal
+Verstopfung|Kabizlik
+Dehydrierung|Sivi kaybi
+Bewusstlosigkeit|Bilinc kaybi
+Schlafstoerung|Uyku bozuklugu
+Palliativpflege|Palyatif bakim
+Schmerzskala|Agri olcegi
+Hygiene|Hijyen
+Nadel|Igne
+Blase|Mesane
+Speichel|Tukuruk
+Kreislauf|Dolasim
+Muedigkeit|Yorgunluk
+Appetitlosigkeit|Istahsizlik
+Sodbrennen|Mide yanmasi
+Notfall|Acil durum
+Hausbesuch|Ev ziyareti
+Pflegebett|Hasta yatagi
+Monitoring|Monitorizasyon
+Hautausschlag|Cilt dokuntusu
+Juckreiz|Kasinti
+Verordnung|Tedavi emri
+Einwilligung|Onam
+Erkaeltung|Soguk alginligi
+Virus|Virus
+Bakterium|Bakteri
+Narkose|Anestezi
+Fraktur|Kirik
+Heilung|Iyilesme
+Blutgruppe|Kan grubu
+Transfusion|Kan nakli
+Isolierung|Izolasyon
+Visite|Vizit
+Mundschutz|Agiz maskesi
+Pflegeziel|Bakim hedefi
+Therapieplan|Tedavi plani
+Abstrich|Suruntu ornegi
+Arznei|Ilac
+Klinik|Klinik
+Blutentnahme|Kan alma
+Wundversorgung|Yara bakimi
+Bettruhe|Yatak istirahati
+Stethoskop|Stetoskop
+Blutdruckmessgeraet|Tansiyon aleti
+Orthopaedie|Ortopedi
+Chirurgie|Cerrahi
+Neurologie|Noroloji
+Dermatologie|Dermatoloji
+Gynaekologie|Jinekoloji
+Urologie|Uroloji
+Pediatrie|Cocuk sagligi
+Radiologie|Radyoloji
+Sonographie|Ultrason
+Roentgenbild|Rontgen goruntusu
+Computertomographie|Bilgisayarli tomografi
+Magnetresonanztomographie|MR
+Intubation|Entubasyon
+Trage|Sedye
+Desinfektionsmittel|Dezenfektan
+`;
+const STEMS=[['Herz','kalp'],['Lungen','akciger'],['Nieren','bobrek'],['Leber','karaciger'],['Magen','mide'],['Darm','bagirsak'],['Blut','kan'],['Haut','cilt'],['Muskel','kas'],['Knochen','kemik'],['Gelenk','eklem'],['Ruecken','sirt'],['Hals','bogaz'],['Augen','goz'],['Ohren','kulak'],['Nerven','sinir'],['Harn','idrar'],['Wund','yara'],['Atemwegs','solunum yolu'],['Gefaess','damar'],['Brust','gogus'],['Schmerz','agri'],['Infusions','serum'],['Katheter','kateter'],['Fieber','ates'],['Puls','nabiz'],['Kreislauf','dolasim'],['Atem','nefes'],['Patienten','hasta'],['Pflege','bakim']];
+const PATTERNS=[['untersuchung',' muayenesi'],['behandlung',' tedavisi'],['therapie',' terapisi'],['pflege',' bakimi'],['diagnostik',' tanisi'],['kontrolle',' kontrolu'],['messung',' olcumu'],['verletzung',' yaralanmasi'],['entzuendung',' iltihabi'],['infektion',' enfeksiyonu'],['funktion',' fonksiyonu'],['probleme',' sorunlari']];
+const DAILY_POOL=[
+{id:'correct5',title:'5 dogru cevap ver',target:5,reward:{coins:180},get:()=>run.todayCorrect},
+{id:'correct12',title:'12 dogru cevap ver',target:12,reward:{xp:220},get:()=>run.todayCorrect},
+{id:'coins300',title:'300 coin kazan',target:300,reward:{shield:1},get:()=>run.todayCoins},
+{id:'level1',title:'1 kez seviye atla',target:1,reward:{coins:220},get:()=>run.todayLevelUps},
+{id:'combo3',title:'3 komboya ulas',target:3,reward:{xp:140},get:()=>run.bestCombo}
 ];
-const SENTENCE_TEMPLATES = [
-  term => `Der Patient benoetigt dringend ${term.de} fuer die weitere Versorgung.`,
-  term => `Auf der Station erklaert die Pflegekraft heute das Wort ${term.de}.`,
-  term => `Vor der Behandlung bereitet das Team ${term.de} sorgfaeltig vor.`,
-  term => `Im Aufnahmegespraech wird ${term.de} sofort dokumentiert.`,
-  term => `Die Krankenschwester kontrolliert ${term.de} noch einmal am Bett.`,
-  term => `Im Nachtdienst wird ${term.de} besonders haeufig gebraucht.`,
-  term => `Der Arzt bittet darum, ${term.de} sofort bereitzustellen.`,
-  term => `Bei der Visite spricht das Team ueber ${term.de} und die richtige Anwendung.`
+const ACHIEVEMENTS=[
+{id:'first',icon:'??',title:'Ilk Temas',desc:'Ilk dogru cevabini ver.',check:()=>run.totalCorrect>=1},
+{id:'ten',icon:'??',title:'Sozluk Acildi',desc:'10 dogru cevap ver.',check:()=>run.totalCorrect>=10},
+{id:'fifty',icon:'??',title:'Terim Toplayici',desc:'50 dogru cevap ver.',check:()=>run.totalCorrect>=50},
+{id:'hundred',icon:'??',title:'Klinik Hafiza',desc:'100 dogru cevap ver.',check:()=>run.totalCorrect>=100},
+{id:'combo3',icon:'?',title:'Ritim',desc:'3 komboya ulas.',check:()=>run.bestCombo>=3},
+{id:'combo6',icon:'??',title:'Kesintisiz Seri',desc:'6 komboya ulas.',check:()=>run.bestCombo>=6},
+{id:'level5',icon:'??',title:'Terfi',desc:'5. seviyeye cik.',check:()=>run.bestLevel>=5},
+{id:'coins1000',icon:'??',title:'Kasa Doldu',desc:'1000 coin biriktir.',check:()=>run.totalCoins>=1000},
+{id:'daily3',icon:'??',title:'Nobet Serisi',desc:'3 gun ust uste giris yap.',check:()=>run.loginStreak>=3},
+{id:'daily7',icon:'???',title:'Disiplinli Oyuncu',desc:'7 gun ust uste giris yap.',check:()=>run.loginStreak>=7},
+{id:'dailyReward',icon:'??',title:'Odul Avcisi',desc:'3 gunluk odul al.',check:()=>run.dailyRewards>=3},
+{id:'shield',icon:'???',title:'Koruma',desc:'2 kalkan topla.',check:()=>run.maxShield>=2}
 ];
-const SHOP_ITEMS = [
-  { id:'life1', title:'Schnelles Serum', desc:'+1 can', price:250, level:1, icon:'💉', apply:()=>state.lives++ },
-  { id:'life2', title:'Vitamin Paket', desc:'+2 can', price:420, level:2, icon:'💊', apply:()=>state.lives+=2 },
-  { id:'shield1', title:'Schutzschild', desc:'+1 kalkan', price:540, level:2, icon:'🛡️', apply:()=>state.shields++ },
-  { id:'shield2', title:'Doppel Schutz', desc:'+2 kalkan', price:980, level:5, icon:'🧤', apply:()=>state.shields+=2 },
-  { id:'xp1', title:'Mini Seminar', desc:'+900 XP', price:700, level:3, icon:'📚', apply:()=>state.xp+=900 },
-  { id:'xp2', title:'Fachkongress', desc:'+2600 XP', price:1800, level:7, icon:'🎓', apply:()=>state.xp+=2600 },
-  { id:'gift', title:'Gluecksbox', desc:'Bir hediye kutusu ac', price:400, level:2, icon:'🎁', apply:()=>eventQueue.push({type:'gift'}) }
+const SHOP=[
+{id:'life',icon:'??',title:'Ek Can',desc:'1 can ekler.',price:180,buy:()=>game.lives+=1},
+{id:'shield',icon:'???',title:'Kalkan',desc:'1 kalkan ekler.',price:220,buy:()=>{game.shields+=1;run.maxShield=Math.max(run.maxShield,game.shields);}},
+{id:'xp',icon:'?',title:'XP Paketi',desc:'160 XP verir.',price:200,buy:()=>addXp(160)}
 ];
-const ACHIEVEMENTS = [
-  { id:'first', icon:'🩺', title:'Ilk Temas', desc:'Ilk dogru cevabini ver.', check:()=>state.correct>=1 },
-  { id:'combo3', icon:'⚡', title:'Seri Baslangici', desc:'3 komboya ulas.', check:()=>state.bestCombo>=3 },
-  { id:'combo5', icon:'🔥', title:'Klinik Ritmi', desc:'5 komboya ulas.', check:()=>state.bestCombo>=5 },
-  { id:'coins1000', icon:'💰', title:'Kasa Doluyor', desc:'1000 coin biriktir.', check:()=>state.coins>=1000 || profile.totalCoins>=1000 },
-  { id:'level5', icon:'🎖️', title:'Terfi', desc:'Seviye 5 ol.', check:()=>state.level>=5 || profile.bestLevel>=5 },
-  { id:'level10', icon:'🏅', title:'Uzmanlasma', desc:'Seviye 10 ol.', check:()=>state.level>=10 || profile.bestLevel>=10 },
-  { id:'gift', icon:'🎁', title:'Surpriz Sever', desc:'Ilk hediye kutunu ac.', check:()=>profile.giftsOpened>=1 || state.giftsOpened>=1 },
-  { id:'daily3', icon:'📅', title:'Duzenli Nobet', desc:'3 gunluk giris serisine ulas.', check:()=>profile.loginStreak>=3 },
-  { id:'daily7', icon:'📆', title:'Aliskanlik', desc:'7 gunluk giris serisine ulas.', check:()=>profile.loginStreak>=7 },
-  { id:'veteran', icon:'👑', title:'Tibbi Sozluk', desc:'Toplam 100 dogru cevap ver.', check:()=>profile.totalCorrect>=100 },
-  { id:'guardian', icon:'🛡️', title:'Koruyucu', desc:'3 kalkan biriktir.', check:()=>state.shields>=3 },
-  { id:'collector', icon:'💎', title:'Odul Avcisi', desc:'3 gunluk gorev odulu al.', check:()=>profile.claimedDailyRewards>=3 }
-];
-const DAILY_TASK_POOL = [
-  { id:'correct6', title:'6 dogru cevap ver', target:6, reward:{coins:220}, progress:()=>profile.daily.progress.correct||0 },
-  { id:'coins300', title:'300 coin kazan', target:300, reward:{xp:380}, progress:()=>profile.daily.progress.coins||0 },
-  { id:'combo4', title:'4 komboya ulas', target:4, reward:{shields:1}, progress:()=>profile.daily.progress.combo||0 },
-  { id:'gift1', title:'1 hediye kutusu ac', target:1, reward:{coins:150,xp:150}, progress:()=>profile.daily.progress.gifts||0 },
-  { id:'levelup', title:'1 kez level atla', target:1, reward:{coins:260}, progress:()=>profile.daily.progress.levelups||0 }
-];
-const GAME_OVER_QUOTES = [
-  'Bugunluk nobet bitti. Bir sonraki denemede daha guclu doneceksin.',
-  'Almanca tibbi kelimeler sabir ister. Ritmi buldugunda seri kendiliginden gelecek.',
-  'Marketi daha erken kullanip kalkan biriktirmek seni cok ileri goturebilir.'
-];
-const DEFAULT_PROFILE = () => ({
-  fullName:'', age:'', bestLevel:1, totalCoins:0, totalCorrect:0, loginStreak:0, lastLoginDate:'', daysPlayed:0,
-  giftsOpened:0, claimedDailyRewards:0, achievements:[], daily:{ date:'', progress:{}, completed:[], claimed:{} }
-});
-const DEFAULT_STATE = () => ({ level:1, xp:0, coins:220, lives:5, shields:0, combo:0, bestCombo:0, correct:0, giftsOpened:0, busy:false, gameOver:false, currentQuestion:null, order:[], cursor:0, name:'' });
-const ACCOUNT_KEY = 'pflege_accounts_v2';
-const CURRENT_KEY = 'pflege_current_user_v2';
-let profileKey = 'pflege_profile_guest';
-let authMode = 'register';
-let currentUser = null;
-let profile = DEFAULT_PROFILE();
-let state = DEFAULT_STATE();
-let questionBank = [];
-let eventQueue = [];
-let audioCtx;
-const $ = id => document.getElementById(id);
-const els = {
-  loginOverlay:$('login-overlay'), authTitle:null, authDesc:$('auth-subtitle'), authSwitch:null,
-  fullName:$('auth-fullname'), age:$('auth-age'), username:$('auth-username'), password:$('auth-password'), authBtn:$('auth-submit'), authHint:$('auth-msg'),
-  registerTab:$('register-tab'), loginTab:$('login-tab'),
-  introOverlay:$('intro-overlay'), startBtn:null, continueBtn:null,
-  playerName:$('user-display'), playerMeta:$('rank-name'), xpBar:$('xp-bar'), levelTxt:$('level-val'), coinTxt:$('coin-val'), lifeTxt:$('life-val'), shieldTxt:$('shield-val'),
-  questionCounter:null, scenario:$('scenario-text'), sample:$('sample-text'), questionWord:$('question-word'), options:$('options'),
-  shopBtn:null, logoutBtn:null, achievementsBtn:null, dailyBtn:null,
-  shopOverlay:$('shop-overlay'), shopItems:$('shop-list'), closeShop:null,
-  achievementsOverlay:$('achievements-overlay'), achievementGrid:$('achievement-list'), achievementCount:null, closeAchievements:null,
-  dailyOverlay:$('daily-overlay'), dailyTasks:$('task-list'), streakValue:$('daily-streak'), dailyClaimInfo:$('daily-meta'), closeDaily:null,
-  giftOverlay:$('gift-overlay'), giftResult:$('gift-emoji'), claimGift:null,
-  modalOverlay:$('modal-overlay'), modalTitle:null, modalBody:$('modal-body'), modalContinue:$('modal-btn'),
-  gameOverOverlay:$('game-over'), gameOverStats:null, gameOverQuote:$('game-over-rank'), restartBtn:null, homeBtn:null,
-  summaryBest:$('summary-best'), summaryLevel:$('summary-level'), summaryCoins:$('summary-coins'), summaryCorrect:$('summary-correct'), gameOverMsg:$('game-over-msg'),
-  toastStack:$('toast-stack'), comboText:$('combo-text'), app:$('app')
-};
-
-function loadAccounts(){ try { return JSON.parse(localStorage.getItem(ACCOUNT_KEY) || '{}'); } catch { return {}; } }
-function saveAccounts(accounts){ localStorage.setItem(ACCOUNT_KEY, JSON.stringify(accounts)); }
-function getProfileKey(username){ return `pflege_profile_${username}`; }
-function todayKey(){ return new Date().toISOString().slice(0,10); }
-function dayDiff(a,b){ return Math.round((new Date(b) - new Date(a)) / 86400000); }
-function shuffle(arr){ const copy=[...arr]; for(let i=copy.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [copy[i],copy[j]]=[copy[j],copy[i]]; } return copy; }
-function xpGoal(level){ return 220 + (level-1) * 110; }
-function levelLabel(level){ if(level>=15) return 'Chefarzt Wortmeister'; if(level>=10) return 'Deutsch Spezialist'; if(level>=5) return 'Stationsprofi'; return 'Pflege Schuler'; }
-function toast(title, text){ const item=document.createElement('div'); item.className='toast'; item.innerHTML=`<b>${title}</b><small>${text}</small>`; els.toastStack.appendChild(item); setTimeout(()=>item.remove(),3600); }
-function toggle(el, show){
-  const node = typeof el === 'string' ? $(el) : el;
-  if(!node) return;
-  node.classList.toggle('hidden', !show);
+const baseTerms=BASE_RAW.trim().split('\n').map(line=>{const [de,tr]=line.split('|');return{de:de.trim(),tr:tr.trim(),scenario:`Im Arztbrief steht heute der Begriff "${de.trim()}".`,sample:`Die Pflegekraft erklaert dem Patienten ruhig, was "${de.trim()}" bedeutet.`};});
+const generatedTerms=[];for(const [deStem,trStem] of STEMS){for(const [suf,trSuf] of PATTERNS){generatedTerms.push({de:`${deStem}${suf}`,tr:`${trStem}${trSuf}`,scenario:`Im Stationsbericht wird heute besonders auf ${deStem}${suf} geachtet.`,sample:`Vor der Visite dokumentiert das Team die ${deStem}${suf} sorgfaeltig.`});}}
+function dedupeTerms(list){const map=new Map();list.forEach(item=>{const key=item.de.toLowerCase();if(!map.has(key))map.set(key,item);});return Array.from(map.values());}
+const vocabulary=dedupeTerms([...baseTerms,...generatedTerms]);
+const $=id=>document.getElementById(id);
+const els={authOverlay:$('auth-overlay'),registerTab:$('register-tab'),loginTab:$('login-tab'),fullName:$('full-name'),age:$('age'),username:$('username'),password:$('password'),authSubmit:$('auth-submit'),authMessage:$('auth-message'),termCount:$('term-count'),app:$('app'),rankText:$('rank-text'),playerName:$('player-name'),playerMicro:$('player-micro'),xpBar:$('xp-bar'),levelText:$('level-text'),coinText:$('coin-text'),lifeText:$('life-text'),shieldText:$('shield-text'),scenario:$('scenario'),sample:$('sample'),word:$('word'),options:$('options'),progressText:$('progress-text'),achievementsBtn:$('achievements-btn'),dailyBtn:$('daily-btn'),logoutBtn:$('logout-btn'),shopBtn:$('shop-btn'),achievementsOverlay:$('achievements-overlay'),achievementsClose:$('achievements-close'),achievementSummary:$('achievement-summary'),achievementList:$('achievement-list'),dailyOverlay:$('daily-overlay'),dailyClose:$('daily-close'),dailyStreak:$('daily-streak'),dailyInfo:$('daily-info'),dailyList:$('daily-list'),shopOverlay:$('shop-overlay'),shopClose:$('shop-close'),shopList:$('shop-list'),messageOverlay:$('message-overlay'),messageBody:$('message-body'),messageContinue:$('message-continue'),gameoverOverlay:$('gameover-overlay'),goLevel:$('go-level'),goCorrect:$('go-correct'),goCoins:$('go-coins'),goBank:$('go-bank'),restartBtn:$('restart-btn'),logoutHomeBtn:$('logout-home-btn'),toastWrap:$('toast-wrap')};
+let authMode='register';let currentUser=null;let profile=null;let game=null;let run=null;let questions=[];let queue=[];
+function toast(title,text){const n=document.createElement('div');n.className='toast';n.innerHTML=`<b>${title}</b><div>${text}</div>`;els.toastWrap.appendChild(n);setTimeout(()=>n.remove(),3200);} 
+function nurseMessage(title,text,button='DEVAM ET'){queue.push({title,text,button});if(queue.length===1)renderModal();}
+function renderModal(){if(!queue.length)return;const x=queue[0];els.messageBody.innerHTML=`<h2 style="margin-top:0;color:#1d4ed8">${x.title}</h2><div class="nurse"><div class="figure"><div class="hat"></div><div class="head"></div><div class="body"></div></div><div class="bubble">${x.text}</div></div>`;els.messageContinue.textContent=x.button;els.messageOverlay.classList.remove('hidden');}
+function closeModal(){queue.shift();if(!queue.length){els.messageOverlay.classList.add('hidden');return;}renderModal();}
+function migrateLegacy(){if(!localStorage.getItem(STORAGE.accounts)){for(const key of LEGACY.accounts){const v=localStorage.getItem(key);if(v){localStorage.setItem(STORAGE.accounts,v);break;}}}if(!localStorage.getItem(STORAGE.current)){for(const key of LEGACY.current){const v=localStorage.getItem(key);if(v){localStorage.setItem(STORAGE.current,v);break;}}}}
+function loadAccounts(){try{return JSON.parse(localStorage.getItem(STORAGE.accounts)||'{}');}catch{return {};}}
+function saveAccounts(x){localStorage.setItem(STORAGE.accounts,JSON.stringify(x));}
+function pKey(u){return `${STORAGE.prefix}${u}`;}
+function defaultProfile(u=''){return{username:u,fullName:'',age:'',bestLevel:1,totalCoins:0,totalCorrect:0,loginStreak:0,lastLogin:'',achievements:[],dailyRewards:0,daily:{date:'',selected:[],claimed:{}}};}
+function loadProfile(u){
+  try{
+    const current=localStorage.getItem(pKey(u));
+    const legacy=localStorage.getItem(`pflege_profile_${u}`)||localStorage.getItem(`pflege_profile_v1_${u}`);
+    const raw=current||legacy||'null';
+    const parsed={...defaultProfile(u),...(JSON.parse(raw)||{})};
+    if(!current&&legacy)localStorage.setItem(pKey(u),JSON.stringify(parsed));
+    return parsed;
+  }catch{return defaultProfile(u);}
 }
-function saveCurrentUser(){ if(currentUser) localStorage.setItem(CURRENT_KEY, currentUser); else localStorage.removeItem(CURRENT_KEY); }
-function loadProfile(){ try { const raw=localStorage.getItem(profileKey); profile={...DEFAULT_PROFILE(), ...(raw?JSON.parse(raw):{})}; } catch { profile=DEFAULT_PROFILE(); } }
-function saveProfile(){ localStorage.setItem(profileKey, JSON.stringify(profile)); }
-function resetState(){ state=DEFAULT_STATE(); state.name = profile.fullName || currentUser || 'Gast'; state.order = shuffle(questionBank.map((_,i)=>i)); state.cursor = 0; state.currentQuestion = null; }
-function persistTotals(){ profile.bestLevel = Math.max(profile.bestLevel || 1, state.level); profile.totalCoins = Math.max(profile.totalCoins || 0, state.coins); profile.totalCorrect = Math.max(profile.totalCorrect || 0, state.correct + (profile.totalCorrect || 0)); saveProfile(); }
-
-async function hashPassword(value){
-  if(window.crypto?.subtle){
-    const buffer = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(value));
-    return Array.from(new Uint8Array(buffer)).map(v=>v.toString(16).padStart(2,'0')).join('');
-  }
-  let hash = 0;
-  for(const ch of value){ hash = ((hash<<5)-hash) + ch.charCodeAt(0); hash |= 0; }
-  return `fallback_${Math.abs(hash)}`;
-}
-
-function setAuthMode(mode){
-  authMode = mode;
-  const register = mode === 'register';
-  if(els.authDesc) els.authDesc.textContent = register ? 'Almanca tibbi terimlerle dolu, gösterişli ve uzun soluklu bir egitim oyunu.' : 'Kullanici adin ve sifrenle kaldigin yerden devam et.';
-  els.fullName.classList.toggle('hidden', !register);
-  els.age.classList.toggle('hidden', !register);
-  els.authBtn.textContent = register ? 'KAYIT OL VE DEVAM ET' : 'GIRIS YAP VE DEVAM ET';
-  if(els.authHint) els.authHint.textContent = register ? 'Bilgilerin bu tarayicida saklanir.' : 'Gunluk serin ve odullerin seni bekliyor.';
-  if(els.registerTab) els.registerTab.className = `btn ${register?'btn-primary':'btn-secondary'}`;
-  if(els.loginTab) els.loginTab.className = `btn ${!register?'btn-primary':'btn-secondary'}`;
-}
-
-function buildQuestionBank(){
-  const bank=[];
-  BASE_TERMS.forEach((term, index) => {
-    SENTENCE_TEMPLATES.forEach((tpl, tplIndex) => {
-      const scenario = tpl.scenario.replaceAll('{de}', term.de).replaceAll('{tr}', term.tr);
-      const sample = tpl.sample.replaceAll('{de}', term.de).replaceAll('{tr}', term.tr);
-      const distractors = shuffle(BASE_TERMS.filter(item=>item.de!==term.de)).slice(0,3).map(item=>item.tr);
-      const options = shuffle([term.tr, ...distractors]);
-      bank.push({
-        id:`${index}-${tplIndex}`,
-        term:term.de,
-        answer:term.tr,
-        scenario,
-        sample,
-        options
-      });
-    });
-  });
-  return shuffle(bank);
-}
-
-function initAudio(){ if(audioCtx) return; try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch {} }
-function beep(freq, duration, type='sine', gain=0.03){
-  if(!audioCtx) return;
-  const osc = audioCtx.createOscillator();
-  const vol = audioCtx.createGain();
-  osc.type = type; osc.frequency.value = freq; vol.gain.value = gain;
-  osc.connect(vol); vol.connect(audioCtx.destination); osc.start();
-  setTimeout(()=>{ osc.stop(); osc.disconnect(); vol.disconnect(); }, duration);
-}
-function playSound(kind){
-  initAudio();
-  if(!audioCtx) return;
-  if(audioCtx.state === 'suspended') audioCtx.resume();
-  if(kind==='correct'){ beep(720,120,'triangle',0.04); setTimeout(()=>beep(920,120,'triangle',0.04),90); }
-  if(kind==='wrong'){ beep(240,160,'sawtooth',0.045); setTimeout(()=>beep(170,180,'sawtooth',0.035),120); }
-  if(kind==='level'){ beep(520,100,'sine',0.035); setTimeout(()=>beep(760,120,'sine',0.04),110); setTimeout(()=>beep(980,180,'triangle',0.05),220); }
-  if(kind==='reward'){ beep(660,100,'triangle',0.04); setTimeout(()=>beep(880,120,'triangle',0.04),100); setTimeout(()=>beep(1120,180,'triangle',0.04),220); }
-  if(kind==='gameover'){ beep(300,180,'square',0.04); setTimeout(()=>beep(220,230,'square',0.04),180); }
-}
-
-function ensureDailyState(){
-  const today = todayKey();
-  if(profile.daily.date !== today){
-    profile.daily = { date:today, progress:{correct:0,coins:0,combo:0,gifts:0,levelups:0}, completed:[], claimed:{} };
-    const tasks = shuffle(DAILY_TASK_POOL).slice(0,3);
-    tasks.forEach(task => profile.daily.progress[task.id] = 0);
-    profile.daily.completed = tasks.map(task => task.id);
-  }
-  saveProfile();
-}
-
-function selectedDailyTasks(){
-  return profile.daily.completed.map(id => DAILY_TASK_POOL.find(task=>task.id===id)).filter(Boolean);
-}
-
-function markLoginStreak(){
-  const today = todayKey();
-  const last = profile.lastLoginDate;
-  if(!last){ profile.loginStreak = 1; profile.daysPlayed = 1; }
-  else {
-    const diff = dayDiff(last, today);
-    if(diff === 1){ profile.loginStreak += 1; profile.daysPlayed += 1; }
-    else if(diff > 1){ profile.loginStreak = 1; profile.daysPlayed += 1; }
-  }
-  profile.lastLoginDate = today;
-  saveProfile();
-}
-
-function queueEvent(evt){ eventQueue.push(evt); if(eventQueue.length===1) showNextEvent(); }
-function showNextEvent(){
-  if(!eventQueue.length) return;
-  const evt = eventQueue[0];
-  els.modalBody.innerHTML = `<h2 style="font-family:'Montserrat',sans-serif;color:#0ea5e9;margin-top:0">${evt.title}</h2>${evt.body}`;
-  els.modalContinue.textContent = evt.button || 'Devam';
-  toggle(els.modalOverlay, true);
-}
-function closeCurrentEvent(){
-  eventQueue.shift();
-  toggle(els.modalOverlay, false);
-  if(eventQueue.length) setTimeout(showNextEvent, 120);
-}
-
-function nurseHTML(text, note='Devam ettiginde oyun akisi kaldigi yerden surer.'){
-  return `<div class="nurse-wrap"><div class="nurse-figure"><div class="nurse-hat"></div><div class="nurse-head"></div><div class="nurse-body"></div><div class="nurse-legs"></div></div><div class="bubble">${text}<div class="speech-note">${note}</div></div></div>`;
-}
-
-function addCoins(amount){ state.coins += amount; profile.totalCoins += amount; profile.daily.progress.coins = (profile.daily.progress.coins || 0) + amount; }
-function addXp(amount){ state.xp += amount; while(state.xp >= xpGoal(state.level)){ state.xp -= xpGoal(state.level); state.level += 1; profile.bestLevel = Math.max(profile.bestLevel, state.level); profile.daily.progress.levelups = (profile.daily.progress.levelups || 0) + 1; playSound('level'); queueEvent({ title:'Terfi!', body:nurseHTML(`Harika! Yeni seviyen <b>${state.level}</b>. Alman tibbi kelimelerde giderek daha guclu oluyorsun.`), button:'Devam Et' }); } }
-function addShield(amount){ state.shields += amount; }
-function loseLife(){ if(state.shields>0){ state.shields -= 1; toast('Kalkan Kullanimda','Bu hatayi kalkan senin yerine karsiladi.'); return; } state.lives -= 1; els.app.classList.add('flash-red','shake'); setTimeout(()=>els.app.classList.remove('flash-red','shake'),420); if(state.lives<=0) endGame(); }
-
-function updateDailyProgress(type, value=1){ profile.daily.progress[type] = Math.max(profile.daily.progress[type] || 0, value); checkDailyTasks(); }
-function incrementDaily(type, amount=1){ profile.daily.progress[type] = (profile.daily.progress[type] || 0) + amount; checkDailyTasks(); }
-
-function checkAchievements(){
-  let unlocked = false;
-  ACHIEVEMENTS.forEach(item => {
-    if(!profile.achievements.includes(item.id) && item.check()){
-      profile.achievements.push(item.id);
-      unlocked = true;
-      playSound('reward');
-      toast('Basarim Acildi', `${item.icon} ${item.title}`);
-      queueEvent({ title:'Basarim Tamamlandi', body:nurseHTML(`<b>${item.icon} ${item.title}</b> rozetini kazandin.<div class="badge-row"><span class="capsule" style="background:#dbeafe;color:#1d4ed8">Rozet Acildi</span><span class="capsule" style="background:#dcfce7;color:#15803d">Profiline Kaydedildi</span></div><p>${item.desc}</p>`), button:'Devam Et' });
-    }
-  });
-  if(unlocked) saveProfile();
-}
-
-function checkDailyTasks(){
-  const finished = selectedDailyTasks().filter(task => task.progress() >= task.target && !profile.daily.claimed[task.id]);
-  if(finished.length){
-    finished.forEach(task => {
-      if(!profile.daily.claimed[`announced_${task.id}`]){
-        profile.daily.claimed[`announced_${task.id}`] = true;
-        queueEvent({
-          title:'Gunluk Gorev Hazir',
-          body:nurseHTML(`<b>${task.title}</b> gorevini tamamladin. Hadi odulu almaya gidelim.`, 'Devam ettiginde gunluk gorev ekranin acilacak ve odulunu alabileceksin.'),
-          button:'Odulu Goster'
-        });
-      }
-    });
-    saveProfile();
-  }
-}
-
-function renderAchievements(){
-  const unlocked = new Set(profile.achievements);
-  els.achievementGrid.innerHTML = ACHIEVEMENTS.map(item => `
-    <div class="achievement ${unlocked.has(item.id)?'':'locked'}">
-      <div class="icon">${item.icon}</div>
-      <b>${item.title}</b>
-      <span>${item.desc}</span>
-    </div>`).join('');
-  if(els.achievementCount) els.achievementCount.textContent = `${profile.achievements.length}/${ACHIEVEMENTS.length}`;
-}
-
-function claimTaskReward(task){
-  if(profile.daily.claimed[task.id]) return;
-  if(task.progress() < task.target) return;
-  if(task.reward.coins) addCoins(task.reward.coins);
-  if(task.reward.xp) addXp(task.reward.xp);
-  if(task.reward.shields) addShield(task.reward.shields);
-  profile.daily.claimed[task.id] = true;
-  profile.claimedDailyRewards += 1;
-  saveProfile();
-  playSound('reward');
-  if(window.confetti) confetti({ particleCount:90, spread:70, origin:{y:.7} });
-  queueEvent({ title:'Gunluk Odul Alindi', body:nurseHTML(`Odulun hesabina eklendi. ${task.reward.coins?`<b>+${task.reward.coins} coin</b><br>`:''}${task.reward.xp?`<b>+${task.reward.xp} XP</b><br>`:''}${task.reward.shields?`<b>+${task.reward.shields} kalkan</b>`:''}`), button:'Harika' });
-  renderDaily();
-  updateUI();
-  checkAchievements();
-}
-
-function renderDaily(){
-  els.streakValue.textContent = `${profile.loginStreak} Gunluk Seri`;
-  const tasks = selectedDailyTasks();
-  const doneCount = tasks.filter(task => task.progress() >= task.target).length;
-  els.dailyClaimInfo.textContent = `${doneCount}/${tasks.length} gorev bugun tamamlandi.`;
-  els.dailyTasks.innerHTML = tasks.map(task => {
-    const progress = task.progress();
-    const percent = Math.min(100, Math.round(progress / task.target * 100));
-    const done = progress >= task.target;
-    const claimed = !!profile.daily.claimed[task.id];
-    return `<div class="task ${done?'done':''}">
-      <div class="task-head"><span>${task.title}</span><span>${Math.min(progress,task.target)}/${task.target}</span></div>
-      <div class="task-bar"><div style="width:${percent}%"></div></div>
-      <div style="margin-top:10px;font-size:12px;color:#475569">Odul: ${task.reward.coins?`${task.reward.coins} coin `:''}${task.reward.xp?`${task.reward.xp} XP `:''}${task.reward.shields?`${task.reward.shields} kalkan`:''}</div>
-      <button class="btn ${done && !claimed ? 'btn-primary' : 'btn-secondary'}" data-claim="${task.id}" ${done && !claimed ? '' : 'disabled'} style="width:100%;margin-top:10px">${claimed?'Alindi':done?'Odulu Al':'Devam Et'}</button>
-    </div>`;
-  }).join('');
-  els.dailyTasks.querySelectorAll('[data-claim]').forEach(btn => btn.onclick = () => {
-    const task = DAILY_TASK_POOL.find(item => item.id === btn.dataset.claim);
-    if(task) claimTaskReward(task);
-  });
-}
-
-function renderShop(){
-  els.shopItems.innerHTML = SHOP_ITEMS.map(item => {
-    const locked = state.coins < item.price;
-    return `<div class="shop-item ${locked?'locked':''}" data-buy="${item.id}"><div class="shop-icon">${item.icon}</div><div class="shop-info"><b>${item.title}</b><span>${item.desc}</span></div><div class="price">${item.price}</div></div>`;
-  }).join('');
-  els.shopItems.querySelectorAll('[data-buy]').forEach(btn => btn.onclick = () => {
-    const item = SHOP_ITEMS.find(x=>x.id===btn.dataset.buy);
-    if(!item || state.coins < item.price) return;
-    state.coins -= item.price;
-    item.apply();
-    playSound('reward');
-    toast('Market', `${item.title} hesabina eklendi.`);
-    renderShop(); updateUI(); checkAchievements();
-  });
-}
-
-function openShop(){ renderShop(); toggle(els.shopOverlay, true); }
-function openAchievements(){ renderAchievements(); toggle(els.achievementsOverlay, true); }
-function openDailyPanel(){ renderDaily(); toggle(els.dailyOverlay, true); }
-
-function spawnFloat(text, color){
-  const div=document.createElement('div');
-  div.className='float-txt';
-  div.style.color=color;
-  div.textContent=text;
-  div.style.left=`${30 + Math.random()*40}%`;
-  div.style.top=`${40 + Math.random()*18}%`;
-  els.app.appendChild(div);
-  setTimeout(()=>div.remove(),1000);
-}
-function showCombo(){ els.comboText.textContent = `${state.combo}X KOMBO`; els.comboText.classList.remove('combo-anim'); void els.comboText.offsetWidth; els.comboText.classList.add('combo-anim'); }
-
-function updateUI(){
-  els.playerName.textContent = state.name;
-  els.playerMeta.textContent = levelLabel(state.level);
-  els.levelTxt.textContent = state.level;
-  els.coinTxt.textContent = state.coins;
-  els.lifeTxt.textContent = state.lives;
-  els.shieldTxt.textContent = `🛡️ ${state.shields}`;
-  els.shieldTxt.classList.toggle('hidden', state.shields <= 0);
-  els.xpBar.style.width = `${Math.min(100, Math.round(state.xp / xpGoal(state.level) * 100))}%`;
-  els.app.style.boxShadow = state.lives <= 2 ? 'inset 0 0 0 4px rgba(239,68,68,.18)' : 'none';
-  saveProfile();
-}
-
-function nextQuestion(){
-  if(state.gameOver) return;
-  if(state.cursor >= state.order.length) state.order = shuffle(questionBank.map((_,i)=>i)), state.cursor = 0;
-  state.currentQuestion = questionBank[state.order[state.cursor++]];
-  const q = state.currentQuestion;
-  els.scenario.textContent = q.scenario;
-  els.sample.textContent = q.sample;
-  els.questionWord.textContent = q.term;
-  els.options.innerHTML = q.options.map(option => `<button class="opt" data-option="${option.replaceAll('"','&quot;')}">${option}</button>`).join('');
-  els.options.querySelectorAll('.opt').forEach(btn => btn.onclick = () => handleAnswer(btn, btn.dataset.option));
-  updateUI();
-}
-function openGift(){
-  const rewards = shuffle([
-    {text:'+180 coin', apply:()=>addCoins(180)},
-    {text:'+1 kalkan', apply:()=>addShield(1)},
-    {text:'+260 XP', apply:()=>addXp(260)},
-    {text:'+1 can', apply:()=>state.lives += 1}
-  ]);
-  const reward = rewards[0];
-  reward.apply();
-  state.giftsOpened += 1;
-  profile.giftsOpened += 1;
-  incrementDaily('gifts',1);
-  els.giftResult.innerHTML = `✅<div style="font-size:15px;margin-top:8px"><b>${reward.text}</b><div style="margin-top:6px;color:#475569">Odul hesabina islendi. Kapatmak icin tekrar tikla.</div></div>`;
-  els.giftResult.dataset.opened = '1';
-  toggle(els.giftOverlay, true);
-  playSound('reward');
-  checkAchievements();
-  updateUI();
-}
-
-function handleAnswer(button, answer){
-  if(state.busy || state.gameOver) return;
-  state.busy = true;
-  const correct = answer === state.currentQuestion.answer;
-  const buttons = [...els.options.querySelectorAll('.opt')];
-  buttons.forEach(btn => btn.disabled = true);
-  if(correct){
-    button.classList.add('correct');
-    state.combo += 1;
-    state.bestCombo = Math.max(state.bestCombo, state.combo);
-    state.correct += 1;
-    addCoins(70 + state.combo * 12);
-    addXp(110 + state.combo * 18);
-    incrementDaily('correct',1);
-    updateDailyProgress('combo', state.bestCombo);
-    playSound('correct');
-    spawnFloat(`+${70 + state.combo * 12}`, '#16a34a');
-    if(state.combo >= 3) showCombo();
-    els.app.classList.add('flash-green');
-    setTimeout(()=>els.app.classList.remove('flash-green'),280);
-  } else {
-    button.classList.add('wrong');
-    const trueBtn = buttons.find(btn => btn.dataset.option === state.currentQuestion.answer);
-    if(trueBtn) trueBtn.classList.add('correct');
-    state.combo = 0;
-    playSound('wrong');
-    loseLife();
-  }
-  updateUI();
-  checkAchievements();
-  setTimeout(() => {
-    state.busy = false;
-    if(!state.gameOver) nextQuestion();
-  }, 850);
-}
-
-function buildGameOver(){
-  if(els.summaryBest) els.summaryBest.textContent = profile.bestLevel;
-  if(els.summaryLevel) els.summaryLevel.textContent = state.level;
-  if(els.summaryCoins) els.summaryCoins.textContent = state.coins;
-  if(els.summaryCorrect) els.summaryCorrect.textContent = state.correct;
-  if(els.gameOverMsg) els.gameOverMsg.textContent = 'Bu vardiya kapandi ama bir sonraki deneme seni bekliyor.';
-  els.gameOverQuote.textContent = GAME_OVER_QUOTES[Math.floor(Math.random()*GAME_OVER_QUOTES.length)];
-}
-
-function endGame(){
-  state.gameOver = true;
-  playSound('gameover');
-  persistTotals();
-  buildGameOver();
-  toggle(els.gameOverOverlay, true);
-}
-
-function restartGame(){
-  resetState();
-  state.name = profile.fullName || currentUser || 'Gast';
-  toggle(els.gameOverOverlay, false);
-  toggle(els.introOverlay, false);
-  toggle(els.app, true);
-  nextQuestion();
-}
-
-function logoutFromGame(){
-  currentUser = null;
-  saveCurrentUser();
-  toggle(els.shopOverlay,false);
-  toggle(els.achievementsOverlay,false);
-  toggle(els.dailyOverlay,false);
-  toggle(els.giftOverlay,false);
-  toggle(els.gameOverOverlay,false);
-  toggle(els.introOverlay,false);
-  toggle(els.modalOverlay,false);
-  eventQueue = [];
-  profile = DEFAULT_PROFILE();
-  state = DEFAULT_STATE();
-  toggle(els.app, false);
-  setAuthMode('login');
-  toggle(els.loginOverlay, true);
-}
-
-async function handleAuth(){
-  const username = els.username.value.trim().toLowerCase();
-  const password = els.password.value.trim();
-  if(!username || !password){ toast('Eksik Alan', 'Kullanici adi ve sifre gerekli.'); return; }
-  const accounts = loadAccounts();
-  if(authMode === 'register'){
-    const fullName = els.fullName.value.trim();
-    const age = els.age.value.trim();
-    if(!fullName || !age){ toast('Eksik Alan', 'Ad soyad ve yas bilgisini de gir.'); return; }
-    if(accounts[username]){ toast('Kayit Var', 'Bu kullanici adi zaten alinmis.'); return; }
-    accounts[username] = { username, passwordHash: await hashPassword(password), fullName, age };
-    saveAccounts(accounts);
-    profileKey = getProfileKey(username);
-    currentUser = username;
-    saveCurrentUser();
-    profile = DEFAULT_PROFILE();
-    profile.fullName = fullName;
-    profile.age = age;
-    markLoginStreak();
-    ensureDailyState();
-    saveProfile();
-  } else {
-    const account = accounts[username];
-    if(!account){ toast('Bulunamadi', 'Bu kullanici adiyla kayit yok.'); return; }
-    const ok = account.passwordHash === await hashPassword(password);
-    if(!ok){ toast('Sifre Hatali', 'Sifreyi tekrar kontrol et.'); return; }
-    currentUser = username;
-    profileKey = getProfileKey(username);
-    saveCurrentUser();
-    loadProfile();
-    profile.fullName = profile.fullName || account.fullName || username;
-    profile.age = profile.age || account.age || '';
-    markLoginStreak();
-    ensureDailyState();
-    saveProfile();
-  }
-  resetState();
-  state.name = profile.fullName || currentUser;
-  toggle(els.app, true);
-  toggle(els.loginOverlay, false);
-  toggle(els.introOverlay, true);
-  els.username.value=''; els.password.value='';
-}
-
-function startFlow(){
-  toggle(els.introOverlay, false);
-  toggle(els.app, true);
-  nextQuestion();
-  if(profile.loginStreak > 1){
-    queueEvent({ title:'Gunluk Giris', body:nurseHTML(`Hos geldin <b>${state.name}</b>. Giris serin <b>${profile.loginStreak} gun</b> oldu.`), button:'Baslayalim' });
-  }
-}
-
-function startGame(){ startFlow(); }
-
-function clickGift(){
-  if(els.giftResult.dataset.opened === '1'){
-    els.giftResult.dataset.opened = '0';
-    els.giftResult.textContent = '🎁';
-    toggle(els.giftOverlay, false);
-    updateUI();
-    return;
-  }
-  openGift();
-}
-
-els.authBtn.onclick = handleAuth;
-if(els.startBtn) els.startBtn.onclick = startFlow;
-if(els.continueBtn) els.continueBtn.onclick = () => toggle(els.introOverlay, false);
-if(els.shopBtn) els.shopBtn.onclick = openShop;
-if(els.logoutBtn) els.logoutBtn.onclick = logoutFromGame;
-if(els.achievementsBtn) els.achievementsBtn.onclick = openAchievements;
-if(els.dailyBtn) els.dailyBtn.onclick = openDailyPanel;
-if(els.closeShop) els.closeShop.onclick = () => toggle(els.shopOverlay, false);
-if(els.closeAchievements) els.closeAchievements.onclick = () => toggle(els.achievementsOverlay, false);
-if(els.closeDaily) els.closeDaily.onclick = () => toggle(els.dailyOverlay, false);
-if(els.claimGift) els.claimGift.onclick = () => { toggle(els.giftOverlay, false); updateUI(); };
-els.modalContinue.onclick = () => {
-  const evt = eventQueue[0];
-  closeCurrentEvent();
-  if(evt?.title === 'Gunluk Gorev Hazir') setTimeout(openDailyPanel, 140);
-};
-if(els.restartBtn) els.restartBtn.onclick = restartGame;
-if(els.homeBtn) els.homeBtn.onclick = () => { toggle(els.gameOverOverlay, false); toggle(els.introOverlay, true); };
-
-questionBank = buildQuestionBank();
-setAuthMode('register');
-const remembered = localStorage.getItem(CURRENT_KEY);
-if(remembered){
-  const accounts = loadAccounts();
-  if(accounts[remembered]){
-    currentUser = remembered;
-    profileKey = getProfileKey(remembered);
-    loadProfile();
-    markLoginStreak();
-    ensureDailyState();
-    resetState();
-    state.name = profile.fullName || currentUser;
-    toggle(els.loginOverlay, false);
-    toggle(els.introOverlay, true);
-    saveProfile();
-  }
-}
-if(!remembered){
-  toggle(els.loginOverlay, true);
-}
-renderAchievements();
-renderDaily();
-renderShop();
-updateUI();
+function saveProfile(){localStorage.setItem(pKey(currentUser),JSON.stringify(profile));}
+function today(){return new Date().toISOString().slice(0,10);}function dayDiff(a,b){return Math.round((new Date(b)-new Date(a))/86400000);}function shuffle(arr){const c=[...arr];for(let i=c.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[c[i],c[j]]=[c[j],c[i]];}return c;}
+async function hashPassword(text){if(window.crypto&&window.crypto.subtle){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(text));return Array.from(new Uint8Array(b)).map(n=>n.toString(16).padStart(2,'0')).join('');}let h=0;for(const ch of text){h=((h<<5)-h)+ch.charCodeAt(0);h|=0;}return `fallback_${Math.abs(h)}`;}
+function setAuthMode(mode){authMode=mode;const reg=mode==='register';els.registerTab.className=`btn ${reg?'btn-primary':'btn-secondary'}`;els.loginTab.className=`btn ${reg?'btn-secondary':'btn-primary'}`;els.fullName.classList.toggle('hidden',!reg);els.age.classList.toggle('hidden',!reg);els.authSubmit.textContent=reg?'KAYIT OL VE DEVAM ET':'GIRIS YAP VE DEVAM ET';els.authMessage.textContent=reg?'Kullanici adi benzersizdir. Ayni ad ikinci kez alinamaz.':'Kayitli kullanici adin ve sifrenle giris yapabilirsin.';}
+function rankName(level){if(level>=12)return'CHEFARZT WORTMEISTER';if(level>=8)return'KLINIK SPEZIALIST';if(level>=5)return'STATIONS PROFI';return'PFLEGE SCHULER';}
+function xpNeed(level){return 180+(level-1)*90;}
+function ensureDaily(){const now=today();if(profile.daily.date!==now){profile.daily={date:now,selected:shuffle(DAILY_POOL.map(x=>x.id)).slice(0,3),claimed:{}};saveProfile();}}
+function markLogin(){const now=today();if(!profile.lastLogin)profile.loginStreak=1;else{const diff=dayDiff(profile.lastLogin,now);if(diff===1)profile.loginStreak+=1;else if(diff>1)profile.loginStreak=1;}profile.lastLogin=now;}
+function selectedTasks(){return profile.daily.selected.map(id=>DAILY_POOL.find(x=>x.id===id)).filter(Boolean);}
+function buildBank(){return vocabulary.map(term=>{const distractors=shuffle(vocabulary.filter(x=>x.tr!==term.tr)).slice(0,3).map(x=>x.tr);return{de:term.de,tr:term.tr,scenario:term.scenario,sample:term.sample,options:shuffle([term.tr,...distractors])};});}
+function startSession(){questions=buildBank();game={level:1,xp:0,coins:250,lives:5,shields:0,correct:0,combo:0,index:0,busy:false,current:null,order:shuffle(questions.map((_,i)=>i))};run={totalCorrect:profile.totalCorrect||0,totalCoins:profile.totalCoins||0,bestLevel:profile.bestLevel||1,loginStreak:profile.loginStreak||0,dailyRewards:profile.dailyRewards||0,maxShield:0,todayCorrect:0,todayCoins:0,todayLevelUps:0,bestCombo:0};}
+function renderDaily(){els.dailyStreak.textContent=`${profile.loginStreak} Gunluk Seri`;const tasks=selectedTasks();const done=tasks.filter(t=>t.get()>=t.target).length;els.dailyInfo.textContent=`${done}/${tasks.length} gorev tamamlandi. Tamamlanan gorevler odul verir.`;els.dailyList.innerHTML=tasks.map(t=>{const val=t.get();const pct=Math.min(100,Math.round(val/t.target*100));const done=val>=t.target;const claimed=!!profile.daily.claimed[t.id];return `<div class="task ${done?'done':''}"><div class="task-top"><span>${t.title}</span><span>${Math.min(val,t.target)}/${t.target}</span></div><div class="task-bar"><div style="width:${pct}%"></div></div><div class="note">Odul: ${t.reward.coins?`${t.reward.coins} coin `:''}${t.reward.xp?`${t.reward.xp} XP `:''}${t.reward.shield?`${t.reward.shield} kalkan`:''}</div><button class="btn ${done&&!claimed?'btn-primary':'btn-secondary'}" data-claim="${t.id}" style="margin-top:10px" ${done&&!claimed?'':'disabled'}>${claimed?'ALINDI':done?'ODULU AL':'DEVAM ET'}</button></div>`;}).join('');els.dailyList.querySelectorAll('[data-claim]').forEach(btn=>btn.onclick=()=>claimDaily(btn.dataset.claim));}
+function claimDaily(id){const t=DAILY_POOL.find(x=>x.id===id);if(!t||profile.daily.claimed[id]||t.get()<t.target)return;if(t.reward.coins)addCoins(t.reward.coins);if(t.reward.xp)addXp(t.reward.xp);if(t.reward.shield){game.shields+=t.reward.shield;run.maxShield=Math.max(run.maxShield,game.shields);}profile.daily.claimed[id]=true;profile.dailyRewards+=1;run.dailyRewards=profile.dailyRewards;saveProfile();updateUI();renderDaily();checkAchievements();nurseMessage('Gunluk Odul Alindi','Harika. Gunluk gorevin tamamlandi ve odulun hesabina eklendi.');}
+function renderAchievements(){els.achievementSummary.textContent=`${profile.achievements.length} / ${ACHIEVEMENTS.length} basarim acildi.`;const u=new Set(profile.achievements);els.achievementList.innerHTML=ACHIEVEMENTS.map(a=>`<div class="box ${u.has(a.id)?'':'locked'}"><div class="icon">${a.icon}</div><b>${a.title}</b><span>${a.desc}</span></div>`).join('');}
+function checkAchievements(){let changed=false;ACHIEVEMENTS.forEach(a=>{if(!profile.achievements.includes(a.id)&&a.check()){profile.achievements.push(a.id);changed=true;toast('Basarim Acildi',`${a.icon} ${a.title}`);nurseMessage('Yeni Basarim',`${a.icon} <b>${a.title}</b> tamamlandi. ${a.desc}`);}});if(changed)saveProfile();renderAchievements();}
+function renderShop(){els.shopList.innerHTML=SHOP.map(item=>{const locked=game.coins<item.price;return `<div class="shop-item ${locked?'locked':''}"><div style="font-size:28px">${item.icon}</div><div><div style="font-weight:800">${item.title}</div><div class="note">${item.desc}</div></div><div class="price">${item.price}</div><button class="btn ${locked?'btn-secondary':'btn-primary'}" data-buy="${item.id}" style="width:auto;padding:10px 12px" ${locked?'disabled':''}>AL</button></div>`;}).join('');els.shopList.querySelectorAll('[data-buy]').forEach(btn=>btn.onclick=()=>buyItem(btn.dataset.buy));}
+function buyItem(id){const item=SHOP.find(x=>x.id===id);if(!item||game.coins<item.price)return;game.coins-=item.price;item.buy();profile.totalCoins=Math.max(profile.totalCoins,game.coins);run.totalCoins=Math.max(run.totalCoins,game.coins);renderShop();updateUI();checkAchievements();toast('Market',`${item.title} alindi.`);}
+function addCoins(v){game.coins+=v;run.todayCoins+=v;run.totalCoins=Math.max(run.totalCoins,game.coins,profile.totalCoins);profile.totalCoins=Math.max(profile.totalCoins,game.coins);}function addXp(v){game.xp+=v;while(game.xp>=xpNeed(game.level)){game.xp-=xpNeed(game.level);game.level+=1;run.todayLevelUps+=1;run.bestLevel=Math.max(run.bestLevel,game.level);profile.bestLevel=Math.max(profile.bestLevel,game.level);nurseMessage('Seviye Atlandi',`Muhte em. <b>${game.level}. seviyeye</b> ulastin.`);}}
+function persistProfile(){profile.totalCorrect=Math.max(profile.totalCorrect,run.totalCorrect);profile.totalCoins=Math.max(profile.totalCoins,run.totalCoins);profile.bestLevel=Math.max(profile.bestLevel,run.bestLevel);saveProfile();}
+function updateUI(){els.playerName.textContent=profile.fullName||currentUser;els.playerMicro.textContent=`${vocabulary.length} kelimelik havuz aktif`;els.rankText.textContent=rankName(game.level);els.levelText.textContent=game.level;els.coinText.textContent=game.coins;els.lifeText.textContent=game.lives;els.shieldText.textContent=game.shields;els.xpBar.style.width=`${Math.min(100,Math.round((game.xp/xpNeed(game.level))*100))}%`;els.progressText.textContent=`Soru ${game.index+1} / ${questions.length}`;persistProfile();}
+function nextQuestion(){if(game.index>=game.order.length){game.order=shuffle(questions.map((_,i)=>i));game.index=0;}game.current=questions[game.order[game.index]];const q=game.current;els.scenario.textContent=q.scenario;els.sample.textContent=q.sample;els.word.textContent=q.de;els.options.innerHTML=q.options.map(option=>`<button class="opt">${option}</button>`).join('');els.options.querySelectorAll('.opt').forEach(btn=>btn.onclick=()=>answer(btn,btn.textContent));updateUI();}
+function answer(button,value){if(game.busy)return;game.busy=true;const correct=game.current.tr===value;const buttons=[...els.options.querySelectorAll('.opt')];buttons.forEach(btn=>btn.disabled=true);if(correct){button.classList.add('correct');game.correct+=1;game.combo+=1;run.todayCorrect+=1;run.totalCorrect+=1;run.bestCombo=Math.max(run.bestCombo,game.combo);addCoins(60+game.combo*10);addXp(90+game.combo*12);toast('Dogru',`${game.current.de} = ${game.current.tr}`);}else{button.classList.add('wrong');const ok=buttons.find(btn=>btn.textContent===game.current.tr);if(ok)ok.classList.add('correct');if(game.shields>0){game.shields-=1;toast('Kalkan Kullanildi','Yanlis cevap kalkanla engellendi.');}else{game.lives-=1;toast('Yanlis',`${game.current.de} kelimesinin dogrusu "${game.current.tr}"`);}game.combo=0;}updateUI();checkDailyCompletion();checkAchievements();setTimeout(()=>{game.busy=false;if(game.lives<=0){finishGame();return;}game.index+=1;nextQuestion();},800);}
+function checkDailyCompletion(){selectedTasks().forEach(t=>{if(t.get()>=t.target&&!profile.daily.claimed[`notify_${t.id}`]){profile.daily.claimed[`notify_${t.id}`]=true;saveProfile();nurseMessage('Gunluk Gorev Tamamlandi',`<b>${t.title}</b> tamamlandi. Gunlukler ekranindan odulunu alabilirsin.`);}});}
+function finishGame(){els.goLevel.textContent=game.level;els.goCorrect.textContent=game.correct;els.goCoins.textContent=game.coins;els.goBank.textContent=vocabulary.length;els.gameoverOverlay.classList.remove('hidden');}
+function restartGame(){els.gameoverOverlay.classList.add('hidden');startSession();renderShop();renderDaily();renderAchievements();updateUI();nextQuestion();}
+function logout(){currentUser=null;localStorage.removeItem(STORAGE.current);els.app.classList.add('hidden');els.gameoverOverlay.classList.add('hidden');els.authOverlay.classList.remove('hidden');setAuthMode('login');}
+async function handleAuth(){const username=els.username.value.trim().toLowerCase();const password=els.password.value.trim();if(!username||!password){els.authMessage.textContent='Kullanici adi ve sifre zorunludur.';return;}const accounts=loadAccounts();if(authMode==='register'){const fullName=els.fullName.value.trim();const age=els.age.value.trim();if(!fullName||!age){els.authMessage.textContent='Kayit icin ad soyad ve yas gerekli.';return;}if(accounts[username]){els.authMessage.textContent='Bu kullanici adi zaten alinmis.';return;}accounts[username]={username,fullName,age,passwordHash:await hashPassword(password)};saveAccounts(accounts);currentUser=username;profile=defaultProfile(username);profile.fullName=fullName;profile.age=age;markLogin();ensureDaily();saveProfile();}else{const acc=accounts[username];if(!acc){els.authMessage.textContent='Bu kullanici adi bulunamadi.';return;}if((await hashPassword(password))!==acc.passwordHash){els.authMessage.textContent='Sifre hatali.';return;}currentUser=username;profile=loadProfile(username);profile.fullName=profile.fullName||acc.fullName||username;profile.age=profile.age||acc.age||'';markLogin();ensureDaily();saveProfile();}localStorage.setItem(STORAGE.current,currentUser);bootGame();}
+function bootGame(){startSession();els.authOverlay.classList.add('hidden');els.app.classList.remove('hidden');renderShop();renderDaily();renderAchievements();updateUI();nextQuestion();els.username.value='';els.password.value='';toast('Hos geldin',`${profile.fullName||currentUser} hesabiyla giris yapildi.`);}
+function resumeUser(){const remembered=localStorage.getItem(STORAGE.current);const accounts=loadAccounts();if(!remembered||!accounts[remembered])return;currentUser=remembered;profile=loadProfile(remembered);markLogin();ensureDaily();saveProfile();bootGame();}
+function setup(){migrateLegacy();els.termCount.textContent=`${vocabulary.length}+ KELIME`;setAuthMode('register');els.registerTab.onclick=()=>setAuthMode('register');els.loginTab.onclick=()=>setAuthMode('login');els.authSubmit.onclick=handleAuth;els.messageContinue.onclick=closeModal;els.achievementsBtn.onclick=()=>{renderAchievements();els.achievementsOverlay.classList.remove('hidden');};els.achievementsClose.onclick=()=>els.achievementsOverlay.classList.add('hidden');els.dailyBtn.onclick=()=>{renderDaily();els.dailyOverlay.classList.remove('hidden');};els.dailyClose.onclick=()=>els.dailyOverlay.classList.add('hidden');els.shopBtn.onclick=()=>{renderShop();els.shopOverlay.classList.remove('hidden');};els.shopClose.onclick=()=>els.shopOverlay.classList.add('hidden');els.logoutBtn.onclick=logout;els.logoutHomeBtn.onclick=logout;els.restartBtn.onclick=restartGame;resumeUser();}
+setup();
 </script>
 </body>
 </html>
+
